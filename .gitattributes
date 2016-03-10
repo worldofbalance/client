@@ -46,9 +46,9 @@ WHATSNEW*          text
 .htaccess          text
 
 # Previous "binary"
-*.unity            text
-*.asset            text
-*.prefab           text
+*.unity            binary
+*.asset            binary
+*.prefab           binary
 
 # Apply Windows/DOS-style CR-LF line-endings on checkout of these files...
 *.bat              text
