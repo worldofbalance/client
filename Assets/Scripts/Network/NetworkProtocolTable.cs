@@ -40,6 +40,10 @@ public class NetworkProtocolTable {
 		Add(NetworkCode.CONVERGE_HINT, "ConvergeHint");
 		Add(NetworkCode.CONVERGE_HINT_COUNT, "ConvergeHintCount");
 		Add(NetworkCode.CONVERGE_NEW_ATTEMPT_SCORE, "ConvergeNewAttemptScore");
+		// DH change
+		Add(NetworkCode.MC_MATCH_INIT, "MCMatchInit");
+		Add(NetworkCode.MC_GET_TIME, "ConvergeGetTime");
+
 		Add(NetworkCode.TOPLIST, "TopList");
 		Add(NetworkCode.PAIR, "Pair");
 		Add(NetworkCode.QUIT_ROOM, "QuitRoom");

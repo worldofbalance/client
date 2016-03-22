@@ -82,4 +82,5 @@ public class Constants {
 	public static readonly int MINIGAME_DONT_EAT_ME      = 3;
 	public static readonly int MINIGAME_CLASH_OF_SPECIES = 4;
     public static readonly int MINIGAME_SEA_DIVIDED      = 5;
+	public static readonly int MINIGAME_MULTI_CONVERGENCE = 6;
 }

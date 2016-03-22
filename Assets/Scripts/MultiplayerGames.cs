@@ -18,6 +18,7 @@ public class MultiplayerGames : MonoBehaviour {
 	private bool enableRRButton = true;
 	private bool enableCWButton = true;
     private bool enableSDButton = true;
+	private bool enableMCButton = true;
 
 	private bool quiting = false;
 	private bool waiting = false;
@@ -108,6 +109,11 @@ public class MultiplayerGames : MonoBehaviour {
             NetworkManager.Send (PairProtocol.Prepare (Constants.MINIGAME_SEA_DIVIDED, -1));
         }
 
+		GUI.enabled = enableMCButton;
+		if (GUI.Button(new Rect(295, windowRect.height - 40, 160, 30), "Play Multi-Convergence")) {
+			NetworkManager.Send (PairProtocol.Prepare (Constants.MINIGAME_MULTI_CONVERGENCE, -1));
+		}
+
 		GUI.enabled = true;
 		if (GUI.Button(new Rect(windowRect.width - 110, windowRect.height - 40, 100, 30), "Quit")) {
 			Quit();
@@ -122,7 +128,7 @@ public class MultiplayerGames : MonoBehaviour {
 	}
 
 	public void Quit() {
-        if (!this.enableRRButton || !this.enableCWButton || !this.enableSDButton) {
+        if (!this.enableRRButton || !this.enableCWButton || !this.enableSDButton || !this.enableMCButton) {
 			NetworkManager.Send (QuitRoomProtocol.Prepare ());
 			quiting = true;
 		} else {
@@ -131,6 +137,8 @@ public class MultiplayerGames : MonoBehaviour {
 	}
 
 	public void OnQuitRoomResult (NetworkResponse response) {
+		// DH change
+		this.enableMCButton = true;
 		this.enableRRButton = true;
 		this.enableCWButton = true;
         this.enableSDButton = true;
@@ -147,21 +155,22 @@ public class MultiplayerGames : MonoBehaviour {
 		int userID = GameState.account.account_id;
 		
 		if (args.status == 0) {
-			Debug.Log("All players are ready to play [room id=" + args.id + "]");
+			Debug.Log ("All players are ready to play [room id=" + args.id + "]");
 			this.room_id = args.id;
 
 			this.enableRRButton = true;
 			this.enableCWButton = true;
             this.enableSDButton = true;
+			this.enableMCButton = true;
 
-			var room = RoomManager.getInstance().getRoom(args.id);
-			if (!room.containsPlayer(userID)) {
-				room.addPlayer(userID);
+			var room = RoomManager.getInstance ().getRoom (args.id);
+			if (!room.containsPlayer (userID)) {
+				room.addPlayer (userID);
 			}
 
 			// switch scene
 			if (args.gameID == Constants.MINIGAME_RUNNING_RHINO) {
-				RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance();
+				RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance ();
 				cManager.Send (RR_RequestRaceInit ());
 
 				Game.SwitchScene ("RRReadyScene");
@@ -174,7 +183,20 @@ public class MultiplayerGames : MonoBehaviour {
                 SD.SDConnectionManager sManager = SD.SDConnectionManager.getInstance();
                 sManager.Send(SD_RequestPlayInit());
                 Game.SwitchScene ("SDReadyScene");
-            }
+            } else if (args.gameID == Constants.MINIGAME_MULTI_CONVERGENCE) {
+				MultiConvergeGame.matchID = args.id;
+				short host = 0;  // Default - not the host
+				if (GameState.player.GetName () == room.host) {
+					host = 1;  // this is the host
+				}
+				NetworkManager.Send (MCMatchInitProtocol.Prepare 
+					(GameState.player.GetID (), args.id, host), 
+					MCProcessMatchInit);
+				Debug.Log("MC notice sent to server(game id, player id): " + args.id + " " + GameState.player.GetID ());
+				Debug.Log ("player id: " + userID);
+				Debug.Log ("This player host value is: " + host);
+			}
+
 		} else {
 			Debug.Log("New room allocated [room id=" + args.id + "]");
 			var room = RoomManager.getInstance().addRoom(args.id, args.gameID);
@@ -184,6 +206,7 @@ public class MultiplayerGames : MonoBehaviour {
 			this.enableRRButton = false;
 			this.enableCWButton = false;
             this.enableSDButton = false;
+			this.enableMCButton = false;
 			this.waiting = true;
 		}
 	}
@@ -204,6 +227,17 @@ public class MultiplayerGames : MonoBehaviour {
 			Game.SwitchScene ("CWBattle");
 		}
 	}
+
+	// DH change
+	public void MCProcessMatchInit(NetworkResponse response) {
+		ResponseMCMatchInit args = response as ResponseMCMatchInit;
+
+		if (args.status == 0) {
+			Debug.Log("MC MatchID set to: " + args.matchID + " Player id is: " + GameState.player.GetID ());
+			Game.SwitchScene ("MultiConverge");
+		}
+	}
+
 
 	public RR.RequestRaceInit RR_RequestRaceInit ()
 	{
