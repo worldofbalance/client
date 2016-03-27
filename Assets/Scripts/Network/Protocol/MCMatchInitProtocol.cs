@@ -10,12 +10,13 @@ using System.Text;
 public class MCMatchInitProtocol
 {
 			
-	public static NetworkRequest Prepare (int playerID, int roomID, short host)
+	public static NetworkRequest Prepare (int playerID, int roomID, short host, string userName)
 	{
 		NetworkRequest request = new NetworkRequest (NetworkCode.MC_MATCH_INIT);
 		request.AddInt32 (playerID);
 		request.AddInt32 (roomID);
 		request.AddShort16 (host);
+		request.AddString(userName);
 	
 		return request;
 	}

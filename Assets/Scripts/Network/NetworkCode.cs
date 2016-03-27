@@ -65,6 +65,8 @@
 	// Multiplayer Convergence
 	public static readonly short MC_MATCH_INIT = 180;
 	public static readonly short MC_GET_TIME = 181;
+	public static readonly short MC_BET_UPDATE = 182;
+	public static readonly short MC_GET_NAMES = 183;
 
 
 	public static readonly short TOPLIST = 153;

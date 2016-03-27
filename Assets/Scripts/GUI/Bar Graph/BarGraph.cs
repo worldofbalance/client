@@ -62,6 +62,9 @@ public class BarGraph : MonoBehaviour
 	private float barWidth = 50;
 	private float interBarWidth;
 
+	// DH change
+	private List<int> scores;  // list of scores, starting from initial and all attempts 
+
 	public ConvergeManager convergeManager { get; set; }
 
 	void Awake ()
@@ -106,6 +109,9 @@ public class BarGraph : MonoBehaviour
 		barLegend = new BarLegend(new Rect(width - 200 - 20, 30, 200, 325), this);
 
 		//gameObject.AddComponent<GraphInput>().graph = this;  jtc-commented out
+
+		// DH change
+		scores = new List<int>();  // arraylist of scores, starting from initial 
 
 	}
 
@@ -418,6 +424,7 @@ public class BarGraph : MonoBehaviour
 	{
 		csvList.Add (csvObject);
 
+		// DH - i believe the first one is the target
 		if (csvList.Count == 1) {
 			return;
 		}
@@ -459,12 +466,26 @@ public class BarGraph : MonoBehaviour
 				new DynamicRect (0, 0, 0, seriesSet.rect.height), 
 				colorList [name]);
 			seriesSet.Add (series);
-
 		}
 
 		//sort seriesList in seriesSet
 		seriesSet.Sort (convergeManager.seriesLabels);
 		seriesSets.Add (seriesSet);
+
+		// DH change
+		// calculates the score for this addition and puts it in scores
+		int maxValue = 1;  //float maxValue = 1;
+		foreach (BarSeries series in seriesSet.seriesList) {
+			maxValue += series.score;
+			//foreach (float value in series.values) {
+			//	if (value > 0) {
+			//		maxValue += value;
+			//	}
+			//}
+		}
+		scores.Add (maxValue);
+		Debug.Log ("BarGraph add score, score / count: " + maxValue + " " + scores.Count);
+
 		
 		// Adjust Max Y-Range
 		//UpdateRange ();
@@ -500,6 +521,28 @@ public class BarGraph : MonoBehaviour
 		int roundTo = int.Parse ("5".PadRight (((int)yMaxValue).ToString ().Length - 1, '0'));
 		yRange = Mathf.CeilToInt (yMaxValue / roundTo) * roundTo;
 	}
+
+	// DH change
+	// Method returns the improvement from the most recent round
+	// improvement = latest score - Max(all previous scores)
+	public int Improvement() {
+		int numScores = scores.Count;
+		if (numScores < 2) {
+			return 0;
+		}
+		Debug.Log ("BG improvement, 0 value: " + scores[0]);
+		int minValue = scores[0];
+		for (int i = 1; i < (numScores - 1); i++) {
+			Debug.Log ("BG: #/value: " + i + " " + scores [i]);
+			if (scores[i] < minValue)
+				minValue = scores[i];
+		}
+		return minValue - scores[numScores - 1];
+		Debug.Log ("BarGraph, minValue/count/latest/improve: " + minValue + " " + numScores + " " + scores [numScores - 1] + 
+			" " + (minValue - scores[numScores - 1]));
+	}
+
+
 
 	//depricated, using CSVObject::AverageDifferenceCSVs
 	public CSVObject SubtractCSVs (CSVObject a, CSVObject b)

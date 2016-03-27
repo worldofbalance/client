@@ -27,8 +27,10 @@ public class MultiConvergeGame : MonoBehaviour
 	// Logic
 	private bool isActive = true;
 	private bool isInitial = true;
-	private bool isProcessing = true;
-	private bool blinkOn = true;
+	// DH change
+	// eliminate blink. Replace isProcessing with betAccepted
+	// private bool isProcessing = true;
+	// private bool blinkOn = true;
 	//public Texture background;
 	private Texture2D bgTexture;
 	private Font font;
@@ -66,16 +68,26 @@ public class MultiConvergeGame : MonoBehaviour
 	private int resetSliderValue = 0;
 	private int maxResetSliderValue = 0;
 	// DH change
+	private string buttonTitle;
 	public static int matchID;     // This is the room_id
 	private bool host;    // Is this player the host?
-	private List<int> players;    // room player ids - includes this player
-	private int timeRemain = -1;
+	private int timeRemain = 0;
 	private string remainLabel;
 	private int balance;    // player money balance
 	private int bet;        // player bet amount 
 	private int timeNow;     // present millisecond time component
-	private int timeNowNew;
+	private int timeNowNew; 
 	private System.DateTime moment;
+	private bool results = false;    // Indicates that a round has been done
+	private short won;    // 1 -> won, 0 -> lost,  -1 -> did not play
+	private int wonAmount;  // amount won (pot) 
+	private bool betAccepted = false;
+	private bool windowClosed = false;
+	private bool closedResponseSent = false;
+	private IDictionary playerNames;
+	private IDictionary betStatusList;
+	private float buttonWidth;
+	private bool simRunning;
 
 	void Awake ()
 	{
@@ -86,8 +98,9 @@ public class MultiConvergeGame : MonoBehaviour
 		top = (Screen.height - height) / 2;
 
 		// DH change
-		OppViewWidth = (int) (width * 0.20f);
+		OppViewWidth = (int) (width * 0.20f - 10);
 		Debug.Log ("Width / OppViewWidth: " + width + " " + OppViewWidth);
+		buttonWidth = OppViewWidth > 125 ? 125 : OppViewWidth;
 		// balance & bet initially hardcoded in client 
 		balance = 1000;
 		bet = 100; 
@@ -100,7 +113,14 @@ public class MultiConvergeGame : MonoBehaviour
 
 		bgTexture = Resources.Load<Texture2D> (Constants.THEME_PATH + Constants.ACTIVE_THEME + "/gui_bg");
 		font = Resources.Load<Font> ("Fonts/" + "Chalkboard");
-		SetIsProcessing (true);
+		// SetIsProcessing (true);
+
+		playerNames = new Dictionary<int, string>();
+		playerNames.Clear();
+		betStatusList = new Dictionary<int, short>();
+		betStatusList.Clear();
+
+		simRunning = false;
 	}
 	
 	// Use this for initialization
@@ -111,12 +131,6 @@ public class MultiConvergeGame : MonoBehaviour
 		var room = RoomManager.getInstance().getRoom(matchID);
 		Debug.Log("MC: room id / host name / player_id: " + matchID + " " + room.host + " " + player_id);
 		Debug.Log("MC: Number of players: " + room.numPlayers());
-		players = room.getPlayers();
-		players.Remove(player_id);  // Remove this player from the list
-		Debug.Log("These are the IDs of the other players in this game:");
-		foreach (var item in players) {
-			Debug.Log("" + item);
-		}
 
 		if (GameState.player.GetName () == room.host) {
 			host = true;
@@ -153,7 +167,7 @@ public class MultiConvergeGame : MonoBehaviour
 		moment = DateTime.Now;
 		timeNow = moment.Millisecond;
 		Debug.Log ("Time: " + timeNow);
-
+		InitializeBarGraph();
 	}
 	
 	// Update is called once per frame
@@ -170,18 +184,38 @@ public class MultiConvergeGame : MonoBehaviour
 		// Client Version Label
 		GUI.Label (new Rect (Screen.width - 75, Screen.height - 30, 65, 20), "v" + Constants.CLIENT_VERSION + " Beta");
 
-		moment = DateTime.Now;
-		timeNowNew = moment.Millisecond;
-		int delta = timeNowNew - timeNow;
-		Debug.Log ("New Time/Delta = " + timeNowNew + " " + delta);
-		// check if more than 200 msec have passed 
-		if ((delta < 0) || (delta > 200)) {
-			timeNow = timeNowNew;
-			GetTime ();  // Update bet time 
+		if ((!windowClosed) && (!simRunning)) {
+			moment = DateTime.Now;
+			timeNowNew = moment.Millisecond;
+			int delta = timeNowNew - timeNow;
+			Debug.Log ("New Time/Delta = " + timeNowNew + " " + delta);
+			// check if more than 300 msec have passed 
+			if ((delta < 0) || (delta > 400)) {
+				timeNow = timeNowNew;
+				GetTime();  // Update bet time 
+
+				// On the multiples of 5 seconds, get the names
+				if ((timeRemain % 10) == 5) {
+					GetNames();
+				}
+			}
 		}
+			
+		// Check if betting window closed and no bet entered
+		if (!betAccepted && windowClosed && !closedResponseSent) {
+			short betEntered = 0;	
+			int improveValue = 0;
+			closedResponseSent = true;
 
-
-
+			NetworkManager.Send (
+				ConvergeBetUpdateProtocol.Prepare (
+					betEntered, 
+					improveValue
+				),
+				ProcessConvergeBetUpdate
+			);
+		}
+			
 		
 		// Converge Game Interface
 		if (isActive) {
@@ -256,30 +290,48 @@ public class MultiConvergeGame : MonoBehaviour
 
 		// DH change
 		// Add in time remaining label
+		if (timeRemain < 0)
+			timeRemain = 0;
 		remainLabel = "Bidding Time Remaining:  ";
-		if (timeRemain == -1) {
-			remainLabel += "Not started yet";
-		} else if (timeRemain == 0) {
-			remainLabel += "Closed. Wait for Next Round";
+		if (windowClosed) {
+			remainLabel += "Bidding Now Closed";
+		} else if (simRunning) {
+			remainLabel += "Simulation Running";
 		} else {
 			remainLabel = remainLabel + timeRemain + " seconds";
 		}
-		GUI.Label (new Rect (bufferBorder, height - 70 - bufferBorder, 300, 30), remainLabel, style);
+		GUI.Label (new Rect (bufferBorder, height - 70 - bufferBorder, 400, 30), remainLabel, style);
 
 		// Add in money balance and bid amount
-		GUI.Label (new Rect (bufferBorder + 450, height/2 + bufferBorder + 150, 200, 30), "Balance: $" + balance, style);
-		GUI.Label (new Rect (bufferBorder + 450, height/2 + bufferBorder + 190, 200, 30), "Bet:      $" + bet, style);
+		GUI.Label (new Rect (bufferBorder + 450, height/2 + bufferBorder + 110, 200, 30), "Balance: $" + balance, style);
+		GUI.Label (new Rect (bufferBorder + 450, height/2 + bufferBorder + 150, 200, 30), "Bet:      $" + bet, style);
+		if (betAccepted) {
+			GUI.Label (new Rect (bufferBorder + 450, height/2 + bufferBorder + 190, 300, 30), "Please wait for results of betting.", style);
+		} else if (results) {
+			if (won == 1) {
+				GUI.Label (new Rect (bufferBorder + 450, height / 2 + bufferBorder + 190, 300, 30), "Congratulations - you won last round!", style);
+			} else if (won == 0) {
+				GUI.Label (new Rect (bufferBorder + 450, height / 2 + bufferBorder + 190, 300, 30), "Sorry - you lost last round.", style);
+			} else {
+				GUI.Label (new Rect (bufferBorder + 450, height / 2 + bufferBorder + 190, 300, 30), "You did not play last round.", style);
+			}
+		}
 
-		string buttonTitle = isProcessing ? "Processing" : "Accept";
-		if (!(isProcessing && !blinkOn)) {
+		if (betAccepted) {
+			buttonTitle = "Bet Entered";
+		} else {
+			buttonTitle = windowClosed ? "Closed" : "Accept";
+		}
+		if (true) {
 			if (GUI.Button (new Rect (bufferBorder, height - 30 - bufferBorder, 100, 30), buttonTitle) &&
-				!isProcessing) {
+				!betAccepted && !windowClosed) {
 				//make sure new config is distinct from prior attempts and initial value
 				currAttempt.UpdateConfig ();  //update config based on user data entry changes
 				ConvergeAttempt prior = attemptList.Find (entry => entry.config == currAttempt.config);
 				if (prior == null && currAttempt.ParamsUpdated ()) {
+					betAccepted = true;
 					Submit ();
-					SetIsProcessing (true);
+					// SetIsProcessing (true);
 				} else if (!showPopup) {
 					int prior_idx = attemptList.FindIndex (entry => entry.config == currAttempt.config);
 					if (prior_idx == Constants.ID_NOT_SET) {
@@ -296,6 +348,36 @@ public class MultiConvergeGame : MonoBehaviour
 		if (GUI.Button (new Rect (bufferBorder + 110, height - 30 - bufferBorder, 110, 30), "Progress Report")) {
 			GenerateBarGraph ();
 		}
+
+		// Display buttons with opponent bet status 
+		// ******
+
+		Color savedColor2 = GUI.color;
+		float topLeft = topGraph;
+
+		int id2;
+		string buttonText;
+		Debug.Log ("Other player button routine");
+		foreach (DictionaryEntry entry in playerNames) {
+			// do something with entry.Value or entry.Key
+			id2 = (int) entry.Key;
+			if ((id2 > 0 ) && (betStatusList.Contains(id2))) {
+				if (((short) betStatusList [id2]) == 1) {  // bet placed
+					GUI.color = Color.green; 
+					buttonText = ((string)entry.Value) + " Entered Bet";
+				} else {  // bet not placed
+					GUI.color = Color.red;
+					buttonText = ((string)entry.Value) + " No Bet";
+				}
+				Debug.Log ("other player button: " + (bufferBorder + width - 170) + " " + topLeft + " " + buttonWidth);
+				Debug.Log ("Button text: " + buttonText);
+				GUI.Button (new Rect (bufferBorder + width - 150, topLeft, buttonWidth, 30), buttonText);
+				topLeft += 45;
+			}
+		}
+		GUI.color = savedColor2;
+
+
 
 		int screenOffset = 0;
 		/* Not doing hints in multiplayer game - initially
@@ -427,6 +509,15 @@ public class MultiConvergeGame : MonoBehaviour
 							valLabel = valLabel + String.Format (
 								" [{0}]", 
 								ConvergeParam.NormParam (param.origVal, min, max));
+							// DH change
+							// Since slider moved, reset all other sliders
+							foreach(KeyValuePair<string, ConvergeParam> entry in currAttempt.seriesParams)
+							{
+								// do something with entry.Value or entry.Key
+								if (!entry.Value.name.Equals(manager.selected)) {
+									entry.Value.value = entry.Value.origVal;
+								}
+							}
 						}
 						style.alignment = TextAnchor.UpperLeft;
 						float xPosn = 
@@ -463,7 +554,7 @@ public class MultiConvergeGame : MonoBehaviour
 	{
 		GUI.Label (new Rect (bufferBorder + 260 + screenOffset, height - 30 - bufferBorder, 110, 30), "Reset to:", style);
 		Rect initial = new Rect (bufferBorder * 2 + 330 + screenOffset, height - 30 - bufferBorder, 50, 30);
-		if (GUI.Button (initial, "Initial") && !isProcessing) {
+		if (GUI.Button (initial, "Initial") && !betAccepted) {
 			ResetCurrAttempt (Constants.ID_NOT_SET);
 		}
 		//use slider to accommodate more reset attempt buttons that fit on the screen
@@ -471,7 +562,7 @@ public class MultiConvergeGame : MonoBehaviour
 		int sliderWidth = 100;
 		if (!isResetSliderInitialized) {
 			InitializeResetSlider (width - (initial.x + initial.width + sliderWidth + bufferBorder), widthPer);
-			isResetSliderInitialized = !isProcessing;
+			isResetSliderInitialized = !betAccepted;
 		}
 		int maxVal = attemptList.Count - maxResetSliderValue + resetSliderValue;
 		for (int i = resetSliderValue; i < maxVal; i++) {
@@ -483,7 +574,7 @@ public class MultiConvergeGame : MonoBehaviour
 			          ), 
 			    String.Format ("#{0}", i + 1)
 				)
-			    && !isProcessing) {
+			    && !betAccepted) {
 				ResetCurrAttempt (i);
 			}
 		}
@@ -546,6 +637,7 @@ public class MultiConvergeGame : MonoBehaviour
 
 	public void Submit ()
 	{
+		simRunning = true;
 		NetworkManager.Send (
 			ConvergeNewAttemptProtocol.Prepare (
 			player_id, 
@@ -569,10 +661,7 @@ public class MultiConvergeGame : MonoBehaviour
 		isResetSliderInitialized = false;
 		FinalizeLoadPriorAttempts ();  // set for no prior attempts
 	}
-
-
-
-
+		
 	private void GetPriorAttempts ()
 	{
 		//get attempts from server based on specified ecosystem
@@ -597,6 +686,7 @@ public class MultiConvergeGame : MonoBehaviour
 	{
 		ResponseConvergeNewAttemptScore args = response as ResponseConvergeNewAttemptScore;
 		int status = args.status;
+		simRunning = false;
 		//Debug.Log ("Processed ReponseConvergeNewAttemptScore, status = " + status);
 	}
 	
@@ -650,11 +740,59 @@ public class MultiConvergeGame : MonoBehaviour
 			);
 
 			FinalizeAttemptUpdate (attemptCount - 1, false);
+
+			// DH change
+			// Send response server with client improvement
+			int improveValue = barGraph.Improvement(); 
+			Debug.Log ("MC send improvement: " + improveValue);
+
+			// ConvergeBetUpdate:
+			// short - 1 = bet entered, 0 = no bet entered
+			// integer = improveValue, improvement for this round; 0 if no bet
+
+			short betEntered = 1;		
+
+			NetworkManager.Send (
+				ConvergeBetUpdateProtocol.Prepare (
+					betEntered, 
+					improveValue
+				),
+				ProcessConvergeBetUpdate
+			);
+
 		} else {
 			Debug.LogError ("Submission of new attempt failed to produce results.");
-			SetIsProcessing (false);
+			// betAccepted = false;
+			// SetIsProcessing (false);
 		}
+	}
 
+	// DH change
+	public void ProcessConvergeBetUpdate (NetworkResponse response)
+	{
+		ResponseConvergeBetUpdate args = response as ResponseConvergeBetUpdate;
+		Debug.Log ("In responseconvergebetupdate");
+		won = args.winStatus;
+		wonAmount = args.wonAmount; 
+		Debug.Log ("won/wonamount: " + won + " " + wonAmount);
+		if (betAccepted) {
+			Debug.Log ("Bet accepted");
+			if (won == 1) {
+				Debug.Log ("you won");
+				balance = balance + wonAmount - bet;
+			} else {
+				Debug.Log ("you lost");
+				balance -= bet;
+			}
+		} else {  // this person did not play
+			Debug.Log("You did not play this round");
+			won = -1;   // signals he did not play
+		}
+		results = true;
+		betAccepted = false; 
+		windowClosed = false;
+		closedResponseSent = false;
+		Debug.Log ("new balance: " + balance);
 	}
 
 	public void ProcessConvergePriorAttemptCount (NetworkResponse response)
@@ -824,7 +962,8 @@ public class MultiConvergeGame : MonoBehaviour
 		//so has to appear following GenerateGraphs
 		currAttempt.ParseConfig (manager);
 
-		SetIsProcessing (false);
+		// betAccepted = false;
+		// SetIsProcessing (false);
 	}
 	
 	public void SetActive (bool active)
@@ -928,6 +1067,16 @@ public class MultiConvergeGame : MonoBehaviour
 
 	}
 
+	private void InitializeBarGraph () {
+		if (barGraph == null) {
+			barGraph = gameObject.AddComponent<BarGraph> ().GetComponent<BarGraph> ();
+
+			//first object must be target, then default 
+			barGraph.InputToCSVObject (ecosystemList [ecosystem_idx].csv_target_string, manager);
+			barGraph.InputToCSVObject (ecosystemList [ecosystem_idx].csv_default_string, manager);
+		}
+	}
+		
 	private void GenerateBarGraph ()
 	{
 		if (barGraph == null) {
@@ -978,7 +1127,8 @@ public class MultiConvergeGame : MonoBehaviour
 
 		
 	}
-
+	/* DH change 
+	 * Remove blinking and set processing 
 	private void SetIsProcessing (bool isProc)
 	{
 		this.isProcessing = isProc;
@@ -1003,6 +1153,7 @@ public class MultiConvergeGame : MonoBehaviour
 			yield return new WaitForSeconds (.5f);
 		}
 	}
+	*/
 	
 	public void ProcessLogout (NetworkResponse response)
 	{
@@ -1094,6 +1245,64 @@ public class MultiConvergeGame : MonoBehaviour
 		ResponseConvergeGetTime args = response as ResponseConvergeGetTime;
 		Debug.Log ("ResponseConvergeGetTime received. Bet time = " + args.betTime);
 		timeRemain = args.betTime;
+		betStatusList.Clear ();
+		betStatusList.Add(args.player1ID, args.betStatus1);
+		betStatusList.Add(args.player2ID, args.betStatus2);
+		betStatusList.Add(args.player3ID, args.betStatus3);
+		betStatusList.Add(args.player4ID, args.betStatus4);
+
+
+		int id;
+		short val;
+		foreach (DictionaryEntry entry in betStatusList) {
+			// do something with entry.Value or entry.Key
+			id = (int) entry.Key;
+			val = (short) entry.Value;
+			Debug.Log ("ResponseConvergeGetTime, id, betstatus: " + id + " " + val);
+			if ((id <= 0) || (id == player_id)) {
+				// betStatusList.Remove (entry.Key);
+			} else {
+				// Debug.Log ("ResponseConvergeGetTime, id, betstatus: " + id + " " + val);
+			}
+		}
+
+		if (timeRemain == 0)
+			windowClosed = true;
 	}
-		
+
+	public void GetNames() {
+		Debug.Log ("Get names request sent");
+		NetworkManager.Send (
+			ConvergeGetNamesProtocol.Prepare (),
+			ProcessGetNames
+		);
+	}
+
+	public void ProcessGetNames (NetworkResponse response)
+	{
+		ResponseConvergeGetNames args = response as ResponseConvergeGetNames;
+		Debug.Log ("ResponseConvergeGetNames received");
+		playerNames.Clear();
+		playerNames.Add (args.player1ID, args.player1Name);
+		playerNames.Add (args.player2ID, args.player2Name);
+		playerNames.Add (args.player3ID, args.player3Name);
+		playerNames.Add (args.player4ID, args.player4Name);
+
+		Debug.Log ("Other player id / name"); 
+ 
+		// foreach (KeyValuePair<int, string> entry in playerNames)
+		// {
+
+		int id;
+		foreach (DictionaryEntry entry in playerNames) {
+			// do something with entry.Value or entry.Key
+			id = (int) entry.Key;
+			Debug.Log (" " + id + " " + entry.Value);
+			if ((id <= 0 ) || (id == player_id)) {
+				// playerNames.Remove (entry.Key);
+			} else {
+				// Debug.Log (" " + id + " " + entry.Value);
+			}
+		}
+	}		
 }

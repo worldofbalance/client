@@ -43,6 +43,9 @@ public class NetworkProtocolTable {
 		// DH change
 		Add(NetworkCode.MC_MATCH_INIT, "MCMatchInit");
 		Add(NetworkCode.MC_GET_TIME, "ConvergeGetTime");
+		Add(NetworkCode.MC_BET_UPDATE, "ConvergeBetUpdate");
+		Add(NetworkCode.MC_GET_NAMES, "ConvergeGetNames");
+
 
 		Add(NetworkCode.TOPLIST, "TopList");
 		Add(NetworkCode.PAIR, "Pair");
