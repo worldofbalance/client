@@ -81,4 +81,5 @@ public class Constants {
 	public static readonly int MINIGAME_CARDS_OF_WILD    = 2;
 	public static readonly int MINIGAME_DONT_EAT_ME      = 3;
 	public static readonly int MINIGAME_CLASH_OF_SPECIES = 4;
+	public static readonly int MINIGAME_SEA_DIVIDED      = 5;
 }
