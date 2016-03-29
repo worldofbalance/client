@@ -17,6 +17,7 @@ public class MultiplayerGames : MonoBehaviour {
 
 	private bool enableRRButton = true;
 	private bool enableCWButton = true;
+	private bool enableSDButton = true;
 
 	private bool quiting = false;
 	private bool waiting = false;
@@ -102,6 +103,11 @@ public class MultiplayerGames : MonoBehaviour {
 			NetworkManager.Send (PairProtocol.Prepare (Constants.MINIGAME_CARDS_OF_WILD, -1));
 		}
 
+		GUI.enabled = enableSDButton;
+		if (GUI.Button(new Rect(295, windowRect.height - 40, 125, 30), "Play Sea Divided")) {
+			NetworkManager.Send (PairProtocol.Prepare (Constants.MINIGAME_SEA_DIVIDED, -1));
+		}
+
 		GUI.enabled = true;
 		if (GUI.Button(new Rect(windowRect.width - 110, windowRect.height - 40, 100, 30), "Quit")) {
 			Quit();
@@ -116,7 +122,7 @@ public class MultiplayerGames : MonoBehaviour {
 	}
 
 	public void Quit() {
-		if (!this.enableRRButton || !this.enableCWButton) {
+		if (!this.enableRRButton || !this.enableCWButton || !this.enableSDButton) {
 			NetworkManager.Send (QuitRoomProtocol.Prepare ());
 			quiting = true;
 		} else {
@@ -127,6 +133,7 @@ public class MultiplayerGames : MonoBehaviour {
 	public void OnQuitRoomResult (NetworkResponse response) {
 		this.enableRRButton = true;
 		this.enableCWButton = true;
+		this.enableSDButton = true;
 		this.waiting = false;
 
 		RoomManager.getInstance().removePlayer(GameState.account.account_id);
@@ -145,6 +152,7 @@ public class MultiplayerGames : MonoBehaviour {
 
 			this.enableRRButton = true;
 			this.enableCWButton = true;
+			this.enableSDButton = true;
 
 			var room = RoomManager.getInstance().getRoom(args.id);
 			if (!room.containsPlayer(userID)) {
@@ -153,15 +161,18 @@ public class MultiplayerGames : MonoBehaviour {
 
 			// switch scene
 			if (args.gameID == Constants.MINIGAME_RUNNING_RHINO) {
-				RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance();
+				RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance ();
 				cManager.Send (RR_RequestRaceInit ());
-
 				Game.SwitchScene ("RRReadyScene");
 			} else if (args.gameID == Constants.MINIGAME_CARDS_OF_WILD) {
 				CW.GameManager.matchID = args.id;
 				CW.NetworkManager.Send (CW.MatchInitProtocol.Prepare 
-				                        (GameState.player.GetID(), args.id), 
-				                        ProcessMatchInit);
+				                        (GameState.player.GetID (), args.id), 
+					ProcessMatchInit);
+			} else if (args.gameID == Constants.MINIGAME_SEA_DIVIDED) {
+				// TODO
+				Debug.Log("Launch A Sea Divided. Work in progress");
+				Game.SwitchScene ("SDReadyScene");
 			}
 		} else {
 			Debug.Log("New room allocated [room id=" + args.id + "]");
@@ -171,6 +182,7 @@ public class MultiplayerGames : MonoBehaviour {
 
 			this.enableRRButton = false;
 			this.enableCWButton = false;
+			this.enableSDButton = false;
 			this.waiting = true;
 		}
 	}

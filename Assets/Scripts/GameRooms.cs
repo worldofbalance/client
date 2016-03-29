@@ -29,15 +29,17 @@ public class Room {
 	}
 
 	public static string getGameName(int type) {
-		if (type == Constants.MINIGAME_CARDS_OF_WILD) {
-			return "Cards of Wild";
-		} else if (type == Constants.MINIGAME_CLASH_OF_SPECIES) {
-			return "Clash of Species";
-		} else if (type == Constants.MINIGAME_DONT_EAT_ME) {
-			return "Don't Eat Me";
-		} else if (type == Constants.MINIGAME_RUNNING_RHINO) {
-			return "Running Rhino";
-		} else {
+        if (type == Constants.MINIGAME_CARDS_OF_WILD) {
+            return "Cards of Wild";
+        } else if (type == Constants.MINIGAME_CLASH_OF_SPECIES) {
+            return "Clash of Species";
+        } else if (type == Constants.MINIGAME_DONT_EAT_ME) {
+            return "Don't Eat Me";
+        } else if (type == Constants.MINIGAME_RUNNING_RHINO) {
+            return "Running Rhino";
+        } else if (type == Constants.MINIGAME_SEA_DIVIDED) {
+            return "Sea Divided";
+        } else {
 			return "Unknown Game";
 		}
 	}

@@ -83,6 +83,7 @@ public class Game : MonoBehaviour
                 case "ClashSplash":
                 case "Converge":
                 case "CWBattle":
+                case "SDReadyScene":
                 Destroy (gObject.GetComponent<EcosystemScore> ());
                 Destroy (gObject.GetComponent<GameResources> ());
                 Destroy (gObject.GetComponent<Clock> ());
