@@ -24,25 +24,36 @@ public class WorldController : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		if (GUI.Button(new Rect(10, 10, 120, 30), "Ecosystem")) {
-			Camera.main.GetComponent<MapCamera>().Move(GameState.player.GetID());
+		MiniGamesConfig config = gameObject.GetComponent<MiniGamesConfig>();
+		if (config.Ecosystem) {
+			if (GUI.Button(new Rect(10, 10, 120, 30), "Ecosystem")) {
+				Camera.main.GetComponent<MapCamera>().Move(GameState.player.GetID());
+			}
 		}
 
-		if (GUI.Button (new Rect (140, 10, 130, 30), "Clash of Species")) {
-			gameObject.AddComponent <ClashOfSpeciesGUI>(); //Single Player
+		if (config.ClashOfSpecies) {
+			if (GUI.Button (new Rect (140, 10, 130, 30), "Clash of Species")) {
+				gameObject.AddComponent <ClashOfSpeciesGUI>(); //Single Player
+			}
 		}
 
-		if (GUI.Button (new Rect (10, 50, 120, 30), "Don't Eat Me")) {
-			gameObject.AddComponent <DontEatMeGUI>(); // Single Player
+		if (config.DontEatMe) {
+			if (GUI.Button (new Rect (10, 50, 120, 30), "Don't Eat Me")) {
+				gameObject.AddComponent <DontEatMeGUI>(); // Single Player
+			}
 		}
 
-		if (GUI.Button (new Rect (140, 50, 130, 30), "Multiplayer Games")) {
-			gameObject.AddComponent <MultiplayerGames>();
+		if (config.Convergence) {
+			if (GUI.Button (new Rect (10, 90, 120, 30), "Convergence")) {
+				gameObject.AddComponent <ConvergeGUI>(); //Single player
+			}
 		}
 
-		if (GUI.Button (new Rect (10, 90, 120, 30), "Converge")) {
-			gameObject.AddComponent <ConvergeGUI>(); //Single player
-		}
+		if (config.MultiplayerGames) {
+			if (GUI.Button (new Rect (140, 50, 130, 30), "Multiplayer Games")) {
+				gameObject.AddComponent <MultiplayerGames>();
+			}		
+		}		
 	}
 	
 	public void ProcessWorld(NetworkResponse response) {
