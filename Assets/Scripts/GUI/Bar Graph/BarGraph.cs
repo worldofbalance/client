@@ -120,7 +120,7 @@ public class BarGraph : MonoBehaviour
 		scores = new List<int>();  // arraylist of scores, starting from initial 
 		oppGraph = false;  // default is player graph
 		oppName = "";     // name of opponent
-        rectO = new DynamicRect(0, 0, 0, barWidth);
+        rectO = new DynamicRect(0, 0, yAxisLength, barWidth);
 
 	}
 
@@ -167,10 +167,13 @@ public class BarGraph : MonoBehaviour
 		style.fontSize = 16;
 		// Window Title
 		title2 = title;
-		if (oppGraph) {
-			title2 = title + " for " + oppName;
-		}
-		GUI.Label (new Rect ((windowRect.width - 530) / 2, 0, 500, 30), title2, style);
+		title2 = title + " for " + oppName;
+        if (oppGraph) {
+            GUI.Label (new Rect ((windowRect.width - 550) / 2, 0, 550, 30), title2, style);
+        } else {
+            GUI.Label (new Rect ((windowRect.width - 650) / 2, 0, 600, 30), title, style);
+        }
+        Debug.Log ("BG: oppName : " + oppName);
 		// Draw Axes
 		DrawGrid (graphRect);
 		// Draw Slider
@@ -314,7 +317,7 @@ public class BarGraph : MonoBehaviour
 		GUIUtility.RotateAroundPivot (-90, origin);
 		// Draw Series Set
 		GUI.BeginGroup (seriesSet.rect.GetRect ());
-        Debug.Log ("seriesSet.rect: x,y,width,height: " + seriesSet.rect.x + " " + seriesSet.rect.y + " " +
+        Debug.Log ("BG: seriesSet.rect: x,y,width,height: " + seriesSet.rect.x + " " + seriesSet.rect.y + " " +
             seriesSet.rect.width + " " + seriesSet.rect.height);
 		float yNext = 0;
 
@@ -327,7 +330,7 @@ public class BarGraph : MonoBehaviour
 			// Next stacking position
 			yNext += barHeight - 1f;
 			
-            Debug.Log ("barRect.rect: x,y,width,height: " + barRect.GetRect().x + " " + barRect.GetRect().y + " " +
+            Debug.Log ("BG: barRect.rect: x,y,width,height: " + barRect.GetRect().x + " " + barRect.GetRect().y + " " +
                 barRect.GetRect().width + " " + barRect.GetRect().height);
 			Functions.DrawBackground (barRect.GetRect (), barTexture, series.color);
 		}
@@ -356,7 +359,7 @@ public class BarGraph : MonoBehaviour
 			style.richText = true;
 			style.alignment = TextAnchor.UpperCenter;
 
-			string xLabel = seriesSet.label;
+            string xLabel = seriesSet.label;
 			GUI.Label (new Rect (seriesSet.rect.x + (seriesSet.rect.height - 200) / 2, seriesSet.rect.y + 10, 200, 60), xLabel, style);
 		}
 	}
@@ -369,7 +372,7 @@ public class BarGraph : MonoBehaviour
 
 		rectO.x = xPos;
 		rectO.y = hStart.y - 1;
-        Debug.Log ("BG: rectO: x, width, height: " + rectO.x + " " + rectO.width + " " + rectO.height);
+        Debug.Log ("BG: rectO: x,y, width, height: " + rectO.x + " " + rectO.y + " " + rectO.width + " " + rectO.height);
 
 		GUI.color = (false) ? Color.gray : Color.white;
 
@@ -382,12 +385,12 @@ public class BarGraph : MonoBehaviour
 		float yNext = 0;
 
 
-		float barHeight = ((float) score / (float) yRange) * yAxisLength;  //prev series.GetSum()
+		float barHeight = ((float) score / (float) yRangeO) * yAxisLength;  //prev series.GetSum()
 		// Draw horizontally, then rotate vertically
         DynamicRect barRect = new DynamicRect (0, 0, 0, barWidth);
 		barRect.x = yNext;
 		barRect.width = barHeight;
-        Debug.Log ("BG: barRect: x, width, height: " + barRect.x + " " + barRect.width + " " + barRect.height);
+        Debug.Log ("BG: barRect: x,y, width, height: " + barRect.x + " " + barRect.y + " " + barRect.width + " " + barRect.height);
         // barRect.height = barWidth;
 		// Next stacking position
 
@@ -420,8 +423,9 @@ public class BarGraph : MonoBehaviour
 			style.richText = true;
 			style.alignment = TextAnchor.UpperCenter;
 
-			// string xLabel = seriesSet.label;
-			// GUI.Label (new Rect (seriesSet.rect.x + (seriesSet.rect.height - 200) / 2, seriesSet.rect.y + 10, 200, 60), xLabel, style);
+            int myInt = index + 1;
+            string xLabel = myInt.ToString();
+            GUI.Label (new Rect (rectO.x + (rectO.height - 200) / 2, rectO.y + 10, 200, 60), xLabel, style);
 		}
 	}
 
@@ -585,7 +589,7 @@ public class BarGraph : MonoBehaviour
 			//}
 		}
 		scores.Add (maxValue);
-		Debug.Log ("BarGraph add score, score / count: " + maxValue + " " + scores.Count);
+		Debug.Log ("BG: BarGraph add score, score / count: " + maxValue + " " + scores.Count);
 
 		
 		// Adjust Max Y-Range

@@ -383,6 +383,7 @@ public class MultiConvergeGame : MonoBehaviour
 				// Debug.Log ("other player button: " + (bufferBorder + width - 170) + " " + topLeft + " " + buttonWidth);
 				Debug.Log ("Button text: " + buttonText);
 				if (GUI.Button (new Rect (bufferBorder + width - 150, topLeft, buttonWidth, 30), buttonText)) {
+                    barGraph.setOppName (name_otherPlayer);
 					displayOtherGraph ();
 				}
 				topLeft += 45;
@@ -1377,7 +1378,6 @@ public class MultiConvergeGame : MonoBehaviour
 			// Give name and indicate that graph for other player 
             Debug.Log("MC: Display other player graph");
 			barGraph.setOppScores(otherScores);
-			barGraph.setOppName (name_otherPlayer);
 			barGraph.setOppGraph (true);
 			barGraph.SetActive (true);
 		}
