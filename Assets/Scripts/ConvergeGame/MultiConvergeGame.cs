@@ -375,12 +375,12 @@ public class MultiConvergeGame : MonoBehaviour
 			if ((id_otherPlayer > 0 ) && (betStatusList.Contains(id_otherPlayer))) {
 				if (((short) betStatusList [id_otherPlayer]) == 1) {  // bet placed
 					GUI.color = Color.green; 
-					buttonText = ((string)entry.Value) + " Entered Bet";
+					buttonText = name_otherPlayer + " Entered Bet";
 				} else {  // bet not placed
 					GUI.color = Color.red;
-					buttonText = ((string)entry.Value) + " No Bet";
+					buttonText = name_otherPlayer + " No Bet";
 				}
-				Debug.Log ("other player button: " + (bufferBorder + width - 170) + " " + topLeft + " " + buttonWidth);
+				// Debug.Log ("other player button: " + (bufferBorder + width - 170) + " " + topLeft + " " + buttonWidth);
 				Debug.Log ("Button text: " + buttonText);
 				if (GUI.Button (new Rect (bufferBorder + width - 150, topLeft, buttonWidth, 30), buttonText)) {
 					displayOtherGraph ();

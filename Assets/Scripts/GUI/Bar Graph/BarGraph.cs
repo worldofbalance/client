@@ -69,7 +69,7 @@ public class BarGraph : MonoBehaviour
 	private string title2;
 	private List<int> oppScores;     // Opponent score values; up to 5
 	private int yRangeO;          // Opponent yRange value
-	public DynamicRect rectO { get; set; }
+    public DynamicRect rectO;
 
 	public ConvergeManager convergeManager { get; set; }
 
@@ -120,6 +120,7 @@ public class BarGraph : MonoBehaviour
 		scores = new List<int>();  // arraylist of scores, starting from initial 
 		oppGraph = false;  // default is player graph
 		oppName = "";     // name of opponent
+        rectO = new DynamicRect(0, 0, 0, barWidth);
 
 	}
 
@@ -169,7 +170,7 @@ public class BarGraph : MonoBehaviour
 		if (oppGraph) {
 			title2 = title + " for " + oppName;
 		}
-		GUI.Label (new Rect ((windowRect.width - 500) / 2, 0, 500, 30), title2, style);
+		GUI.Label (new Rect ((windowRect.width - 530) / 2, 0, 500, 30), title2, style);
 		// Draw Axes
 		DrawGrid (graphRect);
 		// Draw Slider
@@ -313,6 +314,8 @@ public class BarGraph : MonoBehaviour
 		GUIUtility.RotateAroundPivot (-90, origin);
 		// Draw Series Set
 		GUI.BeginGroup (seriesSet.rect.GetRect ());
+        Debug.Log ("seriesSet.rect: x,y,width,height: " + seriesSet.rect.x + " " + seriesSet.rect.y + " " +
+            seriesSet.rect.width + " " + seriesSet.rect.height);
 		float yNext = 0;
 
 		foreach (BarSeries series in seriesSet.seriesList) {
@@ -323,7 +326,9 @@ public class BarGraph : MonoBehaviour
 			barRect.width = barHeight;
 			// Next stacking position
 			yNext += barHeight - 1f;
-				
+			
+            Debug.Log ("barRect.rect: x,y,width,height: " + barRect.GetRect().x + " " + barRect.GetRect().y + " " +
+                barRect.GetRect().width + " " + barRect.GetRect().height);
 			Functions.DrawBackground (barRect.GetRect (), barTexture, series.color);
 		}
 		GUI.EndGroup ();
@@ -364,6 +369,7 @@ public class BarGraph : MonoBehaviour
 
 		rectO.x = xPos;
 		rectO.y = hStart.y - 1;
+        Debug.Log ("BG: rectO: x, width, height: " + rectO.x + " " + rectO.width + " " + rectO.height);
 
 		GUI.color = (false) ? Color.gray : Color.white;
 
@@ -378,10 +384,11 @@ public class BarGraph : MonoBehaviour
 
 		float barHeight = ((float) score / (float) yRange) * yAxisLength;  //prev series.GetSum()
 		// Draw horizontally, then rotate vertically
-        DynamicRect barRect = new DynamicRect (0, 0, 0, 0);
+        DynamicRect barRect = new DynamicRect (0, 0, 0, barWidth);
 		barRect.x = yNext;
 		barRect.width = barHeight;
-        barRect.height = barWidth;
+        Debug.Log ("BG: barRect: x, width, height: " + barRect.x + " " + barRect.width + " " + barRect.height);
+        // barRect.height = barWidth;
 		// Next stacking position
 
 		Functions.DrawBackground (barRect.GetRect(), barTexture, Color.red);
