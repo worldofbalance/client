@@ -73,7 +73,7 @@ public class MultiConvergeGame : MonoBehaviour
 	private bool host;    // Is this player the host?
 	private int timeRemain = 0;   // How many seconds left in round. Could be negative
     private int timeDisplayed = 0;   // Value displayed for time remaining
-    private int timeCheck = -15;   // timeRemain value to check for no response
+    private int timeCheck = -30;   // timeRemain value to check for no response
     private int checkCount = 0;   // count of number of CheckPlayers msgs sent
     private int playerDrop = 0;   // Count of frames to display player dropped msg 
 	private string remainLabel;
