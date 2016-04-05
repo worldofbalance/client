@@ -71,7 +71,11 @@ public class MultiConvergeGame : MonoBehaviour
 	private string buttonTitle;
 	public static int matchID;     // This is the room_id
 	private bool host;    // Is this player the host?
-	private int timeRemain = 0;
+	private int timeRemain = 0;   // How many seconds left in round. Could be negative
+    private int timeDisplayed = 0;   // Value displayed for time remaining
+    private int timeCheck = -15;   // timeRemain value to check for no response
+    private int checkCount = 0;   // count of number of CheckPlayers msgs sent
+    private int playerDrop = 0;   // Count of frames to display player dropped msg 
 	private string remainLabel;
 	private int balance;    // player money balance
 	private int bet;        // player bet amount 
@@ -191,7 +195,7 @@ public class MultiConvergeGame : MonoBehaviour
 		// Client Version Label
 		GUI.Label (new Rect (Screen.width - 75, Screen.height - 30, 65, 20), "v" + Constants.CLIENT_VERSION + " Beta");
 
-		if ((!windowClosed) && (!simRunning)) {
+		if (!simRunning) {
 			moment = DateTime.Now;
 			timeNowNew = moment.Millisecond;
 			int delta = timeNowNew - timeNow;
@@ -202,11 +206,17 @@ public class MultiConvergeGame : MonoBehaviour
 				GetTime();  // Update bet time 
 
 				// On the multiples of 5 seconds, get the names
-				if ((timeRemain % 10) == 5) {
+                if (((timeRemain % 10) == 5) && (!windowClosed)) {
 					GetNames();
 				}
 			}
 		}
+
+        if ((timeRemain < timeCheck) && (checkCount < 3)) {  // waiting too long for some client(s). Check Server
+            checkCount++;
+            CheckPlayers();
+        }
+            
 			
 		// Check if betting window closed and no bet entered
 		if (!betAccepted && windowClosed && !closedResponseSent) {
@@ -303,15 +313,14 @@ public class MultiConvergeGame : MonoBehaviour
 
 		// DH change
 		// Add in time remaining label
-		if (timeRemain < 0)
-			timeRemain = 0;
+        timeDisplayed = (timeRemain < 0) ? 0 : timeRemain;
 		remainLabel = "Bidding Time Remaining:  ";
 		if (windowClosed) {
 			remainLabel += "Bidding Now Closed";
 		} else if (simRunning) {
 			remainLabel += "Simulation Running";
 		} else {
-			remainLabel = remainLabel + timeRemain + " seconds";
+			remainLabel = remainLabel + timeDisplayed + " seconds";
 		}
 		GUI.Label (new Rect (bufferBorder, height - 70 - bufferBorder, 400, 30), remainLabel, style);
 
@@ -329,6 +338,10 @@ public class MultiConvergeGame : MonoBehaviour
 				GUI.Label (new Rect (bufferBorder + 450, height / 2 + bufferBorder + 190, 300, 30), "You did not play last round.", style);
 			}
 		}
+        if (playerDrop > 0) {
+            GUI.Label (new Rect (bufferBorder + 450, height / 2 + bufferBorder + 230, 300, 30), "A player left the game.", style);
+            playerDrop--;
+        }
 
 		if (betAccepted) {
 			buttonTitle = "Bet Entered";
@@ -1266,6 +1279,9 @@ public class MultiConvergeGame : MonoBehaviour
 		ResponseConvergeGetTime args = response as ResponseConvergeGetTime;
 		Debug.Log ("ResponseConvergeGetTime received. Bet time = " + args.betTime);
 		timeRemain = args.betTime;
+        if (timeRemain > 0) {
+            checkCount = 0;
+        }
 		betStatusList.Clear ();
 		betStatusList.Add(args.player1ID, args.betStatus1);
 		betStatusList.Add(args.player2ID, args.betStatus2);
@@ -1287,9 +1303,26 @@ public class MultiConvergeGame : MonoBehaviour
 			}
 		}
 
-		if (timeRemain == 0)
+		if (timeRemain <= 0)
 			windowClosed = true;
 	}
+
+    public void CheckPlayers() {
+        Debug.Log ("Check Players request sent");
+        NetworkManager.Send (
+            ConvergeCheckPlayersProtocol.Prepare (),
+            ProcessCheckPlayers
+        );
+    }
+
+    public void ProcessCheckPlayers (NetworkResponse response)
+    {
+        ResponseConvergeCheckPlayers args = response as ResponseConvergeCheckPlayers;
+        Debug.Log ("ResponseConvergeCheckPlayers received. Status = " + args.status);
+        if (args.status == 1 )  {   // means a player was dropped
+            playerDrop = 600;   // Display player dropped a while 
+        }
+    }
 
 	public void GetNames() {
 		Debug.Log ("Get names request sent");

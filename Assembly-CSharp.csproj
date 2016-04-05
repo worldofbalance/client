@@ -353,6 +353,7 @@
      <Compile Include="Assets\Scripts\Network\Protocol\ClashOfSpecies\ClashSpeciesListProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ClientProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergeBetUpdateProtocol.cs" />
+     <Compile Include="Assets\Scripts\Network\Protocol\ConvergeCheckPlayers.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergeEcosystemsProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergeGetNamesProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergeGetOtherScoreProtocol.cs" />
@@ -423,6 +424,7 @@
      <Compile Include="Assets\Scripts\TileSelectGUI.cs" />
      <Compile Include="Assets\Scripts\World\Map.cs" />
      <Compile Include="Assets\Scripts\World\MapCamera.cs" />
+     <Compile Include="Assets\Scripts\World\MiniGamesConfig.cs" />
      <Compile Include="Assets\Scripts\World\WorldController.cs" />
      <Compile Include="Assets\Scripts\World\WorldMouse.cs" />
      <Compile Include="Assets\Scripts\World\Zone.cs" />

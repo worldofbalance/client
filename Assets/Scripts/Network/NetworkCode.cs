@@ -68,6 +68,7 @@
 	public static readonly short MC_BET_UPDATE = 182;
 	public static readonly short MC_GET_NAMES = 183;
 	public static readonly short MC_GET_OTHER_SCORE = 184;
+    public static readonly short MC_CHECK_PLAYERS = 185;
 
 
 	public static readonly short TOPLIST = 153;

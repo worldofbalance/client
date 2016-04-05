@@ -1,20 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Config.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ConvergeGame\MultiConvergeGame.cs">
     <Files>
-      <File FileName="Assets\Scripts\World\WorldController.cs" Line="23" Column="3" />
-      <File FileName="Assets\Scripts\MultiplayerGames.cs" Line="180" Column="54" />
-      <File FileName="Assets\Scripts\ConvergeGame\MultiConvergeGame.cs" Line="1374" Column="4" />
-      <File FileName="Assets\Scripts\Network\NetworkCode.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\World\WorldController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MultiplayerGames.cs" Line="22" Column="5" />
+      <File FileName="Assets\Scripts\ConvergeGame\MultiConvergeGame.cs" Line="198" Column="63" />
+      <File FileName="Assets\Scripts\Network\NetworkCode.cs" Line="66" Column="51" />
       <File FileName="Assets\Scripts\Network\NetworkProtocolTable.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GameRooms.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Network\Protocol\LoginProtocol.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Network\Protocol\MCMatchInitProtocol.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Network\Protocol\ConvergeGetNamesProtocol.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Network\Protocol\ConvergeGetTimeProtocol.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GUI\Bar Graph\BarGraph.cs" Line="306" Column="35" />
-      <File FileName="Assets\Scripts\Other\DynamicRect.cs" Line="20" Column="68" />
-      <File FileName="Assets\Scripts\Config.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GUI\Bar Graph\BarGraph.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

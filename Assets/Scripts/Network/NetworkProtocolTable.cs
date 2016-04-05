@@ -46,6 +46,7 @@ public class NetworkProtocolTable {
 		Add(NetworkCode.MC_BET_UPDATE, "ConvergeBetUpdate");
 		Add(NetworkCode.MC_GET_NAMES, "ConvergeGetNames");
 		Add(NetworkCode.MC_GET_OTHER_SCORE, "ConvergeGetOtherScore");
+        Add(NetworkCode.MC_CHECK_PLAYERS, "ConvergeCheckPlayers");
 
 
 		Add(NetworkCode.TOPLIST, "TopList");
