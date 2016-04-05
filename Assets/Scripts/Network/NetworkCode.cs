@@ -85,4 +85,18 @@
 	public static readonly short CLASH_INITIATE_BATTLE = 167;
 	public static readonly short CLASH_END_BATTLE = 168;
 
+	// Cards of the wild 
+	public static readonly short MATCH_INIT= 201;
+	public static readonly short MATCH_STATUS = 202;
+	public static readonly short GET_DECK = 203;
+	public static readonly short SUMMON_CARD = 204;
+	public static readonly short CARD_ATTACK = 205;
+	public static readonly short QUIT_MATCH = 206;
+	public static readonly short MATCH_OVER = 207;
+	public static readonly short END_TURN = 208;
+	public static readonly short DEAL_CARD = 209;
+	public static readonly short TREE_ATTACK = 210;
+	public static readonly short MATCH_ACTION = 211;
+	public static readonly short MATCH_START = 212;
+	public static readonly short RETURN_LOBBY = 213;
 }

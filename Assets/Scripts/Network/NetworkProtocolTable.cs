@@ -56,6 +56,22 @@ public class NetworkProtocolTable {
 		Add(NetworkCode.CLASH_PLAYER_VIEW, "ClashPlayerView");
 		Add(NetworkCode.CLASH_INITIATE_BATTLE, "ClashInitiateBattle");
 		Add(NetworkCode.CLASH_END_BATTLE, "ClashEndBattle");
+
+		//Cards of the Wild
+		Add(NetworkCode.MATCH_INIT, "CW.MatchInit");
+		Add(NetworkCode.MATCH_STATUS, "CW.MatchStatus");
+		Add(NetworkCode.MATCH_OVER, "CW.MatchOver");
+		Add(NetworkCode.SUMMON_CARD, "CW.SummonCard");
+		Add(NetworkCode.CARD_ATTACK, "CW.CardAttack");
+		Add(NetworkCode.QUIT_MATCH, "CW.QuitMatch");
+		Add(NetworkCode.DEAL_CARD, "CW.DealCard");
+		Add(NetworkCode.END_TURN, "CW.EndTurn");
+		Add(NetworkCode.TREE_ATTACK, "CW.TreeAttack");
+		Add(NetworkCode.GET_DECK, "CW.GetDeck");
+		Add(NetworkCode.MATCH_ACTION, "CW.MatchAction");
+		Add(NetworkCode.MATCH_START, "CW.MatchStart");
+		Add(NetworkCode.RETURN_LOBBY, "CW.ReturnLobby");
+
 	}
 	
 	public static void Add(short protocol_id, string name) {

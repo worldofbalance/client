@@ -142,12 +142,10 @@ public class Login : MonoBehaviour {
 			//			mainObject.GetComponent<Main>().CreateMessageBox("Password Required");
 			GUI.FocusControl("password_field");
 		} else {
+			
 			NetworkManager.Send(
-				LoginProtocol.Prepare(user_id, password),
-				ProcessLogin
-				);
-
-			CW.NetworkManager.Send(CW.LoginProtocol.Prepare(user_id, password));
+				LoginProtocol.Prepare(user_id, password), ProcessLogin
+			);
 
 			RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance();
 			cManager.Send(RR_RequestLogin(user_id, password));
@@ -178,7 +176,7 @@ public class Login : MonoBehaviour {
 				PlayerSelectProtocol.Prepare(0),
 				ProcessPlayerSelect
 				);
-			CW.NetworkManager.Send(
+			NetworkManager.Send(
 				CW.PlayerSelectProtocol.Prepare(0),
 				CW_ProcessPlayerSelect
 				);
@@ -210,7 +208,7 @@ public class Login : MonoBehaviour {
 		}
 	}
 
-	public void CW_ProcessPlayerSelect(CW.NetworkResponse response) {
+	public void CW_ProcessPlayerSelect(NetworkResponse response) {
 		CW.ResponsePlayerSelect args = response as CW.ResponsePlayerSelect;
 	}
 
