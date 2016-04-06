@@ -186,14 +186,16 @@ public class MultiplayerGames : MonoBehaviour {
             } else if (args.gameID == Constants.MINIGAME_MULTI_CONVERGENCE) {
 				MultiConvergeGame.matchID = args.id;
 				short host = 0;  // Default - not the host
-				if (GameState.player.GetName () == room.host) {
+                string playerName = GameState.player.GetName ();
+				if (playerName == room.host) {
 					host = 1;  // this is the host
 				}
 				NetworkManager.Send (MCMatchInitProtocol.Prepare 
-					(GameState.player.GetID (), args.id, host, GameState.player.GetName()), 
+					(GameState.player.GetID (), args.id, host, playerName), 
 					MCProcessMatchInit);
-				Debug.Log("MC notice sent to server(game id, player id): " + args.id + " " + GameState.player.GetID ());
-				Debug.Log ("player id/name: " + userID + " " + GameState.player.GetName());
+				Debug.Log("MC notice sent to server(game id, player id): " + args.id + " " + playerName);
+				Debug.Log ("Player Name: " + playerName);
+                Debug.Log ("userID: " + userID);
 				Debug.Log ("This player host value is: " + host);
 			}
 
