@@ -301,7 +301,7 @@ public class ConvergeGame : MonoBehaviour
 			int row = 0;
 			int col = 0;
 			float entryHeight = height - heightGraph - 30 * 3 - bufferBorder * 2;
-			GUI.BeginGroup (new Rect (bufferBorder, topGraph + heightGraph + bufferBorder, width, entryHeight));
+			GUI.BeginGroup (new Rect (Screen.width - 450, topGraph + heightGraph + bufferBorder, width, entryHeight));
 			//use seriesNodes to force order
 			foreach (int nodeId in manager.seriesNodes) {
 				//look for all possible parameter types for each node
@@ -373,7 +373,9 @@ public class ConvergeGame : MonoBehaviour
 					);
 
 					//show normalized value for parameter
+                    Color inverse = GUI.color;
 					if (param.name.Equals (manager.selected)) {
+                        GUI.color = new Color (1.0f - inverse.r, 1.0f - inverse.g, 1.0f - inverse.b);
 						string valLabel = String.Format (
 							"{0}", 
 							ConvergeParam.NormParam (param.value, min, max));
@@ -386,9 +388,8 @@ public class ConvergeGame : MonoBehaviour
 						float xPosn = 
 							sliderRect.x + 
 							(param.value / (max - min)) * 
-								sliderRect.width +
-								bufferBorder;
-						Rect valRect = new Rect(xPosn, labelRect.y, 70, labelRect.height - 5);
+								sliderRect.width;
+						Rect valRect = new Rect(xPosn - 80, labelRect.y, 70, labelRect.height - 5);
 
 						GUI.Box (valRect, valLabel);
 						style.alignment = TextAnchor.UpperRight;
