@@ -25,7 +25,7 @@ public class MultiConvergeGame : MonoBehaviour
 	private float OppViewWidth;    // DH change. Width of opponent view area
 	private Rect windowRect;
 	// Logic
-	private bool isActive = true;
+    private bool isActive = true;
 	private bool isInitial = true;
 	// DH change
 	// eliminate blink. Replace isProcessing with betAccepted

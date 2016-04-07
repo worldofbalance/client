@@ -360,8 +360,10 @@
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergeGetTimeProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergeHintCountProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergeHintProtocol.cs" />
+     <Compile Include="Assets\Scripts\Network\Protocol\ConvergeHostConfigProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergeNewAttemptProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergeNewAttemptScoreProtocol.cs" />
+     <Compile Include="Assets\Scripts\Network\Protocol\ConvergeNonHostConfigProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergePriorAttemptCountProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\ConvergePriorAttemptProtocol.cs" />
      <Compile Include="Assets\Scripts\Network\Protocol\EcosystemProtocol.cs" />

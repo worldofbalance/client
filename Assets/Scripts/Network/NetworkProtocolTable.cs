@@ -47,7 +47,8 @@ public class NetworkProtocolTable {
 		Add(NetworkCode.MC_GET_NAMES, "ConvergeGetNames");
 		Add(NetworkCode.MC_GET_OTHER_SCORE, "ConvergeGetOtherScore");
         Add(NetworkCode.MC_CHECK_PLAYERS, "ConvergeCheckPlayers");
-
+        Add(NetworkCode.MC_HOST_CONFIG, "ConvergeHostConfig");
+        Add(NetworkCode.MC_NONHOST_CONFIG, "ConvergeNonHostConfig");
 
 		Add(NetworkCode.TOPLIST, "TopList");
 		Add(NetworkCode.PAIR, "Pair");
