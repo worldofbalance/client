@@ -35,9 +35,9 @@ public class MultiConvergeGame : MonoBehaviour
 	private Rect windowRect;
     private Rect windowRectConfig;
 	// Logic
-    private bool isActive = false;   // Not active until host specifies & non-host receives - isSetup
+    private bool isActive = true;   // Not active until host specifies    Ivan - change to false
     private bool isInitial = true;   // helps with GUI focus
-    private bool isSetup = true;   // read parameters
+    private bool isSetup = false;   // read parameters   Ivan - change to true
 	// DH change
 	// eliminate blink. Replace isProcessing with betAccepted
 	// private bool isProcessing = true;
