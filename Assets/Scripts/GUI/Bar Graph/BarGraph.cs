@@ -367,6 +367,7 @@ public class BarGraph : MonoBehaviour
 	private void DrawOppBar (int score, int index = 0)
 	{
 		float xPos;
+        Color barColor = Color.red;
 
 		xPos = hStart.x + interBarWidth/2 + (index * (barWidth + interBarWidth));
 
@@ -394,7 +395,25 @@ public class BarGraph : MonoBehaviour
         // barRect.height = barWidth;
 		// Next stacking position
 
-		Functions.DrawBackground (barRect.GetRect(), barTexture, Color.red);
+        switch (index) {
+            case 0:
+                barColor = Color.red;
+                break;
+            case 1:
+                barColor = Color.cyan;
+                break;
+            case 2:
+                barColor = Color.green;
+                break;
+            case 3: 
+                barColor = Color.magenta;
+                break;
+            case 4:
+                barColor = Color.blue;
+                break;
+        }
+
+		Functions.DrawBackground (barRect.GetRect(), barTexture, barColor);
 
 		GUI.EndGroup ();
 		// Restore Rotation
