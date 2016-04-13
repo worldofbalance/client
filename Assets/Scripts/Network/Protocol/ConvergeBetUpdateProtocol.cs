@@ -7,11 +7,16 @@ using System.Text;
 public class ConvergeBetUpdateProtocol
 {
 
-	public static NetworkRequest Prepare(short betEntered, int improveValue) {
+	public static NetworkRequest Prepare(short betEntered, int improveValue, int s0, int s1, int s2, int s3, int s4) {
 		NetworkRequest request = new NetworkRequest(NetworkCode.MC_BET_UPDATE);
 
 		request.AddShort16(betEntered);
 		request.AddInt32(improveValue);
+		request.AddInt32(s0);
+		request.AddInt32(s1);
+		request.AddInt32(s2);
+		request.AddInt32(s3);
+		request.AddInt32(s4);
 
 		return request;
 	}

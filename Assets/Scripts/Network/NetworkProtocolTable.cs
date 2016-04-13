@@ -45,6 +45,7 @@ public class NetworkProtocolTable {
 		Add(NetworkCode.MC_GET_TIME, "ConvergeGetTime");
 		Add(NetworkCode.MC_BET_UPDATE, "ConvergeBetUpdate");
 		Add(NetworkCode.MC_GET_NAMES, "ConvergeGetNames");
+		Add(NetworkCode.MC_GET_OTHER_SCORE, "ConvergeGetOtherScore");
 
 
 		Add(NetworkCode.TOPLIST, "TopList");

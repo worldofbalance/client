@@ -88,6 +88,11 @@ public class MultiConvergeGame : MonoBehaviour
 	private IDictionary betStatusList;
 	private float buttonWidth;
 	private bool simRunning;
+	private List<int> scores;   // Obtained from BarGraph
+	private List<int> formattedScores;   // Formatted for BetUpdateProtocol
+	private int id_otherPlayer;   // id of player to display graph
+	private string name_otherPlayer;   // name for other player for graph
+	private List<int> otherScores;
 
 	void Awake ()
 	{
@@ -121,6 +126,8 @@ public class MultiConvergeGame : MonoBehaviour
 		betStatusList.Clear();
 
 		simRunning = false;
+		formattedScores = new List<int>();
+		otherScores = new List<int>();
 	}
 	
 	// Use this for initialization
@@ -206,11 +213,17 @@ public class MultiConvergeGame : MonoBehaviour
 			short betEntered = 0;	
 			int improveValue = 0;
 			closedResponseSent = true;
+			ObtainScores();
 
 			NetworkManager.Send (
 				ConvergeBetUpdateProtocol.Prepare (
 					betEntered, 
-					improveValue
+					improveValue,
+					formattedScores[0],
+					formattedScores[1],
+					formattedScores[2],
+					formattedScores[3],
+					formattedScores[4]
 				),
 				ProcessConvergeBetUpdate
 			);
@@ -350,19 +363,17 @@ public class MultiConvergeGame : MonoBehaviour
 		}
 
 		// Display buttons with opponent bet status 
-		// ******
-
 		Color savedColor2 = GUI.color;
 		float topLeft = topGraph;
 
-		int id2;
 		string buttonText;
 		Debug.Log ("Other player button routine");
 		foreach (DictionaryEntry entry in playerNames) {
 			// do something with entry.Value or entry.Key
-			id2 = (int) entry.Key;
-			if ((id2 > 0 ) && (betStatusList.Contains(id2))) {
-				if (((short) betStatusList [id2]) == 1) {  // bet placed
+			id_otherPlayer = (int) entry.Key;
+			name_otherPlayer = (string)entry.Value;
+			if ((id_otherPlayer > 0 ) && (betStatusList.Contains(id_otherPlayer))) {
+				if (((short) betStatusList [id_otherPlayer]) == 1) {  // bet placed
 					GUI.color = Color.green; 
 					buttonText = ((string)entry.Value) + " Entered Bet";
 				} else {  // bet not placed
@@ -371,7 +382,9 @@ public class MultiConvergeGame : MonoBehaviour
 				}
 				Debug.Log ("other player button: " + (bufferBorder + width - 170) + " " + topLeft + " " + buttonWidth);
 				Debug.Log ("Button text: " + buttonText);
-				GUI.Button (new Rect (bufferBorder + width - 150, topLeft, buttonWidth, 30), buttonText);
+				if (GUI.Button (new Rect (bufferBorder + width - 150, topLeft, buttonWidth, 30), buttonText)) {
+					displayOtherGraph ();
+				}
 				topLeft += 45;
 			}
 		}
@@ -750,12 +763,18 @@ public class MultiConvergeGame : MonoBehaviour
 			// short - 1 = bet entered, 0 = no bet entered
 			// integer = improveValue, improvement for this round; 0 if no bet
 
-			short betEntered = 1;		
+			short betEntered = 1;	
+			ObtainScores ();
 
 			NetworkManager.Send (
 				ConvergeBetUpdateProtocol.Prepare (
 					betEntered, 
-					improveValue
+					improveValue,
+					formattedScores[0],
+					formattedScores[1],
+					formattedScores[2],
+					formattedScores[3],
+					formattedScores[4]
 				),
 				ProcessConvergeBetUpdate
 			);
@@ -1091,6 +1110,7 @@ public class MultiConvergeGame : MonoBehaviour
 				barGraph.InputToCSVObject (attemptList [i].csv_string, manager);
 			}
 		}
+		barGraph.setOppGraph (false);   // This graph is for the player
 		barGraph.SetActive (true);
 
 	}
@@ -1304,5 +1324,65 @@ public class MultiConvergeGame : MonoBehaviour
 				// Debug.Log (" " + id + " " + entry.Value);
 			}
 		}
-	}		
+	}
+
+	void ObtainScores() {
+		int i, j;
+		scores = barGraph.getScores ();
+		formattedScores.Clear();
+		for (i = 0; i < 5; i++) {
+			formattedScores.Add (-1);
+		}
+		int numScores = scores.Count;
+		i = (numScores < 5) ? 0 : numScores - 5;
+		j = 0;
+		while (i < numScores) {
+			formattedScores [j] = scores [i];
+			i++;
+			j++;
+		}
+		Debug.Log ("Obtain Scores: Sending these scores to server:");
+		for (i = 0; i < 5; i++) {
+			Debug.Log (" " + i + " " + formattedScores [i]);
+		}
+	}
+
+	// DH change
+	// Displays score of other player in id_otherPlayer
+	private void displayOtherGraph() {
+        Debug.Log ("MC: DisplayOtherGraph");
+		NetworkManager.Send (
+			ConvergeGetOtherScoreProtocol.Prepare (id_otherPlayer),
+			ProcessConvergeGetOtherScore
+		);
+
+	}
+
+	public void ProcessConvergeGetOtherScore (NetworkResponse response)
+	{
+		ResponseConvergeGetOtherScore args = response as ResponseConvergeGetOtherScore;
+		Debug.Log ("MC: ResponseConvergeGetOtherScore received");
+		otherScores.Clear ();
+		otherScores.Add (args.score0);
+		otherScores.Add (args.score1);
+		otherScores.Add (args.score2);
+		otherScores.Add (args.score3);
+		otherScores.Add (args.score4);
+
+		for (int i = 0; i < 5; i++ ) {
+			Debug.Log (" " + i + " " + otherScores [i]);
+		}
+
+		if (args.score0 != -1) {  // Only display graph if some values
+			// Give name and indicate that graph for other player 
+            Debug.Log("MC: Display other player graph");
+			barGraph.setOppScores(otherScores);
+			barGraph.setOppName (name_otherPlayer);
+			barGraph.setOppGraph (true);
+			barGraph.SetActive (true);
+		}
+	}
+
+
+		
 }
