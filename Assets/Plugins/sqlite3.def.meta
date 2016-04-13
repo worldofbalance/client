@@ -1,4 +1,5 @@
 fileFormatVersion: 2
+<<<<<<< 3730ac0044b067015ae8e372dd471e4b8d247bdb
 <<<<<<< HEAD
 guid: 674d4941d9b424d91acd8daaa339d16e
 timeCreated: 1458708334
@@ -6,6 +7,10 @@ timeCreated: 1458708334
 guid: fda397ff54964494b861b3498636c3b7
 timeCreated: 1458717787
 >>>>>>> 49fd84d19b5adfcd03ee0eb3ba2b473a62bea23b
+=======
+guid: c465bbd59a0a3284d92c28b7e0f5565b
+timeCreated: 1457975186
+>>>>>>> Started refactoring code for converge
 licenseType: Free
 PluginImporter:
   serializedVersion: 1
@@ -14,6 +19,7 @@ PluginImporter:
   isPreloaded: 0
   platformData:
     Any:
+<<<<<<< 3730ac0044b067015ae8e372dd471e4b8d247bdb
 <<<<<<< HEAD
 =======
       enabled: 0
@@ -24,6 +30,8 @@ PluginImporter:
         DefaultValueInitialized: true
     Xbox360:
 >>>>>>> 49fd84d19b5adfcd03ee0eb3ba2b473a62bea23b
+=======
+>>>>>>> Started refactoring code for converge
       enabled: 1
       settings: {}
   userData: 
