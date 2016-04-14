@@ -20,6 +20,7 @@ public abstract class DemTween :Component{
   protected DemMain main;
   protected DemTweenManager tweenManager;
 
+
   public DemTween(GameObject _tweenObject , int _tweenTime){
 
     mainObject = GameObject.Find ("MainObject");

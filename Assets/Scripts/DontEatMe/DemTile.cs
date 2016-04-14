@@ -15,10 +15,12 @@ public class DemTile : MonoBehaviour
     private Vector3 center;
 
   	public GameObject resident; // Resident object (HerbivoreObject or PlantObject) placed on tile
+    private GameObject nextPredator;
     private BuildMenu buildMenu;
     public  GameObject mainObject;
     private DemMain main;
     private DemTurnSystem turnSystem;
+    
 
     // Use this for initialization
     void Start ()
@@ -150,7 +152,11 @@ public class DemTile : MonoBehaviour
     
     if (resident) {
       return resident.GetComponent<BuildInfo> ().isPredator ();
-    } else {
+    } else if(nextPredator){
+      return true;
+    }
+    else
+    {
       return false;
     }
 
@@ -174,17 +180,22 @@ public class DemTile : MonoBehaviour
 
   public void AddNewPredator(GameObject animal){
 
-    this.resident = animal;
+    this.nextPredator = animal;
 
-    this.resident.GetComponent<BuildInfo> ().tile = this;
+    this.nextPredator.GetComponent<BuildInfo> ().tile = this;
 
     Vector3 newPosition = new Vector3();
     newPosition.x = this.center.x+2;
     newPosition.y = this.center.y;
     newPosition.z = this.center.z;
 
-    this.resident.transform.position = newPosition;
+    this.nextPredator.transform.position = newPosition;
 
+  }
+
+  public void UpdateNewPredator(){
+    resident = nextPredator;
+    nextPredator = null;
   }
 
   public void RemoveAnimal(){

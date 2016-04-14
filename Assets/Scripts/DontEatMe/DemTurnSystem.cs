@@ -34,6 +34,7 @@ public class DemTurnSystem : MonoBehaviour {
 
     turnLock = true;
     activePredators = board.GetPredators ();
+    Debug.Log ("Total predators :" + activePredators.Count);
     foreach(KeyValuePair<int, GameObject> predator in activePredators)
     {
 

@@ -27,6 +27,8 @@ public class DemPredatorEnterTween :DemTween{
       //Mark for deletion
       complete = true;
       tweenManager.RemoveTween (id);
+      tweenObject.GetComponent<BuildInfo> ().GetTile().UpdateNewPredator();
+
       turnSystem.ProcessTweens ();
       return;
     }

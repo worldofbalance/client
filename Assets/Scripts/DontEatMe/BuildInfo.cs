@@ -72,21 +72,17 @@ public class BuildInfo : MonoBehaviour {
   }
 
 	public bool isPlant(){
-		if (speciesType == 0)
-			return true;
-		return false;
+		return speciesType == 0;
 	}
 
 	public bool isPrey(){
-		if (speciesType == 1)
-			return true;
-		return false;
+		return speciesType == 1;
 	}
 
 	public bool isPredator(){
-		if (speciesType == 2)
-			return true;
-		return false;
+
+		return speciesType == 2;
+
 	}
 
   public void SetParent(GameObject _parent){
