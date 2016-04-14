@@ -3,12 +3,7 @@ namespace RR {
 		
 		// Constants
 		public static readonly string CLIENT_VERSION = "1.00";
-<<<<<<< 3730ac0044b067015ae8e372dd471e4b8d247bdb
 		//public static readonly string REMOTE_HOST = "localhost";
-
-=======
-		// public static readonly string REMOTE_HOST = "localhost";
->>>>>>> Started refactoring code for converge
 		public static readonly int REMOTE_PORT = 9256;//20039;
 		
 		// Request (1xx) + Response (2xx)
