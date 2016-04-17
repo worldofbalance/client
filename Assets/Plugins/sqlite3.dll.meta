@@ -1,4 +1,5 @@
 fileFormatVersion: 2
+<<<<<<< 3730ac0044b067015ae8e372dd471e4b8d247bdb
 <<<<<<< HEAD
 guid: f610143c01d2043c399dc36789e9c6d8
 timeCreated: 1458708340
@@ -6,6 +7,10 @@ timeCreated: 1458708340
 guid: 57233381a65cd4619b3a0debb2b1e101
 timeCreated: 1458717787
 >>>>>>> 49fd84d19b5adfcd03ee0eb3ba2b473a62bea23b
+=======
+guid: 0d865a3f9e7b2e14586bb1acfe51e144
+timeCreated: 1457975175
+>>>>>>> Started refactoring code for converge
 licenseType: Free
 PluginImporter:
   serializedVersion: 1
@@ -16,6 +21,7 @@ PluginImporter:
     Any:
       enabled: 1
       settings: {}
+<<<<<<< 3730ac0044b067015ae8e372dd471e4b8d247bdb
 <<<<<<< HEAD
 =======
     Editor:
@@ -23,6 +29,8 @@ PluginImporter:
       settings:
         DefaultValueInitialized: true
 >>>>>>> 49fd84d19b5adfcd03ee0eb3ba2b473a62bea23b
+=======
+>>>>>>> Started refactoring code for converge
   userData: 
   assetBundleName: 
   assetBundleVariant: 

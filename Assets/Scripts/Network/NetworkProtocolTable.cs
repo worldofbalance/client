@@ -40,6 +40,16 @@ public class NetworkProtocolTable {
 		Add(NetworkCode.CONVERGE_HINT, "ConvergeHint");
 		Add(NetworkCode.CONVERGE_HINT_COUNT, "ConvergeHintCount");
 		Add(NetworkCode.CONVERGE_NEW_ATTEMPT_SCORE, "ConvergeNewAttemptScore");
+		// DH change
+		Add(NetworkCode.MC_MATCH_INIT, "MCMatchInit");
+		Add(NetworkCode.MC_GET_TIME, "ConvergeGetTime");
+		Add(NetworkCode.MC_BET_UPDATE, "ConvergeBetUpdate");
+		Add(NetworkCode.MC_GET_NAMES, "ConvergeGetNames");
+		Add(NetworkCode.MC_GET_OTHER_SCORE, "ConvergeGetOtherScore");
+        Add(NetworkCode.MC_CHECK_PLAYERS, "ConvergeCheckPlayers");
+        Add(NetworkCode.MC_HOST_CONFIG, "ConvergeHostConfig");
+        Add(NetworkCode.MC_NONHOST_CONFIG, "ConvergeNonHostConfig");
+
 		Add(NetworkCode.TOPLIST, "TopList");
 		Add(NetworkCode.PAIR, "Pair");
 		Add(NetworkCode.QUIT_ROOM, "QuitRoom");

@@ -61,6 +61,17 @@
 	public static readonly short CONVERGE_HINT_COUNT = 151;
 	public static readonly short CONVERGE_NEW_ATTEMPT_SCORE = 152;
 
+	// DH change
+	// Multiplayer Convergence
+	public static readonly short MC_MATCH_INIT = 180;
+	public static readonly short MC_GET_TIME = 181;
+	public static readonly short MC_BET_UPDATE = 182;
+	public static readonly short MC_GET_NAMES = 183;
+	public static readonly short MC_GET_OTHER_SCORE = 184;
+    public static readonly short MC_CHECK_PLAYERS = 185;
+    public static readonly short MC_HOST_CONFIG = 186;
+    public static readonly short MC_NONHOST_CONFIG = 187;
+
 	public static readonly short TOPLIST = 153;
 
 	public static readonly short WAITFORGAME = 154;

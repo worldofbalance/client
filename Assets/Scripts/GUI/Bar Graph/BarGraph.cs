@@ -62,6 +62,15 @@ public class BarGraph : MonoBehaviour
 	private float barWidth = 50;
 	private float interBarWidth;
 
+	// DH change
+	private List<int> scores;  // list of scores, starting from initial and all attempts 
+	private bool oppGraph;    // true = graph for opponent
+	private string oppName;     // Name for opponent
+	private string title2;
+	private List<int> oppScores;     // Opponent score values; up to 5
+	private int yRangeO;          // Opponent yRange value
+    public DynamicRect rectO;
+
 	public ConvergeManager convergeManager { get; set; }
 
 	void Awake ()
@@ -107,6 +116,12 @@ public class BarGraph : MonoBehaviour
 
 		//gameObject.AddComponent<GraphInput>().graph = this;  jtc-commented out
 
+		// DH change
+		scores = new List<int>();  // arraylist of scores, starting from initial 
+		oppGraph = false;  // default is player graph
+		oppName = "";     // name of opponent
+        rectO = new DynamicRect(0, 0, yAxisLength, barWidth);
+
 	}
 
 	// Use this for initialization
@@ -140,6 +155,9 @@ public class BarGraph : MonoBehaviour
 	
 	void MakeWindow (int id)
 	{
+        if (oppGraph) {
+            calcOppValues ();
+        }
 		Functions.DrawBackground (new Rect (0, 0, windowRect.width, windowRect.height), Constants.BG_TEXTURE_01);
 		GUI.BringWindowToFront(id);
 		// Window Title Styling
@@ -148,13 +166,21 @@ public class BarGraph : MonoBehaviour
 		style.font = Constants.FONT_01;
 		style.fontSize = 16;
 		// Window Title
-		GUI.Label (new Rect ((windowRect.width - 500) / 2, 0, 500, 30), title, style);
+		title2 = title;
+		title2 = title + " for " + oppName;
+        if (oppGraph) {
+            GUI.Label (new Rect ((windowRect.width - 550) / 2, 0, 550, 30), title2, style);
+        } else {
+            GUI.Label (new Rect ((windowRect.width - 650) / 2, 0, 600, 30), title, style);
+        }
+        Debug.Log ("BG: oppName : " + oppName);
 		// Draw Axes
 		DrawGrid (graphRect);
 		// Draw Slider
-		DrawSlider ();
+		if (!oppGraph)
+			DrawSlider ();
 		// Draw Legend
-		if (isLegendActive) {
+		if (isLegendActive && !oppGraph) {
 			barLegend.Draw();
 		}
 		if (GUI.Button (new Rect (20, windowRect.height - 40, 50, 30), "Close")) {
@@ -219,7 +245,11 @@ public class BarGraph : MonoBehaviour
 			Drawing.DrawLine (new Vector2 (xPos, yPos), new Vector2 (xPos + 10, yPos), color, thickness, false);
 			// Unit Label
 			style.alignment = TextAnchor.UpperRight;
-			GUI.Label (new Rect (xPos - 85, yPos - 11, 80, 30), (i * yRange / 5).ToString (), style);
+			if (oppGraph) {
+				GUI.Label (new Rect (xPos - 85, yPos - 11, 80, 30), (i * yRangeO / 5).ToString (), style);
+			} else {
+				GUI.Label (new Rect (xPos - 85, yPos - 11, 80, 30), (i * yRange / 5).ToString (), style);
+			}
 		}
 		// Y-Axis Label
 		style.alignment = TextAnchor.UpperCenter;
@@ -237,24 +267,34 @@ public class BarGraph : MonoBehaviour
 //				SeriesSet seriesSet = seriesSets[sliderValue + i];
 //				DrawSeriesSet(seriesSet, i);
 //			}
-		if (seriesSets.Count > 0) {
+
+		// For player graph
+		if ((seriesSets.Count > 0) && !oppGraph) {
 			//draw default vs target
 			SeriesSet seriesSet = seriesSets [0];
 			DrawSeriesSet (seriesSet, 0);
 			Vector2 v1 = new Vector2 (
-				seriesSet.rect.x + barWidth + (interBarWidth/2), 
-				seriesSet.rect.y
-				);
+				             seriesSet.rect.x + barWidth + (interBarWidth / 2), 
+				             seriesSet.rect.y
+			             );
 			Vector2 v2 = new Vector2 (
-				v1.x, 
-				seriesSet.rect.y - yAxisLength
-				);
+				             v1.x, 
+				             seriesSet.rect.y - yAxisLength
+			             );
 			//separate default from player attempts with a line
 			Drawing.DrawLine (v1, v2, color, thickness, false);
 			//draw attempts vs target
 			for (int series = 1; series < Mathf.Min (perPage, seriesSets.Count); series++) {
 				seriesSet = seriesSets [sliderValue + series];
 				DrawSeriesSet (seriesSet, series);
+			}
+		} else if ((oppScores [0] != -1) && oppGraph) {
+            Debug.Log ("BG: Drawing oppGraph");
+			for (int i = 0; i < 5; i++) {
+				if (oppScores [i] != -1) {
+                    Debug.Log ("BG: i/oppScores: " + i + " " + oppScores [i]);
+					DrawOppBar (oppScores [i], i);
+				}
 			}
 		}
 		GUI.EndGroup ();
@@ -277,6 +317,8 @@ public class BarGraph : MonoBehaviour
 		GUIUtility.RotateAroundPivot (-90, origin);
 		// Draw Series Set
 		GUI.BeginGroup (seriesSet.rect.GetRect ());
+        Debug.Log ("BG: seriesSet.rect: x,y,width,height: " + seriesSet.rect.x + " " + seriesSet.rect.y + " " +
+            seriesSet.rect.width + " " + seriesSet.rect.height);
 		float yNext = 0;
 
 		foreach (BarSeries series in seriesSet.seriesList) {
@@ -287,7 +329,9 @@ public class BarGraph : MonoBehaviour
 			barRect.width = barHeight;
 			// Next stacking position
 			yNext += barHeight - 1f;
-				
+			
+            Debug.Log ("BG: barRect.rect: x,y,width,height: " + barRect.GetRect().x + " " + barRect.GetRect().y + " " +
+                barRect.GetRect().width + " " + barRect.GetRect().height);
 			Functions.DrawBackground (barRect.GetRect (), barTexture, series.color);
 		}
 		GUI.EndGroup ();
@@ -315,10 +359,96 @@ public class BarGraph : MonoBehaviour
 			style.richText = true;
 			style.alignment = TextAnchor.UpperCenter;
 
-			string xLabel = seriesSet.label;
+            string xLabel = seriesSet.label;
 			GUI.Label (new Rect (seriesSet.rect.x + (seriesSet.rect.height - 200) / 2, seriesSet.rect.y + 10, 200, 60), xLabel, style);
 		}
 	}
+
+	private void DrawOppBar (int score, int index = 0)
+	{
+		float xPos;
+        Color barColor = Color.red;
+
+		xPos = hStart.x + interBarWidth/2 + (index * (barWidth + interBarWidth));
+
+		rectO.x = xPos;
+		rectO.y = hStart.y - 1;
+        Debug.Log ("BG: rectO: x,y, width, height: " + rectO.x + " " + rectO.y + " " + rectO.width + " " + rectO.height);
+
+		GUI.color = (false) ? Color.gray : Color.white;
+
+		// Rotate -90 degrees to allow Rect to expand upwards by adjusting the width
+		Matrix4x4 matrix = GUI.matrix;
+		Vector2 origin = new Vector2 (rectO.x, rectO.y);
+		GUIUtility.RotateAroundPivot (-90, origin);
+		// Draw Series Set
+		GUI.BeginGroup (rectO.GetRect ());
+		float yNext = 0;
+
+
+		float barHeight = ((float) score / (float) yRangeO) * yAxisLength;  //prev series.GetSum()
+		// Draw horizontally, then rotate vertically
+        DynamicRect barRect = new DynamicRect (0, 0, 0, barWidth);
+		barRect.x = yNext;
+		barRect.width = barHeight;
+        Debug.Log ("BG: barRect: x,y, width, height: " + barRect.x + " " + barRect.y + " " + barRect.width + " " + barRect.height);
+        // barRect.height = barWidth;
+		// Next stacking position
+
+        switch (index) {
+            case 0:
+                barColor = Color.red;
+                break;
+            case 1:
+                barColor = Color.cyan;
+                break;
+            case 2:
+                barColor = Color.green;
+                break;
+            case 3: 
+                barColor = Color.magenta;
+                break;
+            case 4:
+                barColor = Color.blue;
+                break;
+        }
+
+		Functions.DrawBackground (barRect.GetRect(), barTexture, barColor);
+
+		GUI.EndGroup ();
+		// Restore Rotation
+		GUI.matrix = matrix;
+		// Expand "Animation"
+		/*
+		if (Mathf.Abs (seriesSet.rect.width - yAxisLength) > 0.1f) {
+			seriesSet.rect.width = Mathf.Lerp (0, yAxisLength, seriesSet.rect.deltaTime += Time.deltaTime * 0.4f);
+		} else {
+			// Create labels
+			GUIStyle style = new GUIStyle (GUI.skin.label);
+			style.richText = true;
+			style.alignment = TextAnchor.LowerCenter;
+
+			foreach (BarSeries series in seriesSet.seriesList) {
+				DynamicRect barRect = series.GetRect ();
+
+				string text = series.score.ToString ();   //GetSum ().ToString ("F2");
+				//				GUI.Label(new Rect(seriesSet.rect.x - 65, yAxisLength - barRect.x - barRect.width / 2 - 9, 200, 60), text, style);
+			}
+		}
+		*/
+
+		{
+			GUIStyle style = new GUIStyle (GUI.skin.label);
+			style.richText = true;
+			style.alignment = TextAnchor.UpperCenter;
+
+            int myInt = index + 1;
+            string xLabel = myInt.ToString();
+            GUI.Label (new Rect (rectO.x + (rectO.height - 200) / 2, rectO.y + 10, 200, 60), xLabel, style);
+		}
+	}
+
+
 
 	private void DrawMarker (string label, Rect rect, Color color, string text)
 	{
@@ -418,6 +548,7 @@ public class BarGraph : MonoBehaviour
 	{
 		csvList.Add (csvObject);
 
+		// DH - i believe the first one is the target
 		if (csvList.Count == 1) {
 			return;
 		}
@@ -459,12 +590,26 @@ public class BarGraph : MonoBehaviour
 				new DynamicRect (0, 0, 0, seriesSet.rect.height), 
 				colorList [name]);
 			seriesSet.Add (series);
-
 		}
 
 		//sort seriesList in seriesSet
 		seriesSet.Sort (convergeManager.seriesLabels);
 		seriesSets.Add (seriesSet);
+
+		// DH change
+		// calculates the score for this addition and puts it in scores
+		int maxValue = 1;  //float maxValue = 1;
+		foreach (BarSeries series in seriesSet.seriesList) {
+			maxValue += series.score;
+			//foreach (float value in series.values) {
+			//	if (value > 0) {
+			//		maxValue += value;
+			//	}
+			//}
+		}
+		scores.Add (maxValue);
+		Debug.Log ("BG: BarGraph add score, score / count: " + maxValue + " " + scores.Count);
+
 		
 		// Adjust Max Y-Range
 		//UpdateRange ();
@@ -500,6 +645,28 @@ public class BarGraph : MonoBehaviour
 		int roundTo = int.Parse ("5".PadRight (((int)yMaxValue).ToString ().Length - 1, '0'));
 		yRange = Mathf.CeilToInt (yMaxValue / roundTo) * roundTo;
 	}
+
+	// DH change
+	// Method returns the improvement from the most recent round
+	// improvement = latest score - Max(all previous scores)
+	public int Improvement() {
+		int numScores = scores.Count;
+		if (numScores < 2) {
+			return 0;
+		}
+		Debug.Log ("BG improvement, 0 value: " + scores[0]);
+		int minValue = scores[0];
+		for (int i = 1; i < (numScores - 1); i++) {
+			Debug.Log ("BG: #/value: " + i + " " + scores [i]);
+			if (scores[i] < minValue)
+				minValue = scores[i];
+		}
+		return minValue - scores[numScores - 1];
+		Debug.Log ("BarGraph, minValue/count/latest/improve: " + minValue + " " + numScores + " " + scores [numScores - 1] + 
+			" " + (minValue - scores[numScores - 1]));
+	}
+
+
 
 	//depricated, using CSVObject::AverageDifferenceCSVs
 	public CSVObject SubtractCSVs (CSVObject a, CSVObject b)
@@ -538,4 +705,31 @@ public class BarGraph : MonoBehaviour
 		CreateSeriesSet (csvObject);
 	}
 
+	// DH change
+	public List<int> getScores() {
+		return scores;
+	}
+
+	public void setOppGraph(bool oppGraph) {
+		this.oppGraph = oppGraph;
+	}
+
+	public void setOppName(string oppName) {
+		this.oppName = oppName;
+	}
+
+	public void setOppScores(List<int> oppScores) {
+		this.oppScores = oppScores;
+	}
+
+	void calcOppValues() {
+		// yRangeO is max of Opponent score values
+		yRangeO = oppScores[0];
+		for (int i = 1; i < 5; i++) {
+			if (oppScores [i] != -1) {
+				yRangeO = Mathf.Max(yRangeO, oppScores[i]);
+			}
+		}			
+	}
+		
 }

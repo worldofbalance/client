@@ -61,6 +61,8 @@ public class Constants {
 	public static readonly int VIEW_WIN = 11;
 	public static readonly int CONVERGE_WIN = 12;
 	public static readonly int CONVERGE_POPUP_WIN = 13;
+    public static readonly int CONVERGE_HOST_CONFIG = 14;
+    public static readonly int CONVERGE_NONHOST_CONFIG = 15;
 
 	public static readonly float ECO_HEX_SCALE = 3;
 
@@ -82,4 +84,5 @@ public class Constants {
 	public static readonly int MINIGAME_DONT_EAT_ME      = 3;
 	public static readonly int MINIGAME_CLASH_OF_SPECIES = 4;
     public static readonly int MINIGAME_SEA_DIVIDED      = 5;
+	public static readonly int MINIGAME_MULTI_CONVERGENCE = 6;
 }

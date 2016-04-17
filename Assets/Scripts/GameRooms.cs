@@ -19,6 +19,10 @@ public class Room {
 	public void addPlayer(int userid) {
 		players.Add (userid);
 	}
+		
+	public List<int> getPlayers() {
+		return players;
+	}
 
 	public void removePlayer(int userid) {
 		players.Remove (userid);
@@ -39,7 +43,9 @@ public class Room {
 			return "Running Rhino";
         } else if (type == Constants.MINIGAME_SEA_DIVIDED) {
             return "Sea Divided";
-        } else {
+        }  else if (type == Constants.MINIGAME_MULTI_CONVERGENCE) {
+			return "Multiplayer Convergence";
+		} else {
 			return "Unknown Game";
 		}
 	}

@@ -4,7 +4,6 @@ namespace RR {
 		// Constants
 		public static readonly string CLIENT_VERSION = "1.00";
 		//public static readonly string REMOTE_HOST = "localhost";
-
 		public static readonly int REMOTE_PORT = 9256;//20039;
 		
 		// Request (1xx) + Response (2xx)
