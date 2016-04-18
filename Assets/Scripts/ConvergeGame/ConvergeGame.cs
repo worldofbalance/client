@@ -20,7 +20,7 @@ public class ConvergeGame : MonoBehaviour
 	private float heightGraph;
 	private int bufferBorder = 2; //////////////////////////////////
 	private float leftGraph = 10;
-	private float topGraph = 75;
+	private float topGraph = 30;
 	private Rect windowRect;
 	// Logic
 	private bool isActive = true;
@@ -166,10 +166,10 @@ public class ConvergeGame : MonoBehaviour
 		button.fontSize = 12;
 
 		//make Convergence game lable top center
-		GUI.Label (new Rect ((windowRect.width - 100) / 2, 0, 100, 30), "Convergence Game", style);
+		GUI.Label (new Rect ((windowRect.width - 100) / 2, 0, 100, 20), "Convergence Game", style);
 
 		//make return to lobby button top right
-		if (GUI.Button (new Rect (windowRect.width - 100 - bufferBorder, 0, 100, 30), "Return to Lobby", button)) {
+		if (GUI.Button (new Rect (windowRect.width - 100 - bufferBorder, 0, 100, 20), "Return to Lobby", button)) {
 			Destroy (this);
 			Destroy (foodWeb);
 			GameState gs = GameObject.Find ("Global Object").GetComponent<GameState> ();
@@ -179,37 +179,6 @@ public class ConvergeGame : MonoBehaviour
 		}
 
 
-		//make select ecosystem top left
-		int new_idx = 0;
-		
-		string select = "Select Ecosystem";
-		if( GUI.Button (new Rect (0, 0, 100, 30), "Select Ecosystem:", button) ){
-			if(showSelect == 0){
-				showSelect = 1;
-			} else {
-				showSelect = 0;
-			}
-			
-		}
-
-
-		if(showSelect == 1){
-			GUI.SetNextControlName ("ecosystem_idx_field");
-			GUILayout.BeginArea(new Rect(0,30,100,200));
-			GUILayout.BeginVertical("box");
-			new_idx = GUILayout.SelectionGrid (ecosystem_idx, ecosysDescripts, 1);
-			GUILayout.EndVertical();
-			GUILayout.EndArea();
-		}
-		
-
-		if (!isProcessing && new_idx != ecosystem_idx) {
-			//Debug.Log ("Updating selected ecosystem.");
-			SetIsProcessing (true);
-			new_ecosystem_idx = new_idx;
-			new_ecosystem_id = GetEcosystemId (new_ecosystem_idx);
-			GetPriorAttempts ();
-		}
 		if (graphs != null) {
 			graphs.DrawGraphs ();
 		}
@@ -228,7 +197,7 @@ public class ConvergeGame : MonoBehaviour
 
 		string buttonTitle = isProcessing ? "Processing" : "Submit";
 		if (!(isProcessing && !blinkOn)) {
-			if (GUI.Button (new Rect (bufferBorder, height - 30 - bufferBorder, 100, 30), buttonTitle) &&
+			if (GUI.Button (new Rect (bufferBorder, height - 30 - bufferBorder, 100, 20), buttonTitle) &&
 				!isProcessing) {
 				//make sure new config is distinct from prior attempts and initial value
 				currAttempt.UpdateConfig ();  //update config based on user data entry changes
@@ -249,14 +218,14 @@ public class ConvergeGame : MonoBehaviour
 			}
 		}
 
-		if (GUI.Button (new Rect (bufferBorder + 110, height - 30 - bufferBorder, 110, 30), "Progress Report")) {
+		if (GUI.Button (new Rect (bufferBorder + 110, height - 30 - bufferBorder, 110, 20), "Progress Report")) {
 			GenerateBarGraph ();
 		}
 
 		int screenOffset = 0;
 		if (currAttempt != null && currAttempt.allow_hints) {
 			screenOffset += bufferBorder + 110;
-			if (GUI.Button (new Rect (bufferBorder * 2 + 110 * 2, height - 30 - bufferBorder, 110, 30), "Get Hint")) {
+			if (GUI.Button (new Rect (bufferBorder * 2 + 110 * 2, height - 30 - bufferBorder, 110, 20), "Get Hint")) {
 				//only give new hint if one hasn't been provided during this session.
 				if (currAttempt.hint_id == Constants.ID_NOT_SET) {
 					int hintId = GetRandomHint (true);
@@ -283,6 +252,37 @@ public class ConvergeGame : MonoBehaviour
 				//Debug.Log (popupMessage);
 				showPopup = true;
 			}
+		}
+
+		//make select ecosystem top left
+		int new_idx = 0;
+		
+		string select = "Select Ecosystem";
+		if( GUI.Button (new Rect (0, 0, 120, 20), "Select Ecosystem:", button) ){
+			if(showSelect == 0){
+				showSelect = 1;
+			} else {
+				showSelect = 0;
+			}
+			
+		}
+		//the dropdown for the ecosystem selection
+		if(showSelect == 1){
+			GUI.SetNextControlName ("ecosystem_idx_field");
+			GUILayout.BeginArea(new Rect(0,20,120,200));
+			GUILayout.BeginVertical("box");
+			new_idx = GUILayout.SelectionGrid (ecosystem_idx, ecosysDescripts, 1);
+			GUILayout.EndVertical();
+			GUILayout.EndArea();
+		}
+		
+
+		if (!isProcessing && new_idx != ecosystem_idx) {
+			//Debug.Log ("Updating selected ecosystem.");
+			SetIsProcessing (true);
+			new_ecosystem_idx = new_idx;
+			new_ecosystem_id = GetEcosystemId (new_ecosystem_idx);
+			GetPriorAttempts ();
 		}
 
 		DrawResetButtons (screenOffset, style);
@@ -415,8 +415,8 @@ public class ConvergeGame : MonoBehaviour
 
 	void DrawResetButtons (int screenOffset, GUIStyle style)
 	{
-		GUI.Label (new Rect (bufferBorder + 260 + screenOffset, height - 30 - bufferBorder, 110, 30), "Reset to:", style);
-		Rect initial = new Rect (bufferBorder * 2 + 330 + screenOffset, height - 30 - bufferBorder, 50, 30);
+		GUI.Label (new Rect (bufferBorder + 260 + screenOffset, height - 30 - bufferBorder, 110, 20), "Reset to:", style);
+		Rect initial = new Rect (bufferBorder * 2 + 330 + screenOffset, height - 30 - bufferBorder, 50, 20);
 		if (GUI.Button (initial, "Initial") && !isProcessing) {
 			ResetCurrAttempt (Constants.ID_NOT_SET);
 		}
@@ -431,9 +431,9 @@ public class ConvergeGame : MonoBehaviour
 		for (int i = resetSliderValue; i < maxVal; i++) {
 			int slideNo = i - resetSliderValue;
 			if (GUI.Button (
-				new Rect (bufferBorder * 2 + 390 + (slideNo * widthPer) + screenOffset, height - 30 - bufferBorder, 
+				new Rect (bufferBorder * 2 + 390 + (slideNo * widthPer) + screenOffset, height - 20 - bufferBorder, 
 			          widthPer - 5, 
-			          30
+			          20
 			          ), 
 			    String.Format ("#{0}", i + 1)
 				)
@@ -443,7 +443,7 @@ public class ConvergeGame : MonoBehaviour
 		}
 
 		if (maxResetSliderValue > 0) {
-			Rect sliderRect = new Rect (width - sliderWidth - bufferBorder, initial.y, sliderWidth, 30); 
+			Rect sliderRect = new Rect (width - sliderWidth - bufferBorder, initial.y, sliderWidth, 20); 
 			resetSliderValue = Mathf.RoundToInt (GUI.HorizontalSlider (
 				sliderRect, 
 				resetSliderValue, 

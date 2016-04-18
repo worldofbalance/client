@@ -107,11 +107,11 @@ public class GraphUnit
 
 	public void DrawGraph ()
 	{
-
+		GUI.depth = -1;
 		GUIStyle style = new GUIStyle (GUI.skin.label);
 		style.alignment = TextAnchor.UpperCenter;
 		style.font = font;
-		style.fontSize = 16;
+		style.fontSize = 12;
 		
 		GUI.Label (new Rect (left + (width - 100) / 2, top, 100, 30), title, style);
 		
