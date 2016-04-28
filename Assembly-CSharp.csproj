@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{A3DA8180-FC05-42F8-5E6E-781B02F01071}</ProjectGuid>
+    <ProjectGuid>{A2859A56-AB4A-51F9-60BB-1B6FC96E8C70}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -92,12 +92,10 @@
      <Compile Include="Assets\CWAssets\Scripts\GUI\Bar Graph\SeriesSet.cs" />
      <Compile Include="Assets\CWAssets\Scripts\GUI\Chat\Chat.cs" />
      <Compile Include="Assets\CWAssets\Scripts\GUI\Database\Card.cs" />
-     <Compile Include="Assets\CWAssets\Scripts\GUI\Database\Database.cs" />
      <Compile Include="Assets\CWAssets\Scripts\GUI\Database\Page.cs" />
      <Compile Include="Assets\CWAssets\Scripts\GUI\Database\View.cs" />
      <Compile Include="Assets\CWAssets\Scripts\GUI\Graph\Graph.cs" />
      <Compile Include="Assets\CWAssets\Scripts\GUI\Graph\GraphUnit.cs" />
-     <Compile Include="Assets\CWAssets\Scripts\GUI\Graph\GraphsCompare.cs" />
      <Compile Include="Assets\CWAssets\Scripts\GUI\Graph\Series.cs" />
      <Compile Include="Assets\CWAssets\Scripts\GUI\LabColors.cs" />
      <Compile Include="Assets\CWAssets\Scripts\GUI\Parameters.cs" />
@@ -161,8 +159,6 @@
      <Compile Include="Assets\CWAssets\Scripts\Register.cs" />
      <Compile Include="Assets\CWAssets\Scripts\RegisterColorPanel.cs" />
      <Compile Include="Assets\CWAssets\Scripts\Species.cs" />
-     <Compile Include="Assets\CWAssets\Scripts\SpeciesData.cs" />
-     <Compile Include="Assets\CWAssets\Scripts\SpeciesTable.cs" />
      <Compile Include="Assets\CWAssets\Scripts\Strings.cs" />
      <Compile Include="Assets\CWAssets\Scripts\Tests.cs" />
      <Compile Include="Assets\CWAssets\Scripts\TileSelectGUI.cs" />
@@ -555,19 +551,19 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="DOTween">
- <HintPath>/Users/mac/Unity Projects/unity-game-client/Assets/Graph_Maker/DOTween/DOTween.dll</HintPath>
+ <HintPath>/Users/socialchorus/Documents/CSC631/worldofbalance/client/Assets/Graph_Maker/DOTween/DOTween.dll</HintPath>
  </Reference>
  <Reference Include="DOTween43">
- <HintPath>/Users/mac/Unity Projects/unity-game-client/Assets/Graph_Maker/DOTween/DOTween43.dll</HintPath>
+ <HintPath>/Users/socialchorus/Documents/CSC631/worldofbalance/client/Assets/Graph_Maker/DOTween/DOTween43.dll</HintPath>
  </Reference>
  <Reference Include="DOTween46">
- <HintPath>/Users/mac/Unity Projects/unity-game-client/Assets/Graph_Maker/DOTween/DOTween46.dll</HintPath>
+ <HintPath>/Users/socialchorus/Documents/CSC631/worldofbalance/client/Assets/Graph_Maker/DOTween/DOTween46.dll</HintPath>
  </Reference>
  <Reference Include="DOTween50">
- <HintPath>/Users/mac/Unity Projects/unity-game-client/Assets/Graph_Maker/DOTween/DOTween50.dll</HintPath>
+ <HintPath>/Users/socialchorus/Documents/CSC631/worldofbalance/client/Assets/Graph_Maker/DOTween/DOTween50.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Data.Sqlite">
- <HintPath>/Users/mac/Unity Projects/unity-game-client/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
+ <HintPath>/Users/socialchorus/Documents/CSC631/worldofbalance/client/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

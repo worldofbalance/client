@@ -87,10 +87,6 @@ public class Database : MonoBehaviour
 	void Start ()
 	{
 		Refresh ();
-
-//		Card card = cardList["Dwarf Puddle Frog"];
-//		View view = gameObject.AddComponent<View>();
-//		view.SetCard(new Card(card.name, card.image, card.species, new Rect(0, 0, 160, 200)));
 	}
 	
 	// Update is called once per frame
@@ -359,17 +355,6 @@ public class Database : MonoBehaviour
 			Card card = new Card (species.name, image, species, new Rect (0, 0, 160, 200));
 			cardList [species.name] = card;
 		}
-
-//		List<string> contents = new List<string>();
-//		GameState gs = GameObject.Find("Global Object").GetComponent<GameState>();
-//
-//		foreach (Species species in gs.speciesList.Values) {
-//			contents.Add(species.name);
-//		}
-//
-//		ecoList.Clear();
-//		contents.Sort(SortByTrophicLevels);
-//		Prepare(contents, ecoList);
 		
 		shopList.Clear ();
 		List<string> tempList = new List<string> (cardList.Keys);
