@@ -9,7 +9,6 @@ public class SpeciesTable {
 
 	public static Dictionary<int, SpeciesData> speciesList = new Dictionary<int, SpeciesData>();
 	public static Dictionary<string, SpeciesData> spNameList = new Dictionary<string, SpeciesData>();
-	//public static Dictionary<string, SpeciesData> spNameUpperList = new Dictionary<string, SpeciesData>();
 	
 	public static void Initialize() {
 		SqliteConnection con = new SqliteConnection("URI=file:" + Application.dataPath + "/Database/WoB_DB.db");
@@ -77,7 +76,6 @@ public class SpeciesTable {
 			species.name = Functions.NormalizeSpeciesName (species.name);						
 			speciesList.Add(species.species_id, species);
 			spNameList.Add(species.name, species);
-			//spNameUpperList.Add(species.name.ToUpper (), species);
 		}
 
 		foreach (SpeciesData species in speciesList.Values) {
