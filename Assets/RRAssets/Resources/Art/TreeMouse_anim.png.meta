@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 767b917fd01b95b418f85bc01fd88269
+timeCreated: 1463460368
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: TreeMouse_anim_0
@@ -40,14 +42,17 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
-  maxTextureSize: 1024
+  maxTextureSize: 4096
   textureSettings:
     filterMode: 0
     aniso: 16
@@ -55,12 +60,14 @@ TextureImporter:
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
+  rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 20
   alphaIsTransparency: 1
@@ -71,242 +78,491 @@ TextureImporter:
     - name: TreeMouse_anim_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 45
-        width: 35
-        height: 12
+        x: 12
+        y: 450
+        width: 350
+        height: 120
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 149, y: 9}
+        - {x: 6, y: 60}
+        - {x: -126, y: 60}
+        - {x: -175, y: -3}
+        - {x: -175, y: -32}
+        - {x: -174, y: -34}
+        - {x: -141, y: -60}
+        - {x: 100, y: -60}
+        - {x: 175, y: -53}
+        - {x: 175, y: -12}
+        - {x: 164, y: 4}
     - name: TreeMouse_anim_1
       rect:
         serializedVersion: 2
-        x: 39
-        y: 45
-        width: 35
-        height: 12
+        x: 392
+        y: 450
+        width: 346
+        height: 120
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -2, y: 60}
+        - {x: -153, y: 60}
+        - {x: -173, y: 8}
+        - {x: -173, y: -54}
+        - {x: -141, y: -60}
+        - {x: 107, y: -60}
+        - {x: 173, y: -45}
+        - {x: 173, y: 9}
+        - {x: 154, y: 19}
     - name: TreeMouse_anim_2
       rect:
         serializedVersion: 2
-        x: 77
-        y: 45
-        width: 35
-        height: 11
+        x: 772
+        y: 450
+        width: 348
+        height: 110
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -153, y: 55}
+        - {x: -174, y: 15}
+        - {x: -174, y: -33}
+        - {x: -154, y: -55}
+        - {x: 138, y: -55}
+        - {x: 174, y: -40}
+        - {x: 174, y: 22}
+        - {x: 29, y: 55}
     - name: TreeMouse_anim_3
       rect:
         serializedVersion: 2
-        x: 115
-        y: 45
-        width: 35
-        height: 10
+        x: 1152
+        y: 450
+        width: 350
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 19, y: 50}
+        - {x: -153, y: 50}
+        - {x: -175, y: 13}
+        - {x: -175, y: -22}
+        - {x: -159, y: -34}
+        - {x: -138, y: -44}
+        - {x: -119, y: -50}
+        - {x: 163, y: -50}
+        - {x: 175, y: -38}
+        - {x: 175, y: -2}
+        - {x: 164, y: 3}
     - name: TreeMouse_anim_4
       rect:
         serializedVersion: 2
-        x: 153
-        y: 45
-        width: 35
-        height: 10
+        x: 1532
+        y: 450
+        width: 350
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -148, y: 50}
+        - {x: -175, y: 22}
+        - {x: -175, y: -30}
+        - {x: -140, y: -50}
+        - {x: 148, y: -50}
+        - {x: 175, y: -34}
+        - {x: 175, y: 49}
+        - {x: 161, y: 50}
     - name: TreeMouse_anim_5
       rect:
         serializedVersion: 2
-        x: 191
-        y: 45
-        width: 35
-        height: 10
+        x: 1912
+        y: 450
+        width: 350
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 139, y: 38}
+        - {x: 64, y: 50}
+        - {x: -175, y: 50}
+        - {x: -175, y: -22}
+        - {x: -159, y: -34}
+        - {x: -138, y: -44}
+        - {x: -104, y: -50}
+        - {x: 170, y: -50}
+        - {x: 175, y: -41}
+        - {x: 175, y: 8}
     - name: TreeMouse_anim_6
       rect:
         serializedVersion: 2
-        x: 229
-        y: 45
-        width: 35
-        height: 10
+        x: 2292
+        y: 450
+        width: 350
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 30, y: 50}
+        - {x: -164, y: 50}
+        - {x: -175, y: 23}
+        - {x: -175, y: -38}
+        - {x: -168, y: -50}
+        - {x: 147, y: -50}
+        - {x: 175, y: -42}
+        - {x: 175, y: 19}
+        - {x: 160, y: 37}
     - name: TreeMouse_anim_7
       rect:
         serializedVersion: 2
-        x: 267
-        y: 45
-        width: 35
-        height: 10
+        x: 2672
+        y: 450
+        width: 346
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -142, y: 50}
+        - {x: -173, y: 19}
+        - {x: -173, y: -30}
+        - {x: -137, y: -50}
+        - {x: 119, y: -50}
+        - {x: 173, y: 16}
+        - {x: 173, y: 50}
     - name: TreeMouse_anim_8
       rect:
         serializedVersion: 2
-        x: 1
-        y: 30
-        width: 35
-        height: 10
+        x: 12
+        y: 300
+        width: 346
+        height: 100
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -171, y: 50}
+        - {x: -173, y: 33}
+        - {x: -173, y: 12}
+        - {x: -123, y: -50}
+        - {x: 162, y: -50}
+        - {x: 173, y: -29}
+        - {x: 173, y: 50}
     - name: TreeMouse_anim_9
       rect:
         serializedVersion: 2
-        x: 39
-        y: 30
-        width: 35
-        height: 10
+        x: 388
+        y: 300
+        width: 350
+        height: 100
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 34, y: 50}
+        - {x: -20, y: 42}
+        - {x: -175, y: 26}
+        - {x: -175, y: -42}
+        - {x: -169, y: -50}
+        - {x: 154, y: -50}
+        - {x: 175, y: -23}
+        - {x: 175, y: 19}
+        - {x: 138, y: 50}
     - name: TreeMouse_anim_10
       rect:
         serializedVersion: 2
-        x: 77
-        y: 30
-        width: 35
-        height: 10
+        x: 768
+        y: 300
+        width: 350
+        height: 100
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 50}
+        - {x: -175, y: 26}
+        - {x: -175, y: -39}
+        - {x: -165, y: -42}
+        - {x: -102, y: -50}
+        - {x: 140, y: -50}
+        - {x: 175, y: -33}
+        - {x: 175, y: 12}
+        - {x: 141, y: 50}
     - name: TreeMouse_anim_11
       rect:
         serializedVersion: 2
-        x: 115
-        y: 30
-        width: 35
-        height: 10
+        x: 1148
+        y: 300
+        width: 350
+        height: 100
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 38, y: 50}
+        - {x: 1, y: 47}
+        - {x: -175, y: 33}
+        - {x: -175, y: -50}
+        - {x: 150, y: -50}
+        - {x: 175, y: -21}
+        - {x: 175, y: 17}
+        - {x: 130, y: 50}
     - name: TreeMouse_anim_12
       rect:
         serializedVersion: 2
-        x: 153
-        y: 30
-        width: 35
-        height: 10
+        x: 1528
+        y: 300
+        width: 350
+        height: 100
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -98, y: 50}
+        - {x: -122, y: 46}
+        - {x: -175, y: 4}
+        - {x: -175, y: -45}
+        - {x: -173, y: -50}
+        - {x: 160, y: -50}
+        - {x: 175, y: -48}
+        - {x: 175, y: 17}
+        - {x: 153, y: 50}
     - name: TreeMouse_anim_13
       rect:
         serializedVersion: 2
-        x: 191
-        y: 30
-        width: 35
-        height: 11
+        x: 1910
+        y: 300
+        width: 348
+        height: 110
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 29, y: 55}
+        - {x: -50, y: 40}
+        - {x: -174, y: 0}
+        - {x: -174, y: -55}
+        - {x: 174, y: -55}
+        - {x: 174, y: 1}
+        - {x: 138, y: 55}
     - name: TreeMouse_anim_14
       rect:
         serializedVersion: 2
-        x: 229
-        y: 30
-        width: 35
-        height: 12
+        x: 2292
+        y: 300
+        width: 346
+        height: 120
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 51, y: 60}
+        - {x: -37, y: 40}
+        - {x: -173, y: 3}
+        - {x: -173, y: -15}
+        - {x: -137, y: -55}
+        - {x: -119, y: -60}
+        - {x: 127, y: -60}
+        - {x: 173, y: -50}
+        - {x: 173, y: 3}
+        - {x: 131, y: 60}
     - name: TreeMouse_anim_15
       rect:
         serializedVersion: 2
-        x: 267
-        y: 30
-        width: 35
-        height: 12
+        x: 2668
+        y: 300
+        width: 350
+        height: 120
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 51, y: 60}
+        - {x: -34, y: 40}
+        - {x: -168, y: 10}
+        - {x: -175, y: -9}
+        - {x: -175, y: -57}
+        - {x: -160, y: -60}
+        - {x: 129, y: -60}
+        - {x: 175, y: -50}
+        - {x: 175, y: 3}
+        - {x: 133, y: 60}
     - name: TreeMouse_anim_16
       rect:
         serializedVersion: 2
-        x: 1
-        y: 13
-        width: 32
-        height: 12
+        x: 12
+        y: 130
+        width: 320
+        height: 120
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -38, y: 60}
+        - {x: -110, y: 60}
+        - {x: -160, y: -3}
+        - {x: -160, y: -41}
+        - {x: -106, y: -60}
+        - {x: 146, y: -60}
+        - {x: 160, y: -31}
+        - {x: 160, y: 46}
+        - {x: 12, y: 55}
     - name: TreeMouse_anim_17
       rect:
         serializedVersion: 2
-        x: 39
-        y: 13
-        width: 34
-        height: 11
+        x: 392
+        y: 130
+        width: 338
+        height: 110
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -125, y: 55}
+        - {x: -169, y: 2}
+        - {x: -169, y: -37}
+        - {x: -128, y: -55}
+        - {x: 95, y: -55}
+        - {x: 169, y: -47}
+        - {x: 169, y: 43}
+        - {x: 138, y: 55}
     - name: TreeMouse_anim_18
       rect:
         serializedVersion: 2
-        x: 77
-        y: 14
-        width: 33
-        height: 12
+        x: 772
+        y: 140
+        width: 328
+        height: 120
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -56, y: 60}
+        - {x: -144, y: 60}
+        - {x: -164, y: 13}
+        - {x: -164, y: -56}
+        - {x: -127, y: -60}
+        - {x: 118, y: -60}
+        - {x: 164, y: -52}
+        - {x: 164, y: 10}
+        - {x: 113, y: 29}
     - name: TreeMouse_anim_19
       rect:
         serializedVersion: 2
-        x: 115
-        y: 15
-        width: 33
-        height: 12
+        x: 1150
+        y: 150
+        width: 328
+        height: 120
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -164, y: -40}
+        - {x: -162, y: -45}
+        - {x: -127, y: -46}
+        - {x: -72, y: -60}
+        - {x: 126, y: -60}
+        - {x: 164, y: -57}
+        - {x: 164, y: 24}
+        - {x: 152, y: 60}
+        - {x: 56, y: 60}
+        - {x: -139, y: 21}
+        - {x: -164, y: 7}
     - name: TreeMouse_anim_20
       rect:
         serializedVersion: 2
-        x: 152
-        y: 14
-        width: 34
-        height: 11
+        x: 1520
+        y: 140
+        width: 338
+        height: 110
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -166, y: 55}
+        - {x: -169, y: 47}
+        - {x: -169, y: -21}
+        - {x: -152, y: -48}
+        - {x: -92, y: -55}
+        - {x: 144, y: -55}
+        - {x: 169, y: -25}
+        - {x: 169, y: 42}
+        - {x: 164, y: 55}
     - name: TreeMouse_anim_21
       rect:
         serializedVersion: 2
-        x: 192
-        y: 14
-        width: 32
-        height: 12
+        x: 1918
+        y: 140
+        width: 320
+        height: 120
       alignment: 0
-      pivot: {x: .349999994, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 128, y: 60}
+        - {x: -130, y: 60}
+        - {x: -155, y: 55}
+        - {x: -160, y: 41}
+        - {x: -160, y: -60}
+        - {x: 134, y: -60}
+        - {x: 160, y: -30}
+        - {x: 160, y: 16}
     - name: TreeMouse_anim_22
       rect:
         serializedVersion: 2
-        x: 238
-        y: 1
-        width: 25
-        height: 19
+        x: 2390
+        y: 10
+        width: 240
+        height: 190
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 51, y: 76}
+        - {x: 36, y: 59}
+        - {x: 37, y: 37}
+        - {x: 59, y: 12}
+        - {x: 42, y: 29}
+        - {x: -27, y: 95}
+        - {x: -120, y: 95}
+        - {x: -120, y: -81}
+        - {x: -43, y: -95}
+        - {x: 108, y: -95}
+        - {x: 120, y: -49}
+        - {x: 120, y: 78}
+        - {x: 100, y: 85}
     - name: TreeMouse_anim_23
       rect:
         serializedVersion: 2
-        x: 271
-        y: 1
-        width: 25
-        height: 19
+        x: 2710
+        y: 10
+        width: 240
+        height: 190
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -44, y: 95}
+        - {x: -50, y: 94}
+        - {x: -117, y: 78}
+        - {x: -120, y: 75}
+        - {x: -120, y: -17}
+        - {x: -97, y: -95}
+        - {x: -66, y: -95}
+        - {x: -40, y: -78}
+        - {x: -36, y: -95}
+        - {x: 91, y: -95}
+        - {x: 116, y: -90}
+        - {x: 120, y: -55}
+        - {x: 120, y: 95}
+    outline: []
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

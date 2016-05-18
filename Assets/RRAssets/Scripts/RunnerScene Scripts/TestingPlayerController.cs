@@ -7,7 +7,7 @@ namespace RR {
 	{
 	
 		// Player Handling
-		public float gravity = 20;
+		public float gravity = 200;
 		public float speed = 12;
 		public float acceleration = 32;
 		public float jumpHeight = 12;

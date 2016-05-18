@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 4938573e894f2a840aa1df29ae2da977
+timeCreated: 1463459718
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Leopard_0
@@ -45,14 +47,17 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
-  maxTextureSize: 1024
+  maxTextureSize: 4096
   textureSettings:
     filterMode: 0
     aniso: -1
@@ -60,12 +65,14 @@ TextureImporter:
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
+  rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 16
   alphaIsTransparency: 1
@@ -75,307 +82,628 @@ TextureImporter:
     maxTextureSize: 1024
     textureFormat: -3
     compressionQuality: 50
+    allowsAlphaSplitting: 0
   spriteSheet:
     sprites:
     - name: Leopard_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 88
-        width: 52
-        height: 26
+        x: 50
+        y: 880
+        width: 520
+        height: 260
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -17.260002, y: 53.847992}
+        - {x: -53.260002, y: 35.847992}
+        - {x: -53.260002, y: 5.847992}
+        - {x: -36.260002, y: -0.15200806}
+        - {x: 42.739998, y: -0.15200806}
+        - {x: 53.739998, y: 26.847992}
+        - {x: 53.739998, y: 53.847992}
     - name: Leopard_1
       rect:
         serializedVersion: 2
-        x: 59
-        y: 89
-        width: 51
-        height: 24
+        x: 590
+        y: 890
+        width: 510
+        height: 240
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 53.832, y: 30.847992}
+        - {x: 53.832, y: 44.847992}
+        - {x: 47.832, y: 49.847992}
+        - {x: 23.832, y: 49.847992}
+        - {x: -47.168, y: 31.847992}
+        - {x: -52.168, y: 26.847992}
+        - {x: -52.168, y: 13.847992}
+        - {x: -51.168, y: 11.847992}
+        - {x: -47.168, y: 12.847992}
+        - {x: -41.168, y: 18.847992}
+        - {x: -31.168, y: 14.847992}
+        - {x: -2.1679993, y: 0.84799194}
+        - {x: 0.83200073, y: -0.15200806}
+        - {x: 28.832, y: -0.15200806}
+        - {x: 27.832, y: 5.847992}
+        - {x: 34.832, y: 12.847992}
+        - {x: 51.832, y: 27.847992}
     - name: Leopard_2
       rect:
         serializedVersion: 2
-        x: 112
-        y: 89
-        width: 49
-        height: 24
+        x: 1120
+        y: 890
+        width: 490
+        height: 240
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -46.12401, y: -0.15200806}
+        - {x: 38.87599, y: -0.15200806}
+        - {x: 50.87599, y: 11.847992}
+        - {x: 50.87599, y: 49.847992}
+        - {x: -42.12401, y: 49.847992}
+        - {x: -50.12401, y: 48.847992}
+        - {x: -50.12401, y: 1.847992}
     - name: Leopard_3
       rect:
         serializedVersion: 2
-        x: 163
-        y: 89
-        width: 59
-        height: 22
+        x: 1630
+        y: 890
+        width: 590
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -48.175995, y: 45.799988}
+        - {x: -60.175995, y: 35.799988}
+        - {x: -60.175995, y: 13.799988}
+        - {x: 18.824005, y: -0.2000122}
+        - {x: 58.824005, y: -0.2000122}
+        - {x: 61.824005, y: 9.799988}
+        - {x: 61.824005, y: 44.799988}
+        - {x: 60.824005, y: 45.799988}
     - name: Leopard_4
       rect:
         serializedVersion: 2
-        x: 224
-        y: 90
-        width: 63
-        height: 22
+        x: 2240
+        y: 900
+        width: 630
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -64.24802, y: 45.847992}
+        - {x: -64.24802, y: 32.847992}
+        - {x: -29.248016, y: -0.15200806}
+        - {x: 65.75198, y: -0.15200806}
+        - {x: 65.75198, y: 27.847992}
+        - {x: 57.751984, y: 45.847992}
     - name: Leopard_5
       rect:
         serializedVersion: 2
-        x: 290
-        y: 90
-        width: 62
-        height: 22
+        x: 2900
+        y: 900
+        width: 620
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -63.080017, y: 45.847992}
+        - {x: -63.080017, y: 21.847992}
+        - {x: -36.080017, y: -0.15200806}
+        - {x: 43.919983, y: -0.15200806}
+        - {x: 64.91998, y: 1.847992}
+        - {x: 64.91998, y: 28.847992}
+        - {x: 56.919983, y: 45.847992}
     - name: Leopard_6
       rect:
         serializedVersion: 2
-        x: 354
-        y: 87
-        width: 55
-        height: 27
+        x: 3540
+        y: 870
+        width: 550
+        height: 270
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 57.992004, y: 10.82399}
+        - {x: 57.992004, y: 19.82399}
+        - {x: 48.992004, y: 25.82399}
+        - {x: 56.992004, y: 31.82399}
+        - {x: 57.992004, y: 34.82399}
+        - {x: 57.992004, y: 51.82399}
+        - {x: 51.992004, y: 55.82399}
+        - {x: 32.992004, y: 55.82399}
+        - {x: -3.0079956, y: 44.82399}
+        - {x: -20.007996, y: 31.82399}
+        - {x: -54.007996, y: 28.82399}
+        - {x: -56.007996, y: 26.82399}
+        - {x: -56.007996, y: 14.82399}
+        - {x: -32.007996, y: -0.17601013}
+        - {x: 6.9920044, y: -0.17601013}
+        - {x: 5.9920044, y: 5.82399}
+        - {x: 49.992004, y: 3.8239899}
+        - {x: 56.992004, y: 7.82399}
     - name: Leopard_7
       rect:
         serializedVersion: 2
-        x: 415
-        y: 88
-        width: 50
-        height: 27
+        x: 4150
+        y: 880
+        width: 500
+        height: 270
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 52.919983, y: 51.871994}
+        - {x: 49.919983, y: 55.871994}
+        - {x: 11.919983, y: 55.871994}
+        - {x: -51.080017, y: 37.871994}
+        - {x: -51.080017, y: 5.871994}
+        - {x: -33.080017, y: -0.12800598}
+        - {x: 40.919983, y: -0.12800598}
+        - {x: 42.919983, y: 8.871994}
+        - {x: 41.919983, y: 18.871994}
+        - {x: 52.919983, y: 34.871994}
     - name: Leopard_8
       rect:
         serializedVersion: 2
-        x: 6
-        y: 59
-        width: 50
-        height: 27
+        x: 60
+        y: 590
+        width: 500
+        height: 270
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -45.211998, y: 56.979996}
+        - {x: -51.211998, y: 50.979996}
+        - {x: -51.211998, y: 30.979996}
+        - {x: -46.211998, y: 7.9799957}
+        - {x: -40.211998, y: -0.020004272}
+        - {x: 51.788002, y: -0.020004272}
+        - {x: 51.788002, y: 31.979996}
+        - {x: -8.211998, y: 56.979996}
     - name: Leopard_9
       rect:
         serializedVersion: 2
-        x: 62
-        y: 58
-        width: 55
-        height: 27
+        x: 620
+        y: 580
+        width: 550
+        height: 270
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -13.024002, y: 56.93199}
+        - {x: -56.024002, y: 56.93199}
+        - {x: -56.024002, y: 0.9319916}
+        - {x: -45.024002, y: -0.06800842}
+        - {x: 38.975998, y: -0.06800842}
+        - {x: 53.975998, y: 9.931992}
+        - {x: 57.975998, y: 13.931992}
+        - {x: 57.975998, y: 32.93199}
     - name: Leopard_10
       rect:
         serializedVersion: 2
-        x: 119
-        y: 61
-        width: 62
-        height: 22
+        x: 1190
+        y: 610
+        width: 620
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -58.28801, y: 46.455994}
+        - {x: -63.28801, y: 40.455994}
+        - {x: -63.28801, y: 7.4559937}
+        - {x: -53.28801, y: 1.4559937}
+        - {x: -46.28801, y: 0.45599365}
+        - {x: 42.71199, y: 0.45599365}
+        - {x: 64.71199, y: 27.455994}
+        - {x: 64.71199, y: 46.455994}
     - name: Leopard_11
       rect:
         serializedVersion: 2
-        x: 184
-        y: 61
-        width: 63
-        height: 22
+        x: 1840
+        y: 610
+        width: 630
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 64.832, y: 46.455994}
+        - {x: -53.168, y: 46.455994}
+        - {x: -64.168, y: 43.455994}
+        - {x: -64.168, y: 4.4559937}
+        - {x: -61.168, y: 0.45599365}
+        - {x: -27.168, y: 0.45599365}
+        - {x: 62.832, y: 20.455994}
+        - {x: 65.832, y: 28.455994}
+        - {x: 65.832, y: 44.455994}
     - name: Leopard_12
       rect:
         serializedVersion: 2
-        x: 249
-        y: 60
-        width: 59
-        height: 22
+        x: 2490
+        y: 600
+        width: 590
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -60.048004, y: 46.40799}
+        - {x: -60.048004, y: 0.4079895}
+        - {x: 37.951996, y: 0.4079895}
+        - {x: 61.951996, y: 14.4079895}
+        - {x: 61.951996, y: 43.40799}
+        - {x: 47.951996, y: 46.40799}
     - name: Leopard_13
       rect:
         serializedVersion: 2
-        x: 310
-        y: 60
-        width: 49
-        height: 24
+        x: 3100
+        y: 600
+        width: 490
+        height: 240
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 51.880005, y: 42.955994}
+        - {x: 49.880005, y: 43.955994}
+        - {x: 16.880005, y: 49.955994}
+        - {x: 11.880005, y: 50.955994}
+        - {x: -47.119995, y: 50.955994}
+        - {x: -50.119995, y: 49.955994}
+        - {x: -50.119995, y: 20.955994}
+        - {x: -37.119995, y: -0.044006348}
+        - {x: -4.119995, y: -0.044006348}
+        - {x: 3.880005, y: 3.9559937}
+        - {x: 50.880005, y: 10.955994}
+        - {x: 51.880005, y: 15.955994}
     - name: Leopard_14
       rect:
         serializedVersion: 2
-        x: 361
-        y: 60
-        width: 51
-        height: 24
+        x: 3610
+        y: 600
+        width: 510
+        height: 240
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -52.171997, y: 24.955994}
+        - {x: -39.171997, y: -0.044006348}
+        - {x: 28.828003, y: -0.044006348}
+        - {x: 52.828003, y: 4.9559937}
+        - {x: 52.828003, y: 28.955994}
+        - {x: 44.828003, y: 39.955994}
+        - {x: -0.17199707, y: 50.955994}
+        - {x: -49.171997, y: 50.955994}
+        - {x: -52.171997, y: 48.955994}
     - name: Leopard_15
       rect:
         serializedVersion: 2
-        x: 414
-        y: 59
-        width: 52
-        height: 26
+        x: 4140
+        y: 590
+        width: 520
+        height: 260
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14.128052, y: 54.955994}
+        - {x: -53.12805, y: 54.955994}
+        - {x: -53.12805, y: 26.955994}
+        - {x: -39.12805, y: -0.044006348}
+        - {x: 0.87194824, y: -0.044006348}
+        - {x: 34.87195, y: 10.955994}
+        - {x: 54.87195, y: 24.955994}
+        - {x: 54.87195, y: 42.955994}
     - name: Leopard_16
       rect:
         serializedVersion: 2
-        x: 5
-        y: 29
-        width: 58
-        height: 22
+        x: 50
+        y: 290
+        width: 580
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9.760002, y: 45.92}
+        - {x: -59.760002, y: 27.919998}
+        - {x: -59.760002, y: -0.08000183}
+        - {x: 59.239998, y: -0.08000183}
+        - {x: 60.239998, y: 3.9199982}
+        - {x: 60.239998, y: 45.92}
     - name: Leopard_17
       rect:
         serializedVersion: 2
-        x: 65
-        y: 29
-        width: 54
-        height: 21
+        x: 650
+        y: 290
+        width: 540
+        height: 210
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -24.380005, y: 43.895996}
+        - {x: -55.380005, y: 30.895996}
+        - {x: -55.380005, y: 1.8959961}
+        - {x: -49.380005, y: -0.104003906}
+        - {x: 51.619995, y: -0.104003906}
+        - {x: 55.619995, y: 3.895996}
+        - {x: 55.619995, y: 43.895996}
     - name: Leopard_18
       rect:
         serializedVersion: 2
-        x: 124
-        y: 28
-        width: 53
-        height: 21
+        x: 1240
+        y: 280
+        width: 530
+        height: 210
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -54.048004, y: 32.848}
+        - {x: -54.048004, y: 1.8479996}
+        - {x: -52.048004, y: -0.15200043}
+        - {x: 55.951996, y: -0.15200043}
+        - {x: 55.951996, y: 43.848}
+        - {x: -29.048004, y: 43.848}
+        - {x: -33.048004, y: 42.848}
     - name: Leopard_19
       rect:
         serializedVersion: 2
-        x: 188
-        y: 28
-        width: 53
-        height: 21
+        x: 1880
+        y: 280
+        width: 530
+        height: 210
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 54.523987, y: 29.848}
+        - {x: 52.523987, y: 34.848}
+        - {x: 4.523987, y: 43.848}
+        - {x: -54.476013, y: 43.848}
+        - {x: -54.476013, y: -0.15200043}
+        - {x: 54.523987, y: -0.15200043}
     - name: Leopard_20
       rect:
         serializedVersion: 2
-        x: 246
-        y: 28
-        width: 54
-        height: 22
+        x: 2460
+        y: 280
+        width: 540
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 45.807983, y: 1.871994}
+        - {x: 45.807983, y: 0.871994}
+        - {x: 46.807983, y: -0.12800598}
+        - {x: 51.807983, y: -0.12800598}
+        - {x: 51.807983, y: 2.871994}
+        - {x: 49.807983, y: 4.871994}
+        - {x: 48.807983, y: 4.871994}
+      - - {x: 54.807983, y: 4.871994}
+        - {x: 56.807983, y: 4.871994}
+        - {x: 56.807983, y: 14.871994}
+        - {x: 40.807983, y: 40.871994}
+        - {x: 17.807983, y: 45.871994}
+        - {x: -55.192017, y: 45.871994}
+        - {x: -55.192017, y: -0.12800598}
+        - {x: 6.8079834, y: -0.12800598}
+        - {x: 14.807983, y: 4.871994}
+        - {x: 30.807983, y: 3.871994}
     - name: Leopard_21
       rect:
         serializedVersion: 2
-        x: 302
-        y: 29
-        width: 58
-        height: 22
+        x: 3020
+        y: 290
+        width: 580
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 9.495972, y: 2.9199982}
+        - {x: 36.49597, y: -0.08000183}
+        - {x: 48.49597, y: -0.08000183}
+        - {x: 60.49597, y: 2.9199982}
+        - {x: 60.49597, y: 15.919998}
+        - {x: 2.4959717, y: 45.92}
+        - {x: -52.50403, y: 45.92}
+        - {x: -59.50403, y: 42.92}
+        - {x: -59.50403, y: 3.9199982}
+        - {x: -58.50403, y: -0.08000183}
+        - {x: -28.504028, y: -0.08000183}
+        - {x: -24.504028, y: 4.919998}
+        - {x: -20.504028, y: -0.08000183}
+        - {x: 5.4959717, y: -0.08000183}
     - name: Leopard_22
       rect:
         serializedVersion: 2
-        x: 2
-        y: 1
-        width: 55
-        height: 27
+        x: 20
+        y: 10
+        width: 550
+        height: 270
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 56.596, y: 55.696}
+        - {x: 23.596, y: 55.696}
+        - {x: -6.4039993, y: 47.696}
+        - {x: -56.404, y: 26.696}
+        - {x: -56.404, y: 15.695999}
+        - {x: -52.404, y: 6.6959987}
+        - {x: -29.404, y: -0.30400133}
+        - {x: 41.596, y: -0.30400133}
+        - {x: 55.596, y: 6.6959987}
+        - {x: 56.596, y: 7.6959987}
     - name: Leopard_23
       rect:
         serializedVersion: 2
-        x: 58
-        y: 1
-        width: 62
-        height: 22
+        x: 580
+        y: 10
+        width: 620
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -55.216003, y: 45.576}
+        - {x: -61.216003, y: 40.576}
+        - {x: -63.216003, y: 39.576}
+        - {x: -63.216003, y: 29.576}
+        - {x: -62.216003, y: 28.576}
+        - {x: -37.216003, y: 31.576}
+        - {x: -38.216003, y: 16.576}
+        - {x: -31.216003, y: -0.42400026}
+        - {x: 44.783997, y: -0.42400026}
+        - {x: 54.783997, y: 0.57599974}
+        - {x: 64.784, y: 4.5759997}
+        - {x: 64.784, y: 30.576}
+        - {x: 59.783997, y: 45.576}
     - name: Leopard_24
       rect:
         serializedVersion: 2
-        x: 122
-        y: 1
-        width: 62
-        height: 22
+        x: 1220
+        y: 10
+        width: 620
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -40.144012, y: 45.576}
+        - {x: -63.144012, y: 44.576}
+        - {x: -63.144012, y: 24.576}
+        - {x: -36.144012, y: -0.42400026}
+        - {x: 64.85599, y: -0.42400026}
+        - {x: 64.85599, y: 30.576}
+        - {x: 57.855988, y: 45.576}
     - name: Leopard_25
       rect:
         serializedVersion: 2
-        x: 185
-        y: 1
-        width: 63
-        height: 22
+        x: 1850
+        y: 10
+        width: 630
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -39.119995, y: 45.576}
+        - {x: -63.119995, y: 43.576}
+        - {x: -64.119995, y: 41.576}
+        - {x: -64.119995, y: 27.576}
+        - {x: -54.119995, y: 11.576}
+        - {x: 10.880005, y: -0.42400026}
+        - {x: 65.880005, y: -0.42400026}
+        - {x: 65.880005, y: 27.576}
+        - {x: 59.880005, y: 45.576}
     - name: Leopard_26
       rect:
         serializedVersion: 2
-        x: 249
-        y: 1
-        width: 63
-        height: 22
+        x: 2490
+        y: 10
+        width: 630
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -60.048004, y: 45.576}
+        - {x: -64.048004, y: 33.576}
+        - {x: -64.048004, y: -0.42400026}
+        - {x: -11.048004, y: -0.42400026}
+        - {x: 65.951996, y: 10.576}
+        - {x: 65.951996, y: 45.576}
     - name: Leopard_27
       rect:
         serializedVersion: 2
-        x: 314
-        y: 1
-        width: 62
-        height: 22
+        x: 3140
+        y: 10
+        width: 620
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 64.07196, y: 30.576}
+        - {x: 64.07196, y: 40.576}
+        - {x: 62.07196, y: 42.576}
+        - {x: 15.07196, y: 45.576}
+        - {x: -56.92804, y: 45.576}
+        - {x: -63.92804, y: 42.576}
+        - {x: -63.92804, y: -0.42400026}
+        - {x: 30.07196, y: -0.42400026}
+        - {x: 35.07196, y: 15.576}
+        - {x: 21.07196, y: 25.576}
+        - {x: 63.07196, y: 28.576}
     - name: Leopard_28
       rect:
         serializedVersion: 2
-        x: 378
-        y: 1
-        width: 62
-        height: 22
+        x: 3780
+        y: 10
+        width: 620
+        height: 220
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -51.856018, y: 45.576}
+        - {x: -63.856018, y: 37.576}
+        - {x: -63.856018, y: 5.5759997}
+        - {x: -61.856018, y: 3.5759997}
+        - {x: -53.856018, y: 2.5759997}
+        - {x: -29.856018, y: 10.576}
+        - {x: -16.856018, y: 15.576}
+        - {x: -12.856018, y: 17.576}
+        - {x: 17.143982, y: -0.42400026}
+        - {x: 31.143982, y: -0.42400026}
+        - {x: 64.14398, y: 22.576}
+        - {x: 64.14398, y: 45.576}
     - name: Leopard_29
       rect:
         serializedVersion: 2
-        x: 443
-        y: 1
-        width: 55
-        height: 26
+        x: 4430
+        y: 10
+        width: 550
+        height: 260
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -56.236023, y: 53.671997}
+        - {x: -56.236023, y: 35.671997}
+        - {x: -54.236023, y: 34.671997}
+        - {x: -56.236023, y: 22.671999}
+        - {x: -56.236023, y: 5.6719985}
+        - {x: -55.236023, y: 3.6719985}
+        - {x: -33.236023, y: 3.6719985}
+        - {x: -25.236023, y: 7.6719985}
+        - {x: -23.236023, y: 9.671999}
+        - {x: -12.236023, y: -0.3280015}
+        - {x: 28.763977, y: -0.3280015}
+        - {x: 56.763977, y: 11.671999}
+        - {x: 56.763977, y: 51.671997}
+        - {x: 35.763977, y: 53.671997}
+    outline: []
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

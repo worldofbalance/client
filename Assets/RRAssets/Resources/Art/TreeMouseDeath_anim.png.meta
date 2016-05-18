@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 8e66196837f72d54cbcd71fc5860cd02
+timeCreated: 1463460243
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: TreeMouseDeath_anim_0
@@ -8,6 +10,7 @@ TextureImporter:
     21300006: TreeMouseDeath_anim_3
     21300008: TreeMouseDeath_anim_4
     21300010: TreeMouseDeath_anim_5
+    21300012: TreeMouseDeath_anim_8
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -21,14 +24,17 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
-  maxTextureSize: 1024
+  maxTextureSize: 4096
   textureSettings:
     filterMode: 0
     aniso: 1
@@ -36,12 +42,14 @@ TextureImporter:
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
+  rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 16
   alphaIsTransparency: 1
@@ -52,62 +60,228 @@ TextureImporter:
     - name: TreeMouseDeath_anim_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 3
-        width: 34
-        height: 11
+        x: 20
+        y: 27
+        width: 338
+        height: 113
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 56.5}
+        - {x: -34, y: 47.5}
+        - {x: -142, y: 28.5}
+        - {x: -147, y: 26.5}
+        - {x: -169, y: 5.5}
+        - {x: -169, y: -56.5}
+        - {x: 169, y: -56.5}
+        - {x: 169, y: 5.5}
+        - {x: 134, y: 56.5}
     - name: TreeMouseDeath_anim_1
       rect:
         serializedVersion: 2
-        x: 37
-        y: 3
-        width: 34
-        height: 11
+        x: 370
+        y: 32
+        width: 338
+        height: 108
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 130, y: 54}
+        - {x: -159, y: 54}
+        - {x: -169, y: 18}
+        - {x: -169, y: -54}
+        - {x: 142, y: -54}
+        - {x: 155, y: -44}
+        - {x: 169, y: -21}
+        - {x: 169, y: 6}
     - name: TreeMouseDeath_anim_2
       rect:
         serializedVersion: 2
-        x: 77
-        y: 2
-        width: 30
-        height: 12
+        x: 770
+        y: 32
+        width: 298
+        height: 108
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 106, y: 54}
+        - {x: -26, y: 54}
+        - {x: -149, y: 22}
+        - {x: -149, y: -46}
+        - {x: -68, y: -54}
+        - {x: 112, y: -54}
+        - {x: 137, y: -45}
+        - {x: 149, y: -25}
+        - {x: 149, y: 8}
+      - - {x: -136, y: 4}
+        - {x: -139, y: 1}
+        - {x: -139, y: -3}
+        - {x: -136, y: -6}
+        - {x: -132, y: -6}
+        - {x: -129, y: -3}
+        - {x: -129, y: 1}
+        - {x: -132, y: 4}
+      - - {x: -96, y: 4}
+        - {x: -99, y: 1}
+        - {x: -99, y: -3}
+        - {x: -96, y: -6}
+        - {x: -92, y: -6}
+        - {x: -89, y: -3}
+        - {x: -89, y: 1}
+        - {x: -92, y: 4}
+      - - {x: -36, y: 24}
+        - {x: -39, y: 21}
+        - {x: -39, y: 17}
+        - {x: -36, y: 14}
+        - {x: -32, y: 14}
+        - {x: -29, y: 17}
+        - {x: -29, y: 21}
+        - {x: -32, y: 24}
+      - - {x: 2, y: 34}
+        - {x: 1, y: 31}
+        - {x: 1, y: 25}
+        - {x: 4, y: 24}
+        - {x: 10, y: 24}
+        - {x: 11, y: 27}
+        - {x: 11, y: 33}
+        - {x: 8, y: 34}
     - name: TreeMouseDeath_anim_3
       rect:
         serializedVersion: 2
-        x: 110
-        y: 2
-        width: 30
-        height: 12
+        x: 1102
+        y: 37
+        width: 296
+        height: 103
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 51.5}
+        - {x: -148, y: 20.5}
+        - {x: -148, y: -23.5}
+        - {x: -80, y: -51.5}
+        - {x: 129, y: -51.5}
+        - {x: 148, y: -42.5}
+        - {x: 148, y: 38.5}
+        - {x: 139, y: 51.5}
     - name: TreeMouseDeath_anim_4
       rect:
         serializedVersion: 2
-        x: 147
-        y: 2
-        width: 26
-        height: 12
+        x: 1472
+        y: 37
+        width: 256
+        height: 103
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: TreeMouseDeath_anim_5
+      outline:
+      - - {x: 43, y: 51.5}
+        - {x: 33, y: 47.5}
+        - {x: 42, y: 29.5}
+        - {x: 53, y: 34.5}
+        - {x: 47, y: 22.5}
+        - {x: 24, y: 46.5}
+        - {x: -104, y: 8.5}
+        - {x: -104, y: -34.5}
+        - {x: -74, y: -51.5}
+        - {x: 112, y: -51.5}
+        - {x: 122, y: -39.5}
+        - {x: 122, y: 11.5}
+        - {x: 74, y: 51.5}
+      - - {x: -67, y: -24.5}
+        - {x: -72, y: -28.5}
+        - {x: -72, y: -44.5}
+        - {x: -61, y: -50.5}
+        - {x: -46, y: -50.5}
+        - {x: -46, y: -32.5}
+        - {x: -55, y: -24.5}
+      - - {x: -37, y: -24.5}
+        - {x: -42, y: -28.5}
+        - {x: -42, y: -38.5}
+        - {x: -39, y: -42.5}
+        - {x: -29, y: -42.5}
+        - {x: -21, y: -40.5}
+        - {x: -20, y: -36.5}
+        - {x: -20, y: -29.5}
+        - {x: -28, y: -24.5}
+      - - {x: -107, y: -18.5}
+        - {x: -110, y: -21.5}
+        - {x: -110, y: -25.5}
+        - {x: -107, y: -28.5}
+        - {x: -103, y: -28.5}
+        - {x: -100, y: -25.5}
+        - {x: -100, y: -21.5}
+        - {x: -103, y: -18.5}
+      - - {x: -114, y: -19.5}
+        - {x: -110, y: -18.5}
+        - {x: -110, y: -8.5}
+        - {x: -111, y: -7.5}
+        - {x: -128, y: -7.5}
+        - {x: -128, y: -19.5}
+      - - {x: 121, y: -8.5}
+        - {x: 120, y: -11.5}
+        - {x: 120, y: -17.5}
+        - {x: 123, y: -18.5}
+        - {x: 127, y: -18.5}
+        - {x: 128, y: -17.5}
+        - {x: 128, y: -9.5}
+        - {x: 127, y: -8.5}
+      - - {x: -8, y: 13.5}
+        - {x: -10, y: 8.5}
+        - {x: -10, y: 2.5}
+        - {x: -5, y: -0.5}
+        - {x: 8, y: -0.5}
+        - {x: 10, y: 4.5}
+        - {x: 10, y: 10.5}
+        - {x: 6, y: 13.5}
+    - name: TreeMouseDeath_anim_8
       rect:
         serializedVersion: 2
-        x: 181
-        y: 5
-        width: 21
-        height: 7
+        x: 1810
+        y: 48
+        width: 208
+        height: 70
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 21}
+        - {x: -55, y: 15}
+        - {x: -104, y: 2}
+        - {x: -104, y: -25}
+        - {x: -91, y: -35}
+        - {x: 86, y: -35}
+        - {x: 86, y: -4}
+        - {x: 52, y: 21}
+      - - {x: -51, y: -23}
+        - {x: -54, y: -26}
+        - {x: -54, y: -30}
+        - {x: -51, y: -33}
+        - {x: -47, y: -33}
+        - {x: -44, y: -30}
+        - {x: -44, y: -26}
+        - {x: -47, y: -23}
+      - - {x: 99, y: -3}
+        - {x: 96, y: -4}
+        - {x: 96, y: -10}
+        - {x: 97, y: -13}
+        - {x: 103, y: -13}
+        - {x: 104, y: -12}
+        - {x: 104, y: -4}
+        - {x: 103, y: -3}
+      - - {x: 7, y: 35}
+        - {x: 6, y: 34}
+        - {x: 6, y: 30}
+        - {x: 9, y: 27}
+        - {x: 13, y: 27}
+        - {x: 16, y: 30}
+        - {x: 16, y: 34}
+        - {x: 15, y: 35}
+    outline: []
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

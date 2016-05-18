@@ -8,10 +8,9 @@ namespace RR {
 			Dictionary<string, string> items = new Dictionary<string, string>();
 	
 			try {
-				// filename doesn't work. Don't know Why...
 				TextAsset txt = (TextAsset) Resources.Load("ItemLocationFiles/1", typeof(TextAsset));
 				string content = txt.text;
-				Debug.Log(content);
+				DebugConsole.Log("ItemReader content: " + content);
 				string[] sa = content.Split('\n');
 				try {
 					int num = int.Parse(sa[0]);

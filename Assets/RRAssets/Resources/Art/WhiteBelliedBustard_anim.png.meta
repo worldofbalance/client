@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 4673deafef7016b4e8a78f03da909a9e
+timeCreated: 1463460565
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: WhiteBelliedBustard_anim_0
@@ -53,14 +55,17 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
-  maxTextureSize: 1024
+  maxTextureSize: 4096
   textureSettings:
     filterMode: 0
     aniso: 16
@@ -68,12 +73,14 @@ TextureImporter:
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
+  rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 16
   alphaIsTransparency: 1
@@ -85,381 +92,791 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 96
-        width: 34
-        height: 32
-      alignment: 7
+        y: 958
+        width: 342
+        height: 322
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34.5, y: 32.596863}
+        - {x: -34.5, y: 3.5968628}
+        - {x: -12.5, y: -32.403137}
+        - {x: 27.5, y: -32.403137}
+        - {x: 34.5, y: -22.403137}
+        - {x: 34.5, y: 22.596863}
+        - {x: 25.5, y: 32.596863}
     - name: WhiteBelliedBustard_anim_1
       rect:
         serializedVersion: 2
-        x: 35
-        y: 96
-        width: 34
-        height: 31
-      alignment: 7
+        x: 352
+        y: 958
+        width: 338
+        height: 312
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34.050003, y: 31.596863}
+        - {x: -34.050003, y: 14.596863}
+        - {x: -25.050003, y: -1.4031372}
+        - {x: -1.050003, y: -31.403137}
+        - {x: 17.949997, y: -31.403137}
+        - {x: 35.949997, y: -16.403137}
+        - {x: 35.949997, y: 10.596863}
+        - {x: -0.05000305, y: 31.596863}
     - name: WhiteBelliedBustard_anim_2
       rect:
         serializedVersion: 2
-        x: 70
-        y: 96
-        width: 30
-        height: 30
-      alignment: 7
+        x: 699
+        y: 958
+        width: 303
+        height: 302
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 7.8921814, y: 30.596863}
+        - {x: -30.107819, y: 30.596863}
+        - {x: -30.107819, y: -16.403137}
+        - {x: -7.1078186, y: -30.403137}
+        - {x: 27.892181, y: -30.403137}
+        - {x: 31.892181, y: -26.403137}
+        - {x: 31.892181, y: 1.5968628}
+        - {x: 24.892181, y: 22.596863}
     - name: WhiteBelliedBustard_anim_3
       rect:
         serializedVersion: 2
-        x: 101
-        y: 96
-        width: 28
-        height: 31
-      alignment: 7
+        x: 1007
+        y: 958
+        width: 283
+        height: 312
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -28.526566, y: 31.596863}
+        - {x: -28.526566, y: -21.403137}
+        - {x: -7.5265656, y: -31.403137}
+        - {x: 23.473434, y: -31.403137}
+        - {x: 30.473434, y: -22.403137}
+        - {x: 30.473434, y: 5.596863}
+        - {x: -0.52656555, y: 31.596863}
     - name: WhiteBelliedBustard_anim_4
       rect:
         serializedVersion: 2
-        x: 130
-        y: 96
-        width: 28
-        height: 32
-      alignment: 7
+        x: 1300
+        y: 958
+        width: 283
+        height: 322
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -28.96875, y: 32.596863}
+        - {x: -28.96875, y: -22.403137}
+        - {x: -24.96875, y: -32.403137}
+        - {x: 11.03125, y: -32.403137}
+        - {x: 29.03125, y: -20.403137}
+        - {x: 29.03125, y: -0.4031372}
+        - {x: 26.03125, y: 6.596863}
+        - {x: 14.03125, y: 23.596863}
+        - {x: -10.96875, y: 32.596863}
     - name: WhiteBelliedBustard_anim_5
       rect:
         serializedVersion: 2
-        x: 159
-        y: 96
-        width: 28
-        height: 31
-      alignment: 7
+        x: 1587
+        y: 958
+        width: 283
+        height: 312
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -28.12033, y: 31.596863}
+        - {x: -28.12033, y: -29.403137}
+        - {x: -27.12033, y: -31.403137}
+        - {x: 17.87967, y: -31.403137}
+        - {x: 29.87967, y: -21.403137}
+        - {x: 29.87967, y: 17.596863}
+        - {x: 10.879669, y: 31.596863}
     - name: WhiteBelliedBustard_anim_6
       rect:
         serializedVersion: 2
-        x: 188
-        y: 96
-        width: 30
-        height: 30
-      alignment: 7
+        x: 1880
+        y: 958
+        width: 303
+        height: 302
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8.5625, y: 30.596863}
+        - {x: -28.5625, y: 30.596863}
+        - {x: -30.5625, y: 27.596863}
+        - {x: -30.5625, y: 16.596863}
+        - {x: -28.5625, y: 4.596863}
+        - {x: -20.5625, y: -5.403137}
+        - {x: -12.5625, y: -30.403137}
+        - {x: 17.4375, y: -30.403137}
+        - {x: 32.4375, y: -26.403137}
+        - {x: 32.4375, y: -2.4031372}
+        - {x: 17.4375, y: 18.596863}
     - name: WhiteBelliedBustard_anim_7
       rect:
         serializedVersion: 2
-        x: 219
-        y: 96
-        width: 34
-        height: 31
-      alignment: 7
+        x: 2193
+        y: 958
+        width: 337
+        height: 312
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 18.02655, y: 15.596863}
+        - {x: 11.02655, y: 20.596863}
+        - {x: -7.9734497, y: 29.596863}
+        - {x: -12.97345, y: 31.596863}
+        - {x: -33.97345, y: 31.596863}
+        - {x: -33.97345, y: 12.596863}
+        - {x: -6.9734497, y: -31.403137}
+        - {x: 17.02655, y: -31.403137}
+        - {x: 34.02655, y: -19.403137}
+        - {x: 34.02655, y: -2.4031372}
+        - {x: 30.02655, y: 3.5968628}
     - name: WhiteBelliedBustard_anim_8
       rect:
         serializedVersion: 2
-        x: 254
-        y: 96
-        width: 34
-        height: 31
-      alignment: 7
+        x: 2540
+        y: 958
+        width: 337
+        height: 312
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 35.46875, y: 31.596863}
+        - {x: 1.46875, y: 31.596863}
+        - {x: -17.53125, y: 16.596863}
+        - {x: -28.53125, y: 3.5968628}
+        - {x: -33.53125, y: -3.4031372}
+        - {x: -33.53125, y: -15.403137}
+        - {x: -30.53125, y: -14.403137}
+        - {x: -14.53125, y: -31.403137}
+        - {x: 3.46875, y: -31.403137}
+        - {x: 4.46875, y: -27.403137}
+        - {x: 27.46875, y: 6.596863}
+        - {x: 35.46875, y: 20.596863}
     - name: WhiteBelliedBustard_anim_9
       rect:
         serializedVersion: 2
-        x: 289
-        y: 96
-        width: 30
-        height: 30
-      alignment: 7
+        x: 2887
+        y: 958
+        width: 303
+        height: 302
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -1.0890503, y: 30.596863}
+        - {x: -30.08905, y: 9.596863}
+        - {x: -30.08905, y: -27.403137}
+        - {x: -27.08905, y: -30.403137}
+        - {x: 11.91095, y: -30.403137}
+        - {x: 28.91095, y: -22.403137}
+        - {x: 31.91095, y: -15.403137}
+        - {x: 31.91095, y: 30.596863}
     - name: WhiteBelliedBustard_anim_10
       rect:
         serializedVersion: 2
-        x: 320
-        y: 96
-        width: 28
-        height: 31
-      alignment: 7
+        x: 3200
+        y: 958
+        width: 283
+        height: 312
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 10, y: 31.596863}
+        - {x: 6, y: 26.596863}
+        - {x: 6, y: 23.596863}
+        - {x: 8, y: 21.596863}
+        - {x: -14, y: 16.596863}
+        - {x: -28, y: 0.5968628}
+        - {x: -29, y: -2.4031372}
+        - {x: -29, y: -18.403137}
+        - {x: -12, y: -31.403137}
+        - {x: 7, y: -31.403137}
+        - {x: 8, y: -27.403137}
+        - {x: 29, y: 3.5968628}
+        - {x: 29, y: 31.596863}
     - name: WhiteBelliedBustard_anim_11
       rect:
         serializedVersion: 2
-        x: 349
-        y: 96
-        width: 28
-        height: 32
-      alignment: 7
+        x: 3488
+        y: 958
+        width: 282
+        height: 322
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 11.549988, y: 32.596863}
+        - {x: 5.549988, y: 27.596863}
+        - {x: 5.549988, y: 23.596863}
+        - {x: -12.450012, y: 16.596863}
+        - {x: -28.450012, y: 4.596863}
+        - {x: -28.450012, y: -17.403137}
+        - {x: -22.450012, y: -32.403137}
+        - {x: 26.549988, y: -32.403137}
+        - {x: 28.549988, y: -23.403137}
+        - {x: 28.549988, y: 32.596863}
     - name: WhiteBelliedBustard_anim_12
       rect:
         serializedVersion: 2
-        x: 378
-        y: 96
-        width: 28
-        height: 31
-      alignment: 7
+        x: 3780
+        y: 958
+        width: 278
+        height: 312
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 13.40625, y: 31.596863}
+        - {x: 8.40625, y: 26.596863}
+        - {x: 8.40625, y: 23.596863}
+        - {x: 10.40625, y: 21.596863}
+        - {x: -12.59375, y: 17.596863}
+        - {x: -27.59375, y: -2.4031372}
+        - {x: -27.59375, y: -15.403137}
+        - {x: -24.59375, y: -14.403137}
+        - {x: -8.59375, y: -31.403137}
+        - {x: 9.40625, y: -31.403137}
+        - {x: 10.40625, y: -27.403137}
+        - {x: 29.40625, y: 1.5968628}
+        - {x: 29.40625, y: 31.596863}
     - name: WhiteBelliedBustard_anim_13
       rect:
         serializedVersion: 2
-        x: 407
-        y: 96
-        width: 30
-        height: 30
-      alignment: 7
+        x: 4068
+        y: 958
+        width: 303
+        height: 302
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 14.456238, y: 30.596863}
+        - {x: -16.543762, y: 18.596863}
+        - {x: -30.543762, y: 5.596863}
+        - {x: -30.543762, y: -22.403137}
+        - {x: -23.543762, y: -30.403137}
+        - {x: 10.456238, y: -30.403137}
+        - {x: 20.456238, y: -25.403137}
+        - {x: 32.456238, y: -0.4031372}
+        - {x: 32.456238, y: 30.596863}
     - name: WhiteBelliedBustard_anim_14
       rect:
         serializedVersion: 2
-        x: 438
-        y: 96
-        width: 34
-        height: 31
-      alignment: 7
+        x: 4380
+        y: 958
+        width: 338
+        height: 312
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -7.65625, y: 31.596863}
+        - {x: -33.65625, y: 7.596863}
+        - {x: -33.65625, y: -23.403137}
+        - {x: -25.65625, y: -28.403137}
+        - {x: -19.65625, y: -31.403137}
+        - {x: 16.34375, y: -31.403137}
+        - {x: 35.34375, y: 14.596863}
+        - {x: 35.34375, y: 31.596863}
     - name: WhiteBelliedBustard_anim_15
       rect:
         serializedVersion: 2
-        x: 473
-        y: 96
-        width: 34
-        height: 32
-      alignment: 7
+        x: 4728
+        y: 958
+        width: 342
+        height: 322
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 13.987488, y: 32.596863}
+        - {x: -18.012512, y: 17.596863}
+        - {x: -34.012512, y: -0.4031372}
+        - {x: -34.012512, y: -15.403137}
+        - {x: -26.012512, y: -28.403137}
+        - {x: -19.012512, y: -32.403137}
+        - {x: 22.987488, y: -32.403137}
+        - {x: 35.987488, y: 6.596863}
+        - {x: 35.987488, y: 29.596863}
+        - {x: 33.987488, y: 32.596863}
     - name: WhiteBelliedBustard_anim_16
       rect:
         serializedVersion: 2
         x: 0
-        y: 68
-        width: 40
-        height: 25
-      alignment: 7
+        y: 680
+        width: 402
+        height: 253
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -41, y: 26.0625}
+        - {x: -41, y: 12.0625}
+        - {x: -27, y: -8.9375}
+        - {x: -14, y: -25.9375}
+        - {x: 28, y: -25.9375}
+        - {x: 39, y: -16.9375}
+        - {x: 41, y: -10.9375}
+        - {x: 41, y: 20.0625}
+        - {x: 22, y: 26.0625}
     - name: WhiteBelliedBustard_anim_17
       rect:
         serializedVersion: 2
-        x: 41
-        y: 68
-        width: 40
-        height: 25
-      alignment: 7
+        x: 412
+        y: 680
+        width: 397
+        height: 253
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -40.456253, y: -7.9375}
+        - {x: -34.456253, y: -25.9375}
+        - {x: 34.543747, y: -25.9375}
+        - {x: 40.543747, y: -19.9375}
+        - {x: 40.543747, y: 15.0625}
+        - {x: 35.543747, y: 24.0625}
+        - {x: 5.543747, y: 26.0625}
+        - {x: -34.456253, y: 26.0625}
+        - {x: -40.456253, y: 20.0625}
     - name: WhiteBelliedBustard_anim_18
       rect:
         serializedVersion: 2
-        x: 82
-        y: 68
-        width: 42
-        height: 24
-      alignment: 7
+        x: 824
+        y: 680
+        width: 416
+        height: 243
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -41.912506, y: 25.0625}
+        - {x: -41.912506, y: 6.0625}
+        - {x: -26.912506, y: -24.9375}
+        - {x: 42.087494, y: -24.9375}
+        - {x: 42.087494, y: 23.0625}
+        - {x: 36.087494, y: 25.0625}
+      - - {x: 19.087494, y: -8.9375}
+        - {x: 18.087494, y: -9.9375}
+        - {x: 18.087494, y: -14.9375}
+        - {x: 23.087494, y: -14.9375}
+        - {x: 24.087494, y: -12.9375}
+        - {x: 24.087494, y: -10.9375}
+        - {x: 22.087494, y: -8.9375}
     - name: WhiteBelliedBustard_anim_19
       rect:
         serializedVersion: 2
-        x: 127
-        y: 68
-        width: 40
-        height: 24
-      alignment: 7
+        x: 1270
+        y: 680
+        width: 402
+        height: 243
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 42.484375, y: -16.9375}
+        - {x: 42.484375, y: 17.0625}
+        - {x: 31.484375, y: 25.0625}
+        - {x: -40.515625, y: 25.0625}
+        - {x: -40.515625, y: 0.0625}
+        - {x: -18.515625, y: -24.9375}
+        - {x: -3.515625, y: -24.9375}
+        - {x: 7.484375, y: -13.9375}
+        - {x: 18.484375, y: -24.9375}
+        - {x: 41.484375, y: -24.9375}
+      - - {x: 20.484375, y: -11.9375}
+        - {x: 23.484375, y: -14.9375}
+        - {x: 24.484375, y: -14.9375}
+        - {x: 27.484375, y: -11.9375}
+        - {x: 26.484375, y: -8.9375}
+        - {x: 21.484375, y: -8.9375}
     - name: WhiteBelliedBustard_anim_20
       rect:
         serializedVersion: 2
-        x: 168
-        y: 68
-        width: 40
-        height: 25
-      alignment: 7
+        x: 1682
+        y: 680
+        width: 397
+        height: 253
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 22.528107, y: 24.0625}
+        - {x: 0.5281067, y: 26.0625}
+        - {x: -35.471893, y: 26.0625}
+        - {x: -40.471893, y: 20.0625}
+        - {x: -40.471893, y: 7.0625}
+        - {x: -7.4718933, y: -25.9375}
+        - {x: 35.528107, y: -25.9375}
+        - {x: 40.528107, y: -20.9375}
+        - {x: 40.528107, y: 14.0625}
+        - {x: 34.528107, y: 23.0625}
     - name: WhiteBelliedBustard_anim_21
       rect:
         serializedVersion: 2
-        x: 210
-        y: 68
-        width: 40
-        height: 25
-      alignment: 7
+        x: 2098
+        y: 680
+        width: 402
+        height: 253
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -23.121887, y: 26.0625}
+        - {x: -40.121887, y: 11.0625}
+        - {x: -40.121887, y: -21.9375}
+        - {x: -30.121887, y: -25.9375}
+        - {x: 1.8781128, y: -25.9375}
+        - {x: 41.878113, y: 12.0625}
+        - {x: 41.878113, y: 25.0625}
+        - {x: 37.878113, y: 26.0625}
     - name: WhiteBelliedBustard_anim_22
       rect:
         serializedVersion: 2
-        x: 251
-        y: 68
-        width: 40
-        height: 24
-      alignment: 7
+        x: 2510
+        y: 680
+        width: 397
+        height: 243
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 35.421875, y: 25.0625}
+        - {x: -25.578125, y: 25.0625}
+        - {x: -39.578125, y: 16.0625}
+        - {x: -39.578125, y: -24.9375}
+        - {x: -22.578125, y: -24.9375}
+        - {x: -20.578125, y: -23.9375}
+        - {x: -13.578125, y: -24.9375}
+        - {x: 17.421875, y: -24.9375}
+        - {x: 18.421875, y: -21.9375}
+        - {x: 41.421875, y: 8.0625}
+        - {x: 41.421875, y: 22.0625}
+      - - {x: -22.578125, y: -8.9375}
+        - {x: -24.578125, y: -10.9375}
+        - {x: -24.578125, y: -12.9375}
+        - {x: -22.578125, y: -14.9375}
+        - {x: -20.578125, y: -14.9375}
+        - {x: -18.578125, y: -12.9375}
+        - {x: -18.578125, y: -10.9375}
+        - {x: -20.578125, y: -8.9375}
     - name: WhiteBelliedBustard_anim_23
       rect:
         serializedVersion: 2
-        x: 294
-        y: 68
-        width: 42
-        height: 24
-      alignment: 7
+        x: 2942
+        y: 680
+        width: 417
+        height: 243
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 43.996887, y: 25.0625}
+        - {x: -31.003113, y: 25.0625}
+        - {x: -42.003113, y: 21.0625}
+        - {x: -42.003113, y: -24.9375}
+        - {x: 37.996887, y: -24.9375}
+        - {x: 43.996887, y: -11.9375}
+      - - {x: -21.003113, y: -8.9375}
+        - {x: -23.003113, y: -10.9375}
+        - {x: -23.003113, y: -12.9375}
+        - {x: -21.003113, y: -14.9375}
+        - {x: -19.003113, y: -14.9375}
+        - {x: -17.003113, y: -12.9375}
+        - {x: -17.003113, y: -10.9375}
+        - {x: -19.003113, y: -8.9375}
     - name: WhiteBelliedBustard_anim_24
       rect:
         serializedVersion: 2
-        x: 337
-        y: 68
-        width: 40
-        height: 25
-      alignment: 7
+        x: 3368
+        y: 680
+        width: 402
+        height: 253
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 37.862488, y: 26.0625}
+        - {x: -23.137512, y: 26.0625}
+        - {x: -40.137512, y: 11.0625}
+        - {x: -40.137512, y: -9.9375}
+        - {x: -31.137512, y: -25.9375}
+        - {x: 37.862488, y: -25.9375}
+        - {x: 41.862488, y: -21.9375}
+        - {x: 41.862488, y: 22.0625}
     - name: WhiteBelliedBustard_anim_25
       rect:
         serializedVersion: 2
-        x: 378
-        y: 68
-        width: 40
-        height: 25
-      alignment: 7
+        x: 3780
+        y: 680
+        width: 397
+        height: 253
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 4.40625, y: -18.9375}
+        - {x: 3.40625, y: -15.9375}
+        - {x: 26.40625, y: -2.9375}
+        - {x: 41.40625, y: 13.0625}
+        - {x: 41.40625, y: 25.0625}
+        - {x: 37.40625, y: 26.0625}
+        - {x: -25.59375, y: 26.0625}
+        - {x: -39.59375, y: 11.0625}
+        - {x: -39.59375, y: -5.9375}
+        - {x: -26.59375, y: -25.9375}
+        - {x: -10.59375, y: -25.9375}
+        - {x: -10.59375, y: -23.9375}
+        - {x: -12.59375, y: -21.9375}
+        - {x: -1.59375, y: -21.9375}
     - name: WhiteBelliedBustard_anim_26
       rect:
         serializedVersion: 2
-        x: 3
-        y: 33
-        width: 49
-        height: 27
-      alignment: 7
+        x: 30
+        y: 327
+        width: 491
+        height: 273
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34.953125, y: 28.910934}
+        - {x: -49.953125, y: 21.910934}
+        - {x: -49.953125, y: -11.089066}
+        - {x: -34.953125, y: -27.089066}
+        - {x: 30.046875, y: -27.089066}
+        - {x: 50.046875, y: -18.089066}
+        - {x: 50.046875, y: 14.910934}
+        - {x: 44.046875, y: 23.910934}
+        - {x: 37.046875, y: 28.910934}
     - name: WhiteBelliedBustard_anim_27
       rect:
         serializedVersion: 2
-        x: 56
-        y: 33
-        width: 49
-        height: 26
-      alignment: 7
+        x: 561
+        y: 327
+        width: 491
+        height: 263
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -49.92344, y: 27.910934}
+        - {x: -49.92344, y: 8.910934}
+        - {x: -19.923439, y: -26.089066}
+        - {x: 42.07656, y: -26.089066}
+        - {x: 44.07656, y: -24.089066}
+        - {x: 50.07656, y: -15.089066}
+        - {x: 50.07656, y: 14.910934}
+        - {x: 34.07656, y: 27.910934}
     - name: WhiteBelliedBustard_anim_28
       rect:
         serializedVersion: 2
-        x: 106
-        y: 33
-        width: 42
-        height: 27
-      alignment: 7
+        x: 1062
+        y: 327
+        width: 416
+        height: 273
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -41.940628, y: 28.910934}
+        - {x: -41.940628, y: 0.91093445}
+        - {x: -25.940628, y: -27.089066}
+        - {x: 42.059372, y: -27.089066}
+        - {x: 42.059372, y: 20.910934}
+        - {x: 22.059372, y: 28.910934}
     - name: WhiteBelliedBustard_anim_29
       rect:
         serializedVersion: 2
-        x: 149
-        y: 42
-        width: 47
-        height: 18
-      alignment: 7
+        x: 1493
+        y: 422
+        width: 467
+        height: 178
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -47.0672, y: 18.059372}
+        - {x: -47.0672, y: 8.059372}
+        - {x: -30.0672, y: -2.940628}
+        - {x: -6.0671997, y: -14.940628}
+        - {x: 17.9328, y: -17.940628}
+        - {x: 48.9328, y: -17.940628}
+        - {x: 48.9328, y: 0.05937195}
+        - {x: 47.9328, y: 4.059372}
+        - {x: 38.9328, y: 18.059372}
     - name: WhiteBelliedBustard_anim_30
       rect:
         serializedVersion: 2
-        x: 197
-        y: 44
-        width: 49
-        height: 20
-      alignment: 7
+        x: 1969
+        y: 442
+        width: 492
+        height: 198
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27.623444, y: 20.090622}
+        - {x: -49.623444, y: 9.090622}
+        - {x: -49.623444, y: -7.909378}
+        - {x: -11.623444, y: -19.909378}
+        - {x: 45.376556, y: -19.909378}
+        - {x: 51.376556, y: -16.909378}
+        - {x: 51.376556, y: 4.090622}
+        - {x: 43.376556, y: 20.090622}
     - name: WhiteBelliedBustard_anim_31
       rect:
         serializedVersion: 2
-        x: 251
-        y: 34
-        width: 45
-        height: 30
-      alignment: 7
+        x: 2510
+        y: 337
+        width: 452
+        height: 303
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -45.578125, y: 31.92656}
+        - {x: -45.578125, y: -30.07344}
+        - {x: 21.421875, y: -30.07344}
+        - {x: 47.421875, y: -23.07344}
+        - {x: 47.421875, y: 20.92656}
+        - {x: 40.421875, y: 31.92656}
     - name: WhiteBelliedBustard_anim_32
       rect:
         serializedVersion: 2
-        x: 9
-        y: 2
-        width: 45
-        height: 30
-      alignment: 7
+        x: 89
+        y: 20
+        width: 452
+        height: 302
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 47.439064, y: 17.53125}
+        - {x: 47.439064, y: 29.53125}
+        - {x: 42.439064, y: 30.53125}
+        - {x: -38.560936, y: 30.53125}
+        - {x: -45.560936, y: 15.53125}
+        - {x: -45.560936, y: -9.46875}
+        - {x: -6.560936, y: -30.46875}
+        - {x: 32.439064, y: -30.46875}
+        - {x: 31.439064, y: -27.46875}
+        - {x: 19.439064, y: -17.46875}
+        - {x: 28.439064, y: -6.46875}
     - name: WhiteBelliedBustard_anim_33
       rect:
         serializedVersion: 2
-        x: 59
-        y: 12
-        width: 49
-        height: 20
-      alignment: 7
+        x: 590
+        y: 119
+        width: 487
+        height: 203
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -41.078125, y: 21.985937}
+        - {x: -49.078125, y: 3.985937}
+        - {x: -49.078125, y: -17.014063}
+        - {x: -34.078125, y: -20.014063}
+        - {x: 21.921875, y: -20.014063}
+        - {x: 50.921875, y: -1.0140629}
+        - {x: 50.921875, y: 18.985937}
+        - {x: 46.921875, y: 21.985937}
     - name: WhiteBelliedBustard_anim_34
       rect:
         serializedVersion: 2
-        x: 109
-        y: 10
-        width: 47
-        height: 18
-      alignment: 7
+        x: 1091
+        y: 99
+        width: 467
+        height: 184
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -32.09532, y: 20.454687}
+        - {x: -47.09532, y: 10.454687}
+        - {x: -47.09532, y: -18.545313}
+        - {x: -3.0953217, y: -18.545313}
+        - {x: 30.904678, y: -11.545313}
+        - {x: 48.90468, y: 2.454687}
+        - {x: 48.90468, y: 15.454687}
+        - {x: 44.90468, y: 20.454687}
     - name: WhiteBelliedBustard_anim_35
       rect:
         serializedVersion: 2
-        x: 157
-        y: 1
-        width: 42
-        height: 27
-      alignment: 7
+        x: 1568
+        y: 10
+        width: 421
+        height: 273
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -0.4500122, y: 28.015625}
+        - {x: -18.450012, y: 24.015625}
+        - {x: -42.450012, y: 9.015625}
+        - {x: -42.450012, y: -22.984375}
+        - {x: -32.450012, y: -27.984375}
+        - {x: -1.4500122, y: -27.984375}
+        - {x: 42.549988, y: 15.015625}
+        - {x: 42.549988, y: 24.015625}
+        - {x: 34.549988, y: 28.015625}
     - name: WhiteBelliedBustard_anim_36
       rect:
         serializedVersion: 2
-        x: 200
-        y: 1
-        width: 49
-        height: 26
-      alignment: 7
+        x: 1999
+        y: 10
+        width: 491
+        height: 263
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34.07657, y: 27.015625}
+        - {x: -49.07657, y: 20.015625}
+        - {x: -49.07657, y: -13.984375}
+        - {x: -29.076569, y: -26.984375}
+        - {x: 6.9234314, y: -26.984375}
+        - {x: 50.92343, y: 12.015625}
+        - {x: 50.92343, y: 27.015625}
     - name: WhiteBelliedBustard_anim_37
       rect:
         serializedVersion: 2
-        x: 253
-        y: 1
-        width: 49
-        height: 27
-      alignment: 7
+        x: 2530
+        y: 10
+        width: 486
+        height: 273
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -39.546875, y: 28.015625}
+        - {x: -48.546875, y: 22.015625}
+        - {x: -48.546875, y: -22.984375}
+        - {x: -43.546875, y: -27.984375}
+        - {x: 19.453125, y: -27.984375}
+        - {x: 36.453125, y: -17.984375}
+        - {x: 50.453125, y: -6.984375}
+        - {x: 50.453125, y: 20.015625}
+        - {x: 38.453125, y: 28.015625}
+    outline: []
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

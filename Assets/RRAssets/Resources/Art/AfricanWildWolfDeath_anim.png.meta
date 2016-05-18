@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 1e89843b692586f4ca8c4eda048aa690
+timeCreated: 1463457313
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: AfricanWildWolfDeath_anim_0
@@ -22,14 +24,17 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
-  maxTextureSize: 1024
+  maxTextureSize: 4096
   textureSettings:
     filterMode: 0
     aniso: -1
@@ -37,12 +42,14 @@ TextureImporter:
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
+  rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 16
   alphaIsTransparency: 1
@@ -53,72 +60,165 @@ TextureImporter:
     - name: AfricanWildWolfDeath_anim_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 4
-        width: 43
-        height: 23
+        x: 20
+        y: 40
+        width: 430
+        height: 230
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 61.733337, y: 78.183334}
+        - {x: -72.26666, y: 78.183334}
+        - {x: -72.26666, y: 31.183334}
+        - {x: -70.26666, y: 24.183334}
+        - {x: -34.266663, y: 0.18333435}
+        - {x: 67.73334, y: 0.18333435}
+        - {x: 73.73334, y: 16.183334}
+        - {x: 73.73334, y: 55.183334}
     - name: AfricanWildWolfDeath_anim_1
       rect:
         serializedVersion: 2
-        x: 48
-        y: 4
-        width: 43
-        height: 23
+        x: 480
+        y: 40
+        width: 430
+        height: 230
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 73.600006, y: 15.183334}
+        - {x: 73.600006, y: 59.183334}
+        - {x: 56.600006, y: 73.183334}
+        - {x: 12.600006, y: 72.183334}
+        - {x: -25.399994, y: 78.183334}
+        - {x: -72.399994, y: 78.183334}
+        - {x: -72.399994, y: 38.183334}
+        - {x: -65.399994, y: 23.183334}
+        - {x: -36.399994, y: 0.18333435}
+        - {x: -0.3999939, y: 0.18333435}
+        - {x: -1.3999939, y: 11.183334}
+        - {x: 19.600006, y: 0.18333435}
+        - {x: 68.600006, y: 0.18333435}
     - name: AfricanWildWolfDeath_anim_2
       rect:
         serializedVersion: 2
-        x: 93
-        y: 6
-        width: 43
-        height: 20
+        x: 930
+        y: 60
+        width: 430
+        height: 200
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 72.600006, y: 23.866669}
+        - {x: 72.600006, y: 48.86667}
+        - {x: 59.600006, y: 66.86667}
+        - {x: 19.600006, y: 65.86667}
+        - {x: -29.399994, y: 67.86667}
+        - {x: -72.399994, y: 67.86667}
+        - {x: -72.399994, y: 37.86667}
+        - {x: -70.399994, y: 30.866669}
+        - {x: -35.399994, y: -0.1333313}
+        - {x: 39.600006, y: -0.1333313}
     - name: AfricanWildWolfDeath_anim_3
       rect:
         serializedVersion: 2
-        x: 138
-        y: 8
-        width: 43
-        height: 18
+        x: 1380
+        y: 80
+        width: 430
+        height: 180
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -72.399994, y: 62.233337}
+        - {x: -72.399994, y: 28.233337}
+        - {x: -42.399994, y: 0.2333374}
+        - {x: 36.600006, y: 0.2333374}
+        - {x: 73.600006, y: 18.233337}
+        - {x: 73.600006, y: 62.233337}
     - name: AfricanWildWolfDeath_anim_4
       rect:
         serializedVersion: 2
-        x: 184
-        y: 9
-        width: 44
-        height: 11
+        x: 1840
+        y: 90
+        width: 440
+        height: 110
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 22.966675, y: 4.8166656}
+        - {x: 22.966675, y: -0.18333435}
+        - {x: 28.966675, y: -0.18333435}
+        - {x: 28.966675, y: 4.8166656}
+      - - {x: -11.033325, y: 4.8166656}
+        - {x: 71.966675, y: 4.8166656}
+        - {x: 74.966675, y: 9.816666}
+        - {x: 74.966675, y: 37.816666}
+        - {x: 29.966675, y: 37.816666}
+        - {x: 11.966675, y: 32.816666}
+        - {x: 12.966675, y: 26.816666}
+        - {x: 12.966675, y: 23.816666}
+        - {x: 13.966675, y: 20.816666}
+        - {x: 15.966675, y: 20.816666}
+        - {x: 12.966675, y: 21.816666}
+        - {x: 12.966675, y: 25.816666}
+        - {x: 9.966675, y: 35.816666}
+        - {x: 6.966675, y: 37.816666}
+        - {x: -69.033325, y: 37.816666}
+        - {x: -69.033325, y: 11.816666}
+        - {x: -58.033325, y: 9.816666}
+        - {x: -21.033325, y: 4.8166656}
+        - {x: -16.033325, y: 4.8166656}
+        - {x: -14.033325, y: 7.8166656}
+        - {x: -14.033325, y: 11.816666}
+        - {x: -14.033325, y: 9.816666}
+      - - {x: 46.966675, y: 13.816666}
+        - {x: 46.966675, y: 8.816666}
+        - {x: 51.966675, y: 8.816666}
+        - {x: 52.966675, y: 9.816666}
+        - {x: 52.966675, y: 12.816666}
+        - {x: 50.966675, y: 14.816666}
+        - {x: 48.966675, y: 14.816666}
+      - - {x: -74.033325, y: 31.816666}
+        - {x: -70.033325, y: 31.816666}
+        - {x: -68.033325, y: 32.816666}
+        - {x: -68.033325, y: 35.816666}
+        - {x: -69.033325, y: 37.816666}
+        - {x: -73.033325, y: 37.816666}
+        - {x: -74.033325, y: 36.816666}
+      - - {x: -51.033325, y: 37.816666}
+        - {x: -51.033325, y: 33.816666}
+        - {x: -49.033325, y: 31.816666}
+        - {x: -47.033325, y: 31.816666}
+        - {x: -45.033325, y: 33.816666}
+        - {x: -45.033325, y: 37.816666}
     - name: AfricanWildWolfDeath_anim_5
       rect:
         serializedVersion: 2
-        x: 239
-        y: 12
-        width: 30
-        height: 5
+        x: 2390
+        y: 120
+        width: 300
+        height: 50
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: AfricanWildWolfDeath_anim_6
       rect:
         serializedVersion: 2
-        x: 278
-        y: 12
-        width: 17
-        height: 4
+        x: 2780
+        y: 120
+        width: 170
+        height: 40
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

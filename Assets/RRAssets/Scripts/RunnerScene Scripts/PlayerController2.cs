@@ -8,7 +8,7 @@ namespace RR {
 		// Player Handling
 		public float gravity = 20;
 		public float speed = Running.BASE_SPEED;
-		public float acceleration = 32;
+		public float acceleration = 64;
 		public float jumpHeight = 12;
 		
 		private float currentSpeed;

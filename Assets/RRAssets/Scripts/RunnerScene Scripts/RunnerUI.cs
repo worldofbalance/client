@@ -39,9 +39,9 @@ public class RunnerUI : MonoBehaviour {
 		p2Indicator.transform.parent = canvas.transform;
 
 		r1 = p1Indicator.AddComponent<RectTransform> ();
-		r1.sizeDelta = new Vector2 (16f, 16f);
+		r1.sizeDelta = new Vector2 (160f, 160f);
 		r2 = p2Indicator.AddComponent<RectTransform> ();
-		r2.sizeDelta = new Vector2 (16f, 16f);
+		r2.sizeDelta = new Vector2 (160f, 160f);
 
 		c1 = p1Indicator.AddComponent<CanvasRenderer> ();
 		c2 = p2Indicator.AddComponent<CanvasRenderer> ();
@@ -95,11 +95,11 @@ public class RunnerUI : MonoBehaviour {
         dealWithNearFinish();
     }
 
-		barPos1 = 723.42f * percentDone1;
-		barPos2 = 723.42f * percentDone2;
+		barPos1 = 7234.2f * percentDone1;
+		barPos2 = 7234.2f * percentDone2;
 
-		r1.localPosition = new Vector3 (-363.71f + barPos1, -274.3f, 0f);
-		r2.localPosition = new Vector3 (-363.71f + barPos2, -274.3f, 0f);
+		r1.localPosition = new Vector3 (-3637.1f + barPos1, -2743f, 0f);
+		r2.localPosition = new Vector3 (-3637.1f + barPos2, -2743f, 0f);
 	}
 
   //Add logic for when one player is close to finishing

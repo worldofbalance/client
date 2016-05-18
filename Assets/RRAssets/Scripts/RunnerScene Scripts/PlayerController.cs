@@ -8,11 +8,11 @@ namespace RR
     public class PlayerController : MonoBehaviour
     {
         // Player Handling
-        public float gravity = 20;
+        public float gravity;
         // Cannot assign speed with other value here. Don't know why.
-        public float speed = 8;//Running.BASE_SPEED; // <- Doesn't work.
-        public float acceleration = 32;
-        public float jumpHeight = 12;
+        public float speed;//Running.BASE_SPEED; // <- Doesn't work.
+        public float acceleration;
+        public float jumpHeight = 120;
 
         private Animator anim;
         private float currentSpeed;
@@ -38,6 +38,12 @@ namespace RR
         void Start()
         {
             speed = Running.BASE_SPEED;
+            // speed = 150;
+			gravity = 175;
+            acceleration = 64;
+            DebugConsole.Log("!!!!!!!!!"+speed.ToString());
+            DebugConsole.Log("!!!!!!!!!"+acceleration.ToString());
+			DebugConsole.Log(gravity.ToString());
             playerPhysics = GetComponent<PlayerPhysics>();
             anim = GetComponent<Animator>();
         }
@@ -68,7 +74,6 @@ namespace RR
 
         void Update()
         {
-
             int direction;
             direction = doKeyboardInput();
 
@@ -85,7 +90,6 @@ namespace RR
             }
 
             targetSpeed = direction * speed;
-
             currentSpeed = IncrementTowards(currentSpeed, targetSpeed, acceleration);
 
             barDisplay =  speed / Running.MAX_SPEED;

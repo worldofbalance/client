@@ -24,12 +24,12 @@ namespace RR
 		//public static bool player1touchitem1 = false;
 		//public static string hitItem = "";
 	
-		private const float SPEED_INCREASE = 5f;
-		private const float SPEED_DECREASE = -10f;
-		public const float BASE_SPEED = 15f;
-		public const float HIGH_SPEED = 25f;
-		public const float MAX_SPEED = 30f;
-		public const float MIN_SPEED = 5f;
+		private const float SPEED_INCREASE = 50f;
+		private const float SPEED_DECREASE = -100f;
+		public const float BASE_SPEED = 100f;
+		public const float HIGH_SPEED = 250f;
+		public const float MAX_SPEED = 300f;
+		public const float MIN_SPEED = 50f;
 
 		void OnDestroy() 
 		{
