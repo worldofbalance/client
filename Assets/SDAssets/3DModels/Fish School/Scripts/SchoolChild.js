@@ -93,7 +93,7 @@ function OnEnable() {
 }
 
 function LocateRequiredChildren(){
-	if(!_model) _model = _cacheTransform.FindChild("Model");
+	if(!_model) _model = _cacheTransform.Find("Model");
 	if(!_scanner){
 		_scanner = new GameObject().transform;
 		_scanner.parent = this.transform;
