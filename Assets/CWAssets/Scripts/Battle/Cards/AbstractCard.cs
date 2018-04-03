@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System;
 
 namespace CW
 {
@@ -289,17 +291,55 @@ namespace CW
                 //transform.Find("Canvas/Pop/Sdescription").GetComponent<TextMesh>().text = TextWrap(this.description, 16);
                 Transform child = transform.Find("Canvas/Pop/Sname");
                 Text t = child.GetComponent<Text>();
-                t.text = TextWrap(this.name, 70); 
+                t.text = "Name: " + TextWrap(this.name, 70);
 
                 child = transform.Find("Canvas/Pop/Sdescription");
-                t = child.GetComponent<Text>(); 
-                t.text = this.description;
+                t = child.GetComponent<Text>();
+                t.text = "Description:" + this.description;
 
                 child = transform.Find("Canvas/Pop/Stype");
-                t = child.GetComponent<Text>(); 
-                t.text = TextWrap(this.type, 70);
+                t = child.GetComponent<Text>();
+                t.text = "Type: " + TextWrap(this.type, 70);  
+
+                try
+                {
+                    SpeciesData speciesData = SpeciesTable.speciesList[this.cardID];
+                    //Debug.Log("SpeciesId(" + temp + ")" + " : " + speciesData.name);
+                    List<string> predatorList = new List<string>(speciesData.predatorList.Values);
+                    predatorList.Sort();
+                    string predatorText = predatorList.Count > 0 ? string.Join(", ", predatorList.ToArray()) : "None";
+                    //Debug.Log("Predator: " + predatorText);
+
+                    List<string> preyList = new List<string>(speciesData.preyList.Values);
+                    preyList.Sort();
+                    string preyText = preyList.Count > 0 ? string.Join(", ", preyList.ToArray()) : "None";
+                    //Debug.Log("Prey: " + preyText);
+
+
+                    child = transform.Find("Canvas/Pop/Spredator");
+                    t = child.GetComponent<Text>();
+                    t.text = "Predator:" + predatorText;
+
+                    child = transform.Find("Canvas/Pop/Sprey");
+                    t = child.GetComponent<Text>();
+                    t.text = "Prey: " + preyText;
+
+                }
+                // Most specific:
+                catch (ArgumentNullException e)
+                {
+                    Console.WriteLine("{0} First exception caught.", e);
+                }
+                // Least specific:
+                catch (Exception e)
+                {
+                    Console.WriteLine("{0} Second exception caught.", e);
+                }
+
             }
         }
+
+   
 
         public int getDamage ()
 		{

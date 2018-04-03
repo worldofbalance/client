@@ -1,5 +1,8 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
+using System;
+using System.Linq;
 
 namespace CW
 {
@@ -60,8 +63,41 @@ namespace CW
 					if (currentPlayer.targetCard.diet != AbstractCard.DIET.HERBIVORE) {
 						attackback = true;
 					}
-                    
-					currentPlayer.clickedCard.attack (currentPlayer.clickedCard, currentPlayer.targetCard, attackback);
+                    //try to put predator and prey at here like check clickedcard(player) and targetcard(opponent) species, (maybe using the sameline below   
+                    //currentPlayer.targetCard.dmg += 6; //this will give opponent card +6 attack damage while attacking
+                    //currentPlayer.clickedCard.dmg += 6; //this will give player card +6 attack damage while attacking
+
+
+
+                    SpeciesData speciesData = SpeciesTable.speciesList[currentPlayer.clickedCard.cardID];
+                    //Debug.Log("SpeciesId(" + temp + ")" + " : " + speciesData.name);
+                    List<string> predatorList = new List<string>(speciesData.predatorList.Values);
+                    predatorList.Sort();
+                    string[] pdlist = predatorList.ToArray();
+                    Debug.Log("Predator: " + pdlist[0]);
+
+                    List<string> preyList = new List<string>(speciesData.preyList.Values);
+                    preyList.Sort();
+                    string[] prelist = preyList.ToArray();
+                    Debug.Log("Prey: " + prelist[0]);
+
+
+
+                    //if player species is predator of opponent species
+                    if(preyList.Contains(currentPlayer.targetCard.name)) {
+                        currentPlayer.clickedCard.dmg += 2;
+                        currentPlayer.clickedCard.hp += 2;
+                    }
+
+
+                    //if player species is prey of opponent species
+                    if(pdlist.Contains(currentPlayer.targetCard.name))
+                    {
+                        currentPlayer.clickedCard.dmg -= 2;
+                        currentPlayer.clickedCard.hp -= 2;
+                    }
+
+                    currentPlayer.clickedCard.attack (currentPlayer.clickedCard, currentPlayer.targetCard, attackback);
 					
 					currentPlayer.getProtocolManager ().sendCardAttack (currentPlayer.playerID, currentPlayer.clickedCard.fieldIndex, currentPlayer.targetCard.fieldIndex);
 					currentPlayer.clickedCard = null;
