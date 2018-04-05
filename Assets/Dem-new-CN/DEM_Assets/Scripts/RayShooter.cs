@@ -13,7 +13,8 @@ public class RayShooter : MonoBehaviour {
 		_camera = GetComponent<Camera>();
 		// locks the location of the mouse cursor in the center of the screen,
 		// and makes it invisible so that it does not distract.
-		// WARNING: Remember to use Escape Key (ESC) to restore the mouse cursor so you can leave the game.
+		// WARNING: Remember to use Escape Key (ESC) to restore the mouse cursor 
+		// so you can leave the game.
 		Debug.Log("WARNING: Remember to use Escape Key to restore the mouse cursor.");
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
