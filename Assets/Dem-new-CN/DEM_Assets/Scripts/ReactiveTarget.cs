@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// added as a component to the enemy object so it can react to being hit by dying
+// added as a component to the enemy or player objects so it can react to being hit by dying
 
 public class ReactiveTarget : MonoBehaviour {
 

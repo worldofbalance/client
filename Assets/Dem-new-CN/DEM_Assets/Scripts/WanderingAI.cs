@@ -3,10 +3,11 @@ using System.Collections;
 
 // attach this as a component of the enemy object
 
-public class WanderingAI : MonoBehaviour {
+public class WanderingAI : MonoBehaviour 
+{
 	// speed of the motion of the wandering enemy
-	// too slow so increased speed of enemy from 3.0f to 5.0f
-	public float speed = 5.0f;
+	// too fast so reducing speed of enemy from 5.0f to 3.0f
+	public float speed = 3.0f;
 
 
 	// distance for an obsticle to be in range for avoidance reaction by the enemy
@@ -32,8 +33,7 @@ public class WanderingAI : MonoBehaviour {
 			// creat a ray at the same position as the enemy and facing in the same direction as the enemy
 			Ray ray = new Ray(transform.position, transform.forward);
 			RaycastHit hit;
-			// do ray casting to look for a hit, but this time with a radius of 0.75 for the ray,
-			// not just the thin line used by the player object
+			// do ray casting to look for a hit, with a radius of 0.75 for the ray
 			if (Physics.SphereCast(ray, 0.75f, out hit)) {
 				// get the object that was hit by the ray cast
 				GameObject hitObject = hit.transform.gameObject;
@@ -52,7 +52,7 @@ public class WanderingAI : MonoBehaviour {
 				// if the object hit was not a player character,
 				// and if the object hit is within the distance for an obsticle to be in 
 				// range for avoidance reaction by the enemy,
-				// then rotate the enemy by a random angle from -110 to 100 degrees horizontally about the Y-axis
+				// then rotate the enemy by randomly +/- 110 degrees horizontally about the Y-axis
 				else if (hit.distance < obstacleRange) {
 					float angle = Random.Range(-110, 110);
 					transform.Rotate(0, angle, 0);
