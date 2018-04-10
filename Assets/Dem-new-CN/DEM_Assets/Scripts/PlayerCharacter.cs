@@ -3,7 +3,7 @@ using System.Collections;
 
 // This needs to be made a component of the player.
 // lets the player react to being hit with a fireball from the enemy,
-// by losing health points.  The new health value is then displayed in the debug log on the console.
+// by losing health points.
 
 public class PlayerCharacter : MonoBehaviour {
 	private int _health;
@@ -17,6 +17,7 @@ public class PlayerCharacter : MonoBehaviour {
 	// the new health value to the console, which is only viewable in the Unity IDE
 	public void Hurt(int damage) {
 		_health -= damage;
-		Debug.Log("Health: " + _health);
+		Debug.Log("Player Health: " + _health);
 	}
+
 }
