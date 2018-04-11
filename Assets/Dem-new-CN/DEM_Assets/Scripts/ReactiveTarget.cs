@@ -6,11 +6,11 @@ using System.Collections;
 public class ReactiveTarget : MonoBehaviour {
 
 	public void ReactToHit() {
-		// if this object has a WanderingAI component, get that object, 
+		// if this object has a SpeciesWanderingAI component, get that object, 
 		// and set its alive state to false, so it can wander no more
-		WanderingAI behavior = GetComponent<WanderingAI>();
+		SpeciesAttack behavior = GetComponent<SpeciesAttack>();
 		if (behavior != null) {
-			behavior.SetAlive(false);
+			behavior.setAlive(false);
 		}
 		// start a coroutine Die to let the object react to being hit
 		StartCoroutine(Die());

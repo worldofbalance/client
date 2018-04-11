@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // This needs to be made a component of the carnivore prefab.
-// This lets the species and enemy interact.
 
-public class CarnivoreCharacter : PlayerCharacter {
+public class CarnivoreBehavior : MonoBehaviour {
 	
 
 }
