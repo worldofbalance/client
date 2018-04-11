@@ -4,12 +4,8 @@ using UnityEngine;
 
 // this needs to be made a component of the TreeOfLife object
 
-public class TreeOfLifeBehavior : MonoBehaviour 
+public class TreeOfLifeBehavior : SpeciesBehavior 
 {
-	private const int injured = 3;
-	private const int dead = 0;
-	private int health;
-
 	private Material material;
 	public Material healthyTreeOfLife;
 	public Material injuredTreeOfLife;
@@ -19,12 +15,14 @@ public class TreeOfLifeBehavior : MonoBehaviour
 	// Changes the look of the Tree of Life based on its health state.
 	void Update () {
 
-		if ((health <= injured) && (health > dead)) {
+		int treeHealth = getHealth();
+
+		if ((treeHealth <= injured) && (treeHealth > dead)) {
 			material = GetComponent<Renderer>().material;
 			material = injuredTreeOfLife;
 		}
 
-		if (health <= dead) {
+		if (treeHealth <= dead) {
 			// Let the Tree of Life animate dying and then be destroyed.
 			StartCoroutine(Die());
 		}
@@ -33,7 +31,7 @@ public class TreeOfLifeBehavior : MonoBehaviour
 	// Overide because Tree of Life does not dies instantly.
 	// Instead, the tree of life reduces health untill dead state has been reached.
 	public void ReactToHit() {
-		health--;
+		Hurt (1);
 	}
 		
 
