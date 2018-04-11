@@ -49,11 +49,11 @@ public class EnemyController : MonoBehaviour
 
 		if (next) {
 			x = DemSceneConstants.MaxEdge;
-			angle = 0;
+			angle = 90;
 		}
 		else {
 			x = DemSceneConstants.MinEdge;
-			angle = 360;
+			angle = 180;
 		}
 		
 		int z = Random.Range(DemSceneConstants.MinEdge, DemSceneConstants.MaxEdge);
