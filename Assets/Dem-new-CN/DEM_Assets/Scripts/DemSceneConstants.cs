@@ -13,7 +13,7 @@ public class DemSceneConstants : MonoBehaviour
 	public static int FloorZWidth = (int)(GameObject.Find("Floor").transform.localScale.z) - 4;
 	public static int FloorXWidth = (int)(GameObject.Find("Floor").transform.localScale.x) - 4;
 	// The maximum number of enemies to have on the game board at the same time.
-	public static int MaxNumberOfEnemies = 20;
+	public static int MaxNumberOfEnemies = 20; // make 50
 
 
 	public static SpeciesType getRandomAnimalType()

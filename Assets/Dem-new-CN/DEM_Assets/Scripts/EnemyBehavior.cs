@@ -53,8 +53,10 @@ public class EnemyBehavior : SpeciesBehavior {
 					if ((otherSpecies != null) && (preyList.Contains (otherSpecies.getSpeciesType())))
 					{
 						otherSpecies.ReactToHit ();
+
 						if (otherSpecies.getSpeciesType() == DemSceneConstants.SpeciesType.TreeOfLife)
 						{
+							
 							ObsticleAvoidance();
 							transform.Translate (0, 0, 10);
 						}
