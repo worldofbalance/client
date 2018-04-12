@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using System.Collections.Generic;
+using System;
+
 namespace CW
 {
 	public class AbstractCard : MonoBehaviour
@@ -11,7 +15,7 @@ namespace CW
 		private BattlePlayer player;
 		public string name, type = " ", description = " ", dietChar= " ";
 		public DIET diet;
-		private bool canAttackNow, inMotion, moveBack;
+        private bool canAttackNow, inMotion, moveBack;
 		private Vector3 oriPosition;
 		private Vector3 newPosition;
 		private bool zoomed = false;
@@ -36,6 +40,10 @@ namespace CW
         private float raised = 50f;
         public bool isInHand = true;
         public bool isInPlay = false;
+
+        //2018/03/21 Added mouse hover
+        private bool _mouseOver = false;
+
 		//Initialization for a card and sets it's position to (1000, 1000, 1000)
 		public void init(BattlePlayer player, int cardID, string diet, int level, int attack, int health, string species_name, string type, string description)
         {
@@ -53,9 +61,10 @@ namespace CW
             this.dietChar = diet;
             this.level = level;
             maxHP = hp = health;
+            type = this.type;
             naturalDmg = dmg = attack;
             //this.type = type; //hide temporarily
-            //this.description = description; //hide temporarily
+            this.description = description; //hide temporarily
 		
 			
             Texture2D cardTexture;
@@ -86,18 +95,22 @@ namespace CW
                 }
                     
             }
-
-			//Changing cardfront texture
-			GetComponent<Renderer>().material.mainTexture = cardTexture;
+            //Changing cardfront texture
+            GetComponent<Renderer>().material.mainTexture = cardTexture;
 			transform.Find ("CardArt").GetComponent<MeshRenderer> ().material.mainTexture = speciesTexture;
 
-			//Changing card text 
-//		Color gold = new Color (209f, 234f, 50f, 255f);
-			transform.Find ("NameText").GetComponent<TextMesh> ().text = TextWrap (this.name, 16);
-			transform.Find ("TypeText").GetComponent<TextMesh> ().text = this.type;
-			transform.Find ("TypeText").GetComponent<MeshRenderer> ().material.color = Color.white;
-			transform.Find ("DescriptionText").GetComponent<TextMesh> ().text = TextWrap (this.description, 26);
-			transform.Find ("DescriptionText").GetComponent<MeshRenderer> ().material.color = Color.white;
+            Transform child = transform.Find("Canvas/Pop/Image");
+            Image i = child.GetComponent<Image>();
+            Sprite s = Sprite.Create(speciesTexture, new Rect(0, 0, speciesTexture.width, speciesTexture.height), Vector2.zero);
+            i.sprite = s;
+
+            //Changing card text 
+            //		Color gold = new Color (209f, 234f, 50f, 255f);
+            transform.Find ("NameText").GetComponent<TextMesh> ().text = TextWrap (this.name, 16);
+			//transform.Find ("TypeText").GetComponent<TextMesh> ().text = this.type;
+			//transform.Find ("TypeText").GetComponent<MeshRenderer> ().material.color = Color.white;
+			//transform.Find ("DescriptionText").GetComponent<TextMesh> ().text = TextWrap (this.description, 26);
+			//transform.Find ("DescriptionText").GetComponent<MeshRenderer> ().material.color = Color.white;
 			transform.Find ("LevelText").GetComponent<TextMesh> ().text = "" + this.level;
 			transform.Find ("LevelText").GetComponent<MeshRenderer> ().material.color = Color.white;
 			transform.Find ("DoneText").GetComponent<MeshRenderer> ().material.color = Color.red;
@@ -120,14 +133,20 @@ namespace CW
 		DIET getDietType (string diet)
 		{
 			if (diet == "o") {
+                //added
+                type = "Omnivore";
 				return DIET.OMNIVORE;	
 			} else if (diet == "c") {
-				return DIET.CARNIVORE;	
+                type = "Carnivore";
+                return DIET.CARNIVORE;	
 			} else if (diet == "h") {
-				return DIET.HERBIVORE;
+                type = "Herbivore";
+                return DIET.HERBIVORE;
 			} else if (diet == "f") {
-				return DIET.FOOD;
+                type = "food";
+                return DIET.FOOD;
 			} else 
+                type = "weather";
 				return DIET.WEATHER;
 			//else diet == 2
 		}
@@ -237,9 +256,92 @@ namespace CW
 			}*/
 			zoomed = false;
 			clicked = false;
+            //2018/03/22 
+            _mouseOver = false;
 		}
 
-		public int getDamage ()
+        //2018/03/22 
+        /*How to do? 1) put card prefab to hierarchy 
+         * 2) under card create empty 
+         * 3) for plane: add mesh filter and plane and add mesh renderer 
+         * 4) for text: add mesh renderer and text 
+         * Caution: adjust camera carefully */
+        void OnMouseOver()
+        {
+            _mouseOver = true;
+        }
+
+        //2018/03/22 
+        void OnGUI()
+        {
+            //if mouse not hover
+            if (!_mouseOver)
+            {
+                transform.Find("Hello").GetComponent<TextMesh>().text = "---";
+                transform.Find("Canvas/Pop").gameObject.SetActive(false);
+            }
+            //if mouse hover
+            else
+            {
+                transform.Find("Hello").GetComponent<TextMesh>().text = "-^-";
+                transform.Find("Canvas/Pop").gameObject.SetActive(true);
+                //transform.Find("Pop/Image").GetComponent<Image>().sprite = sImage;
+                //transform.Find("Canvas/Pop/Sname").GetComponent<TextMesh>().text = TextWrap(this.name, 16);
+                //transform.Find("Canvas/Pop/Stype").GetComponent<TextMesh>().text = this.type;
+                //transform.Find("Canvas/Pop/Sdescription").GetComponent<TextMesh>().text = TextWrap(this.description, 16);
+                Transform child = transform.Find("Canvas/Pop/Sname");
+                Text t = child.GetComponent<Text>();
+                t.text = "Name: " + TextWrap(this.name, 70);
+
+                child = transform.Find("Canvas/Pop/Sdescription");
+                t = child.GetComponent<Text>();
+                t.text = "Description:" + this.description;
+
+                child = transform.Find("Canvas/Pop/Stype");
+                t = child.GetComponent<Text>();
+                t.text = "Type: " + TextWrap(this.type, 70);  
+
+                try
+                {
+                    SpeciesData speciesData = SpeciesTable.speciesList[this.cardID];
+                    //Debug.Log("SpeciesId(" + temp + ")" + " : " + speciesData.name);
+                    List<string> predatorList = new List<string>(speciesData.predatorList.Values);
+                    predatorList.Sort();
+                    string predatorText = predatorList.Count > 0 ? string.Join(", ", predatorList.ToArray()) : "None";
+                    //Debug.Log("Predator: " + predatorText);
+
+                    List<string> preyList = new List<string>(speciesData.preyList.Values);
+                    preyList.Sort();
+                    string preyText = preyList.Count > 0 ? string.Join(", ", preyList.ToArray()) : "None";
+                    //Debug.Log("Prey: " + preyText);
+
+
+                    child = transform.Find("Canvas/Pop/Spredator");
+                    t = child.GetComponent<Text>();
+                    t.text = "Predator:" + predatorText;
+
+                    child = transform.Find("Canvas/Pop/Sprey");
+                    t = child.GetComponent<Text>();
+                    t.text = "Prey: " + preyText;
+
+                }
+                // Most specific:
+                catch (ArgumentNullException e)
+                {
+                    Console.WriteLine("{0} First exception caught.", e);
+                }
+                // Least specific:
+                catch (Exception e)
+                {
+                    Console.WriteLine("{0} Second exception caught.", e);
+                }
+
+            }
+        }
+
+   
+
+        public int getDamage ()
 		{
 			return this.dmg;	
 		}
