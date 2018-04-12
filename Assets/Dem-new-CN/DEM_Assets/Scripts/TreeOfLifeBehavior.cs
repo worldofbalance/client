@@ -18,34 +18,29 @@ public class TreeOfLifeBehavior : SpeciesBehavior
 		int treeHealth = getHealth();
 
 		if ((treeHealth <= injured) && (treeHealth > dead)) {
+			// This changes the appearance of Tree of Life as a visual clue
+			// to the player that the Tree is at risk of dying soon.
 			material = GetComponent<Renderer>().material;
 			material = injuredTreeOfLife;
 		}
 
 		if (treeHealth <= dead) {
-			// Let the Tree of Life animate dying and then be destroyed.
+			// Make the Tree of Life look dead.
+			material = GetComponent<Renderer>().material;
+			material = deadTreeOfLife;
+			// Start a coroutine Die to let the object react to being hit
 			StartCoroutine(Die());
+			// TODO need to notify game that game is over due to death of Tree of Life
 		}
 	}
 
-	// Overide because Tree of Life does not dies instantly.
+
+	// Override, Tree of Life does not dies instantly.
 	// Instead, the tree of life reduces health untill dead state has been reached.
 	public void ReactToHit() {
 		Hurt (1);
 	}
-		
 
-	// Overide to add specific Tree of Life animations.
-	private IEnumerator Die() {
-		// Make the Tree of Life look dead.
-		material = GetComponent<Renderer>().material;
-		material = deadTreeOfLife;
-		// The Tree of Life falls over on its side.
-		this.transform.Rotate(-90, 0, 0);
-		// It then lays dead for 2 seconds, while the function yields control,
-		// so that the game keeps on playing.
-		yield return new WaitForSeconds(2.0f);
-		// After 1.5 seconds, the dead object is destroyed, so it leaves the game.
-		Destroy(this.gameObject);
-	}
+
+
 }

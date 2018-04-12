@@ -29,8 +29,8 @@ public class RayShooter : MonoBehaviour {
 		GUI.Label(new Rect(posX, posY, size, size), "*");
 	}
 
-	// if the mouse was clicked shoot a ray in the direction that the camera is looking,
-	// and shoot it at the center of the camera field of view
+	// If the mouse was clicked, shoot a ray in the direction that the camera is looking,
+	// and at the center of the camera field of view.
 	void Update() {
 		
 		// if the mouse has been clicked this returns true
@@ -46,7 +46,7 @@ public class RayShooter : MonoBehaviour {
 				GameObject hitObject = hit.transform.gameObject;
 				// get the reactive target component from the object that was hit
 				// the target returned is null if the object hit does not contain that type of component
-				ReactiveTarget target = hitObject.GetComponent<ReactiveTarget>();
+				SpeciesBehavior target = hitObject.GetComponent<SpeciesBehavior>();
 				if (target != null) {
 					// if true, tell the object that was hit to react to being hit
 					target.ReactToHit();
@@ -58,16 +58,16 @@ public class RayShooter : MonoBehaviour {
 		}
 	}
 
-	// this is the coroutine called if a non-reactive object was hit
-	// This shows where an object was hit by the ray at point pos,
-	// by creating a sphere at that point for one second.
+	// This is called if a non-SpeciesBehavior object was hit by the mouse ray.
+	// This shows where an object was hit, by creating a sphere at that point for one second.
 	private IEnumerator SphereIndicator(Vector3 pos) {
 		GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 		sphere.transform.position = pos;
 
-		// pause this function for one second, so that the user can see the sphere 
-		// indicating where the ray hit an object, and meanwhile keep the game playing,
-		// then come back to this function to continue to the next line in one second.
+		// Pause this function for one second, so that the user can see the sphere 
+		// indicating where the ray hit an object.  
+		// Meanwhile yield control to the rest of the game playing, and
+		// then come back to this function to continue at the next line of code.
 		yield return new WaitForSeconds(1);
 
 		// destroy the temporary sphere object
