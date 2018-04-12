@@ -45,6 +45,7 @@ public class EnemyController : MonoBehaviour
 
 	private void makeNewEnemy() 
 	{
+		Material material;
 		// Create a new instance of an enemy based on the enemy prefab file,
 		// and cast its type to game object.
 		enemy = Instantiate(enemyPrefab) as GameObject;

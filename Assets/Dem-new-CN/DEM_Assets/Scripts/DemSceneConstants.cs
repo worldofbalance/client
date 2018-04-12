@@ -18,11 +18,12 @@ public class DemSceneConstants : MonoBehaviour
 
 	public static SpeciesType getRandomAnimalType()
 	{
-		var values = System.Enum.GetValues (typeof(SpeciesType));
+		System.Array values = System.Enum.GetValues (typeof(SpeciesType));
 		// limit to animal types only
 		int max = values.Length - 2;
 		// Omnivore = 0, Carnivore = 1, Herbivore = 2
-		SpeciesType specie = (SpeciesType)values[Random.Range(0,max)];
+		SpeciesType specie = (SpeciesType)(((int[])values)[Random.Range(0,max)]);
+		return specie;
 	}
 		
 
