@@ -41,7 +41,7 @@ namespace CW
         public bool isInHand = true;
         public bool isInPlay = false;
 
-        //2018/03/21 Added mouse hover
+        //mouse hover
         private bool _mouseOver = false;
 
 		//Initialization for a card and sets it's position to (1000, 1000, 1000)
@@ -256,32 +256,25 @@ namespace CW
 			}*/
 			zoomed = false;
 			clicked = false;
-            //2018/03/22 
+            //if the mouse leave the card, set the _mouseOver false
             _mouseOver = false;
 		}
 
-        //2018/03/22 
-        /*How to do? 1) put card prefab to hierarchy 
-         * 2) under card create empty 
-         * 3) for plane: add mesh filter and plane and add mesh renderer 
-         * 4) for text: add mesh renderer and text 
-         * Caution: adjust camera carefully */
+        //when mouse hover on card
         void OnMouseOver()
-        {
-            _mouseOver = true;
+        {    
+            //AND when mouse right click the card, it would set the _mouseOver true
+            if (Input.GetMouseButtonDown(1))
+            {
+                _mouseOver = true;
+            }
         }
 
-        //2018/03/22 
+        
         void OnGUI()
         {
-            //if mouse not hover
-            if (!_mouseOver)
-            {
-                transform.Find("Hello").GetComponent<TextMesh>().text = "---";
-                transform.Find("Canvas/Pop").gameObject.SetActive(false);
-            }
-            //if mouse hover
-            else
+            //if _mouseOver true, then display the description panel
+            if (_mouseOver)
             {
                 transform.Find("Hello").GetComponent<TextMesh>().text = "-^-";
                 transform.Find("Canvas/Pop").gameObject.SetActive(true);
@@ -299,7 +292,7 @@ namespace CW
 
                 child = transform.Find("Canvas/Pop/Stype");
                 t = child.GetComponent<Text>();
-                t.text = "Type: " + TextWrap(this.type, 70);  
+                t.text = "Type: " + TextWrap(this.type, 70);
 
                 try
                 {
@@ -335,6 +328,13 @@ namespace CW
                 {
                     Console.WriteLine("{0} Second exception caught.", e);
                 }
+            }
+            //if _mouseOver false, then turn off the description
+            else
+            {
+                transform.Find("Hello").GetComponent<TextMesh>().text = "---";
+                transform.Find("Canvas/Pop").gameObject.SetActive(false);
+               
 
             }
         }
@@ -432,14 +432,24 @@ namespace CW
 			dmgTimer = 120;
 			transform.Find ("DamageText").GetComponent<TextMesh> ().text = "-" + dmg;
 			hp -= dmg;
-			//Debug.Log ("Was dealt " + dmg + " damage and is now at " + hp + " hp");
-		
-			if (hp <= 0) {
-				Debug.Log ("DEAD");	
-				//handler = new RemoveFromPlay (this, player);
-				//handler.affect ();
+            //Debug.Log ("Was dealt " + dmg + " damage and is now at " + hp + " hp");
 
-				removeAfterDelay = true;
+            //when card receive attack
+            audioSource.clip = Resources.Load("Sounds/burning_fire") as AudioClip;
+            //audioSource.PlayDelayed (1);
+            audioSource.Play();
+
+            if (hp <= 0) {
+				Debug.Log ("DEAD");
+                //handler = new RemoveFromPlay (this, player);
+                //handler.affect ();
+
+                //when card dead
+                audioSource.clip = Resources.Load("Sounds/burning_fire") as AudioClip;
+                //audioSource.PlayDelayed (1);
+                audioSource.Play();
+
+                removeAfterDelay = true;
 			}
 		
 		}
