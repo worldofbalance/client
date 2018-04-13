@@ -1,4 +1,6 @@
-﻿Shader "Custom/OutlineShader" {
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/OutlineShader" {
 	Properties {
 		_MainTex ("Base (RGB)", 2D) = "white" {}
 		_Outline("Outline Thickness", Range(0.0, 0.3)) = 0.002
@@ -47,7 +49,7 @@
 			v2f vert(appdata v)
 			{
 				v2f o;
-				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.pos = UnityObjectToClipPos(v.vertex);
 				half3 norm = mul((half3x3)UNITY_MATRIX_IT_MV, v.normal);
 				half2 offset = TransformViewToProjection(norm.xy);
 				o.pos.xy += offset * o.pos.z * _Outline;
@@ -79,7 +81,7 @@
 			v2f vert(appdata v)
 			{
 				v2f o;
-				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.pos = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.color = v.color;
 				return o;

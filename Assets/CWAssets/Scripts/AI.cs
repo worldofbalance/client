@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 namespace CW{
 public class AI : MonoBehaviour {
