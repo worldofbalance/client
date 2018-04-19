@@ -21,6 +21,7 @@ namespace CW
 		private bool zoomed = false;
         private bool clicked = false, removeAfterDelay;
         public bool frozen = false;
+        private bool receivedmg = false;
 		//VELOCITY
 		private Vector3 targetPosition, startPosition;
 		private float velocity, terminalVelocity, angle, distance;
@@ -40,9 +41,14 @@ namespace CW
         private float raised = 50f;
         public bool isInHand = true;
         public bool isInPlay = false;
+        public Vector3 temp;
 
         //mouse hover
         private bool _mouseOver = false;
+
+        //shaking
+        private bool shake = true;
+
 
 		//Initialization for a card and sets it's position to (1000, 1000, 1000)
 		public void init(BattlePlayer player, int cardID, string diet, int level, int attack, int health, string species_name, string type, string description)
@@ -117,8 +123,8 @@ namespace CW
 			transform.Find ("DamageText").GetComponent<TextMesh> ().text = "";
 			transform.Find ("DamageText").GetComponent<MeshRenderer> ().material.color = Color.red;
 
-			//Initializes off screen
-			transform.position = new Vector3 (9999, 9999, 9999);
+            //Initializes off screen
+            transform.position = new Vector3 (9999, 9999, 9999);
 
 			//rotate facedown if player 2
 			if (!player.player1 && !Constants.SINGLE_PLAYER) {
@@ -439,16 +445,30 @@ namespace CW
             //audioSource.PlayDelayed (1);
             audioSource.Play();
 
+            //transform.position = transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * 50;
+            //transform.position = new Vector3(transform.position.x + 50 * 1.3f * Time.deltaTime * 3, transform.position.y, transform.position.z);
+            //transform.position = new Vector3(transform.position.x - 100 * 1.3f * Time.deltaTime * 5, transform.position.y, transform.position.z);
+            //transform.position = new Vector3(transform.position.x + 150 * 1.3f * Time.deltaTime * 3, transform.position.y, transform.position.z);
+            //transform.position = new Vector3(transform.position.x - 200 * 1.3f * Time.deltaTime * 7, transform.position.y, transform.position.z);
+            //shake();
+            
+
+            receivedmg = true;
+            temp = transform.position;
+
             if (hp <= 0) {
 				Debug.Log ("DEAD");
                 //handler = new RemoveFromPlay (this, player);
                 //handler.affect ();
 
+                //transform.Find("CardArt").GetComponent<Renderer>().material.SetColor("_Color", new Color32(0, 0, 0, 255));
+                Renderer rend = transform.Find("CardArt").GetComponent<Renderer>();
+                rend.material.mainTexture = (Texture2D)Resources.Load("Images/Battle/Death", typeof(Texture2D));
+
                 //when card dead
                 audioSource.clip = Resources.Load("Sounds/burning_fire") as AudioClip;
                 //audioSource.PlayDelayed (1);
                 audioSource.Play();
-
                 removeAfterDelay = true;
 			}
 		
@@ -515,18 +535,43 @@ namespace CW
 		{
             if (removeAfterDelay) {
 				delayTimer += Time.deltaTime;
-
-				if (delayTimer > DELAY_CONSTANT) {
-
+				if (delayTimer > 1.5f) {
 					handler = new RemoveFromPlay (this, player);
 					handler.affect ();
 					removeAfterDelay = false;
 					delayTimer = 0;
 				}
-
-				Debug.Log (Time.deltaTime);
-
+				//Debug.Log (Time.deltaTime);
 			}
+
+            
+            if (receivedmg)
+            {
+                //Debug.Log(transform.position.x);
+                float d = 10f;
+
+                if (shake)
+                {
+                    //Debug.Log("R : " + transform.position.x);
+                    transform.position = new Vector3(transform.position.x + d, transform.position.y, transform.position.z);
+                    shake = false;
+
+                } else {
+
+                    //Debug.Log("L : " + transform.position.x);
+                    transform.position = new Vector3(transform.position.x - d, transform.position.y, transform.position.z);
+                    shake = true;
+                }
+
+                d = d * 10f;
+
+                delayTimer += Time.deltaTime;
+                if (delayTimer > 1f)
+                {
+                    receivedmg = false;
+                    transform.position = temp;
+                }
+            }
 
 			//Change text on card
 			transform.Find ("AttackText").GetComponent<TextMesh> ().text = dmg.ToString ();
@@ -590,8 +635,15 @@ namespace CW
                 }*/
 		}
 
-		//For wrapping long text
-		public static string TextWrap (string originaltext, int chars_in_line)
+
+        private IEnumerator WaitAndPrint(float a)
+        {
+            yield return new WaitForSecondsRealtime(a);
+              
+        }
+
+        //For wrapping long text
+        public static string TextWrap (string originaltext, int chars_in_line)
 		{
 			string output = "";
 			string[] words = originaltext.Split (' ');
