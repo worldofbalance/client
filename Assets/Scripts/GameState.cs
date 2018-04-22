@@ -1,3 +1,8 @@
+/*
+ * This class is created and persists throughout the game session. It contains several important 
+ * static objects. 
+ */
+
 using UnityEngine;
 
 using System.Collections.Generic;

@@ -42,7 +42,7 @@ public class Login : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        //StartCoroutine("AutoLogin");
+        StartCoroutine("AutoLogin");
 
     }
 	
@@ -165,8 +165,8 @@ public class Login : MonoBehaviour
     public IEnumerator AutoLogin ()
     {
         while (true) {
-            user_id = "1";
-            password = "1";
+            user_id = "cherise";
+            password = "muimui";
             Submit ();
 			
             yield return new WaitForSeconds (1.0f);

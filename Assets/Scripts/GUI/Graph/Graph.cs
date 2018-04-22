@@ -1,3 +1,7 @@
+/*
+ * This class displays a graph of the player's ecosystem score and species biomass.
+ */
+
 using UnityEngine;
 
 using System;
@@ -5,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class Graph : MonoBehaviour {
 
@@ -177,31 +182,52 @@ public class Graph : MonoBehaviour {
 		}
 	}
 		
-	
 	void OnGUI() {
-		if (buttonActive) {
+        // temporary reference to current scene
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        // displays Graph button if current scene is Ecosystem
+        if (buttonActive && currentScene.name == "Ecosystem") {
+            if (GUI.Button(new Rect(100, 10, 80, 30), "Graph")) {
+                ToggleGraph();
+            }
+        }
+
+        // old display "Graph" button
+        if (buttonActive && currentScene.name != "Ecosystem") {
 			if (GUI.Button(new Rect(200, Screen.height - 95f, 80, 30), "Graph")) {
 				ToggleGraph();
 			}
 		}
 
+        // creates graph window
 		if (isActive) {
 			windowRect = GUI.Window(window_id, windowRect, MakeWindow, title);
 		}
 	}
 
-	void ToggleGraph() {
+    // toggles graph display
+	public void ToggleGraph() {
+        // temporary reference to current scene
+        Scene currentScene = SceneManager.GetActiveScene();
+
 		isActive = !isActive;
 		if (isActive) {
-			GameObject.Find ("MenuScript").GetComponent<MenuScript> ().menuOpen = true;
-			GameObject.Find ("MenuScript").GetComponent<MenuScript> ().disableDropDown ();
-			GameObject.Find ("Local Object").GetComponent<WorldMouse> ().popOversEnabled = false;
+            // disable when in Ecosystem scene
+            if (currentScene.name != "Ecosystem"){
+                GameObject.Find("MenuScript").GetComponent<MenuScript>().menuOpen = true;
+                GameObject.Find("MenuScript").GetComponent<MenuScript>().disableDropDown();
+                GameObject.Find("Local Object").GetComponent<WorldMouse>().popOversEnabled = false;
+            }            
 			excludeList.Clear ();
 			GetData ();
 		} else {
-			GameObject.Find ("MenuScript").GetComponent<MenuScript> ().menuOpen = false;
-			GameObject.Find ("MenuScript").GetComponent<MenuScript> ().enableDropdown ();
-			GameObject.Find ("Local Object").GetComponent<WorldMouse> ().popOversEnabled = true;
+            // disable when in Ecosystem scene
+            if (currentScene.name != "Ecosystem"){
+                GameObject.Find("MenuScript").GetComponent<MenuScript>().menuOpen = false;
+                GameObject.Find("MenuScript").GetComponent<MenuScript>().enableDropdown();
+                GameObject.Find("Local Object").GetComponent<WorldMouse>().popOversEnabled = true;
+            }			
 		}
 	}
 
@@ -766,8 +792,9 @@ public class Graph : MonoBehaviour {
 		}
 		return result;
 	}
-		
-	void GetData() {		
+
+    // This method will retrieve data for the graph based on local cache and server data.
+    void GetData() {		
 		isReady = false;
 		biomassValues = new Dictionary<int,int> ();
 		speciesIds = new List<int> ();
@@ -777,16 +804,19 @@ public class Graph : MonoBehaviour {
 		minMonth = NUM_YEARS * 12;
 		maxMonth = 0;
 
+        // if cache exists
 		if (File.Exists (fileName)) {			
 			int spId, cnt = 0;
 			List<int> tList;
 			Dictionary<int,int> tDict;
 			string inLine;
+
+            // read local cache data
 			using(StreamReader sr = new StreamReader(fileName))
 			{
 				inLine = sr.ReadLine();
 				aDay = Int32.Parse(inLine);
-				maxDay = aDay;
+				maxDay = aDay; // most recent 
 
 				while (!sr.EndOfStream) {
 					inLine = sr.ReadLine();
@@ -794,7 +824,7 @@ public class Graph : MonoBehaviour {
 					bufLine = inLine;
 					spId = NextValue ();
 					// Debug.Log ("Sorted month values, species_id = " + spId);
-					cnt = NextValue ();
+					cnt = NextValue (); // number of data values/days stored for this species
 					minDay = Math.Min (minDay, aDay - cnt + 1);
 					for (int idx = 0; idx < cnt; idx++) {
 						int val = NextValue ();
@@ -829,7 +859,7 @@ public class Graph : MonoBehaviour {
 				speciesIds = new List<int> ();
 				// minDay = 1000000;
 			}
-		} else {
+		} else { // no cached data
 			aDay = 0;
 		}
 
@@ -983,7 +1013,7 @@ public class Graph : MonoBehaviour {
 		}
 	}
 
-
+    // writes latest data to local cache file
 	void WriteFile() {
 		string outLine;
 		Dictionary<int,int> sDict;
