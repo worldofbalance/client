@@ -39,7 +39,8 @@ namespace CW
 					card.transform.position = position;
 
 					card.calculateDirection (destination, false);
-                    
+                    card.effect = true;
+
 					GameManager.player1.getProtocolManager ().sendSummon (player.playerID, card.cardID, card.dietChar, 
 			                                        card.level, card.dmg, card.maxHP, 
 			                                        card.name, card.type, 

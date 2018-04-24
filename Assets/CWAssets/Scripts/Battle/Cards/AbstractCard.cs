@@ -26,7 +26,8 @@ namespace CW
 		private Vector3 targetPosition, startPosition;
 		private float velocity, terminalVelocity, angle, distance;
 		private float delayTimer, DELAY_CONSTANT = 1.5f;
-		//Enum for Animal Type
+        //Enum for Animal Type
+        private ParticleSystem ground;
 		public enum DIET
 		{
 			OMNIVORE,
@@ -49,6 +50,9 @@ namespace CW
         //shaking
         private bool shake = true;
 
+        //Summon effects
+        public bool effect = false;
+        public float  z = 0.1f;
 
 		//Initialization for a card and sets it's position to (1000, 1000, 1000)
 		public void init(BattlePlayer player, int cardID, string diet, int level, int attack, int health, string species_name, string type, string description)
@@ -71,8 +75,7 @@ namespace CW
             naturalDmg = dmg = attack;
             //this.type = type; //hide temporarily
             this.description = description; //hide temporarily
-		
-			
+
             Texture2D cardTexture;
             Texture2D speciesTexture;
             //o-omnivore, c-carnivore, h-herbivore, f-food, w-weather
@@ -122,6 +125,9 @@ namespace CW
 			transform.Find ("DoneText").GetComponent<MeshRenderer> ().material.color = Color.red;
 			transform.Find ("DamageText").GetComponent<TextMesh> ().text = "";
 			transform.Find ("DamageText").GetComponent<MeshRenderer> ().material.color = Color.red;
+            ground = transform.Find("Basic_aura/Ground_pulse").GetComponent<ParticleSystem>();
+            ground.Stop();
+            
 
             //Initializes off screen
             transform.position = new Vector3 (9999, 9999, 9999);
@@ -444,14 +450,13 @@ namespace CW
             audioSource.clip = Resources.Load("Sounds/burning_fire") as AudioClip;
             //audioSource.PlayDelayed (1);
             audioSource.Play();
-
+            
             //transform.position = transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * 50;
             //transform.position = new Vector3(transform.position.x + 50 * 1.3f * Time.deltaTime * 3, transform.position.y, transform.position.z);
             //transform.position = new Vector3(transform.position.x - 100 * 1.3f * Time.deltaTime * 5, transform.position.y, transform.position.z);
             //transform.position = new Vector3(transform.position.x + 150 * 1.3f * Time.deltaTime * 3, transform.position.y, transform.position.z);
             //transform.position = new Vector3(transform.position.x - 200 * 1.3f * Time.deltaTime * 7, transform.position.y, transform.position.z);
-            //shake();
-            
+
 
             receivedmg = true;
             temp = transform.position;
@@ -492,7 +497,6 @@ namespace CW
 		
 	
 			distance = Mathf.Sqrt (deltaX * deltaX + deltaZ * deltaZ);
-		
 
 		
 		}
@@ -513,7 +517,6 @@ namespace CW
 				distance -= Mathf.Sqrt (deltaX * deltaX + deltaZ * deltaZ);
 				transform.position = new Vector3 (transform.position.x + deltaX, transform.position.y, transform.position.z + deltaZ);
 			
-			
 				return true;
 			} else if (inMotion) {
 			
@@ -524,8 +527,7 @@ namespace CW
 					terminalVelocity = 2500;
 					velocity = 50;
 
-
-				}
+                }
 			}
 		
 			return false;
@@ -547,31 +549,25 @@ namespace CW
             
             if (receivedmg)
             {
-                //Debug.Log(transform.position.x);
-                float d = 10f;
+                cardshake();
+            }
 
-                if (shake)
+            if(effect)
+            {
+                delayTimer += Time.deltaTime;
+
+                if (!ground.isPlaying)
                 {
-                    //Debug.Log("R : " + transform.position.x);
-                    transform.position = new Vector3(transform.position.x + d, transform.position.y, transform.position.z);
-                    shake = false;
-
-                } else {
-
-                    //Debug.Log("L : " + transform.position.x);
-                    transform.position = new Vector3(transform.position.x - d, transform.position.y, transform.position.z);
-                    shake = true;
+                    ground.Play();
                 }
 
-                d = d * 10f;
-
-                delayTimer += Time.deltaTime;
-                if (delayTimer > 1f)
+                if (delayTimer > 3.5f)
                 {
-                    receivedmg = false;
-                    transform.position = temp;
+                    effect = false;
+                    ground.Stop();
                 }
             }
+
 
 			//Change text on card
 			transform.Find ("AttackText").GetComponent<TextMesh> ().text = dmg.ToString ();
@@ -636,10 +632,34 @@ namespace CW
 		}
 
 
-        private IEnumerator WaitAndPrint(float a)
+        public void cardshake()
         {
-            yield return new WaitForSecondsRealtime(a);
-              
+            //Debug.Log(transform.position.x);
+            float d = 10f;
+
+            if (shake)
+            {
+                //Debug.Log("R : " + transform.position.x);
+                transform.position = new Vector3(transform.position.x + d, transform.position.y, transform.position.z);
+                shake = false;
+
+            }
+            else
+            {
+
+                //Debug.Log("L : " + transform.position.x);
+                transform.position = new Vector3(transform.position.x - d, transform.position.y, transform.position.z);
+                shake = true;
+            }
+
+            d = d * 10f;
+
+            delayTimer += Time.deltaTime;
+            if (delayTimer > 1f)
+            {
+                receivedmg = false;
+                transform.position = temp;
+            }
         }
 
         //For wrapping long text
