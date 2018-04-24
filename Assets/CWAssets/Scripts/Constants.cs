@@ -10,13 +10,10 @@ public class Constants {
 
 	// Constants
 	public static readonly string CLIENT_VERSION = "1.00";
-    //public static readonly string REMOTE_HOST =  "localhost";//"thecity.sfsu.edu"; // "localhost"; //"localhost";  "smurf.sfsu.edu";
-    // public static readonly string REMOTE_HOST =  "thecity.sfsu.edu";
-	//public static readonly string REMOTE_HOST =  "smurf.sfsu.edu";
-	public static readonly string REMOTE_HOST =  "worldofbalance.westus.cloudapp.azure.com";
-	//public static readonly string REMOTE_HOST = "54.153.66.118";   // AWS from Ben, 2-2017
-	public static readonly int REMOTE_PORT = 9260;  	// for thecity
-	//public static readonly int REMOTE_PORT = 20038;     // for localhost
+    public static readonly string REMOTE_HOST =  "localhost";//"thecity.sfsu.edu"; // "localhost"; //"localhost";  "smurf.sfsu.edu";
+	//public static readonly string REMOTE_HOST =  "worldofbalance.westus.cloudapp.azure.com";
+	//public static readonly int REMOTE_PORT = 9260;
+	public static readonly int REMOTE_PORT = 20038;     // for localhost
 	public static readonly float HEARTBEAT_RATE = 1f;
 	public static readonly float ANIMATE_RATE = 20.0f;
 	// Other
