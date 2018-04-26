@@ -49,7 +49,7 @@ public class AnimalBehavior : SpeciesBehavior
 				} // end if distance within obsticle range
 			}
 		} // end if alive
-	} // end function Update()
+	} 
 
 
 }

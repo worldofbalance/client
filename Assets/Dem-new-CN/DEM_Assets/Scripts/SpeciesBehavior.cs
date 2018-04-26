@@ -83,18 +83,14 @@ public class SpeciesBehavior : MonoBehaviour
 		return this.health; 
 	}
 
-	public void ReactToHit() {
-		// If this object has a SpeciesBehavior component, get that object, 
-		// and set its alive state to false, so it can wander no more
-		SpeciesBehavior behavior = GetComponent<SpeciesBehavior>();
-		if (behavior != null) {
-			behavior.setAlive(false);
-		}
+	public virtual void ReactToHit() {
+		// set its alive state to false, so it can wander no more
+		setAlive(false);
 		// Start a coroutine Die to let the object react to being hit
 		StartCoroutine(Die());
 	}
 
-	public IEnumerator Die() {
+	public virtual IEnumerator Die() {
 		// The object reacts to being hit by falling over,
 		this.transform.Rotate(-75, 0, 0);
 		// and then laying dead for 1.5 seconds, while the function yields control,

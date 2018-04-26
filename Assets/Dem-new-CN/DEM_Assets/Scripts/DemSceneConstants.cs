@@ -10,10 +10,10 @@ public class DemSceneConstants : MonoBehaviour
 	public enum SpeciesType {Omnivore, Carnivore, Herbivore, Plant, TreeOfLife};
 	// The edges of the game board, this is used for species placement on the board.
 	// Minus 4 to accomidate the walls around the board.
-	public static int FloorZWidth = (int)(GameObject.Find("Floor").transform.localScale.z) - 4;
-	public static int FloorXWidth = (int)(GameObject.Find("Floor").transform.localScale.x) - 4;
-	// The maximum number of enemies to have on the game board at the same time.
-	public static int MaxNumberOfEnemies = 20; // make 50
+	public static int groundWidth = 200 - 4;
+	// The maximum number of enemies on the game board at the same time.
+	public static int maxNumberOfEnemies = 10; // make 50?
+
 
 
 	public static SpeciesType getRandomAnimalType()
@@ -25,7 +25,7 @@ public class DemSceneConstants : MonoBehaviour
 		SpeciesType specie = (SpeciesType)(((int[])values)[Random.Range(0,max)]);
 		return specie;
 	}
-		
+
 
 	/**
 	* food web hard coded for testing of code concepts
@@ -34,6 +34,10 @@ public class DemSceneConstants : MonoBehaviour
 	* Carnivore -> Omnivore, Carnivore, Herbivore
 	* Herbivore -> Plant, TreeOfLife
 	* Plant -> empty list
+	* 
+	* TODO: Lion, Buffalo, Grass and Herbs, Bush Pig
+	* Tree Mouse, Cockroach, Decaying Material, 
+	* Trees and Shrubs
 	* 
 	* **/
 	public static ArrayList setSpeciesPreyHardCoded(DemSceneConstants.SpeciesType species)
