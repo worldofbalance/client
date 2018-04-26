@@ -20,11 +20,6 @@ public class Constants
 	// public static readonly string REMOTE_HOST = "54.153.66.118";   // AWS from Ben, 2-2017
     // IP address may be 130.212.3.51
 
-    //public static readonly int REMOTE_PORT = 9234;
-    // public static readonly int REMOTE_PORT = 9270;    // 9270 is new port as of 2016-9-13 - cvg account
-    //20041;
-    //    public static readonly int REMOTE_PORT = 9234;
-    //9257 9255 for locahost, 9257 for Anu's server
     public static readonly int REMOTE_PORT = 9255;    // 9255  wob_wob account
     public static readonly float HEARTBEAT_RATE = 1f;
 	
