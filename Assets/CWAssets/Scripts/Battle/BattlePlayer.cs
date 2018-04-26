@@ -112,7 +112,7 @@ namespace CW
                     isFiring=true;
                     //by Pedro
                     if (currentPlayer && audioSource!=null) {
-                        audioSource.clip = Resources.Load ("Sounds/burning_fire") as AudioClip;
+                        audioSource.clip = Resources.Load ("Sounds/fire") as AudioClip;
                         //audioSource.PlayDelayed (1);
                         audioSource.Play ();
                         showWeatherEffect = CW.Constants.ANIMATE_RATE;
@@ -133,7 +133,7 @@ namespace CW
                     playerFrozen=true;// used to show frozen text
                     isFreezing=true;
                     //by Pedro
-                    audioSource.clip = Resources.Load ("Sounds/ice_cracking") as AudioClip;
+                    audioSource.clip = Resources.Load ("Sounds/freeze") as AudioClip;
                     //audioSource.PlayDelayed (1);
                     audioSource.Play ();
                     showWeatherEffect=CW.Constants.ANIMATE_RATE;
@@ -151,7 +151,7 @@ namespace CW
                 if (currentPlayer && audioSource!=null) {
                     isRaining = true;
                     //by Pedro
-                    audioSource.clip = Resources.Load ("Sounds/rain_thunder") as AudioClip;
+                    audioSource.clip = Resources.Load ("Sounds/rain") as AudioClip;
                     //audioSource.PlayDelayed (1);
                     audioSource.Play ();
                     showWeatherEffect = CW.Constants.ANIMATE_RATE;
