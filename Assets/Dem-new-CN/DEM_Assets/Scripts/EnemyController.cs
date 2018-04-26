@@ -9,51 +9,45 @@ public class EnemyController : MonoBehaviour
 {
 	// for linking to the prefabricated object, which is stored as a file in the game assets
 	[SerializeField] private GameObject enemyPrefab;
-	// the current enemy instances in the game scene
-	private ArrayList enemies;
 	private GameObject enemy;
-	private bool next = true;
+	private float timeStep = 2.0f;
+	private float oldTime;
+	// the current number of enemies alive in the game
+	public static int numberOfEnemies = 0;
 
 	// Use this for initialization
-	void Start() 
-	{
-		makeNewEnemy();
+	void Start(){	
+		oldTime = Time.time;
 	}
 
-	// For every frame of the game scene, if the enemy has died, spawn a new enemy.
-	// TODO spawn a new enemy up to max number of enemies every so many seconds.
+	// For every frame of the game scene
+	// Every so many seconds, spawn a new enemy, up to max number of enemies.
 	void Update() 
 	{
-		if (enemy == null) 
+		if ((numberOfEnemies < DemSceneConstants.maxNumberOfEnemies) && ((Time.time - oldTime) > timeStep))
 		{
-			makeNewEnemy ();
+			// create a new instance of an enemy 
+			enemy = makeNewEnemy ();
 			placeEnemy (enemy);
+			oldTime = Time.time;
 		}
-
-		/**
-		if (enemies.Count < DemSceneConstants.MaxNumberOfEnemies) 
-		{
-			// create a new instance of an enemy based on the enemyPrefab file,
-			// and cast its type to game object
-			enemy = Instantiate(enemyPrefab) as GameObject;
-			placeEnemy (enemy);
-			enemies.Add (enemy);
-		}
-		**/
 	}
 
 
-	private void makeNewEnemy() 
+	private GameObject makeNewEnemy() 
 	{
 		Material material;
 		// Create a new instance of an enemy based on the enemy prefab file,
 		// and cast its type to game object.
-		enemy = Instantiate(enemyPrefab) as GameObject;
+		GameObject enemy = Instantiate(enemyPrefab) as GameObject;
 		// Randomly assign the enemy an animal species type.
 		SpeciesBehavior behavior = enemy.GetComponent<SpeciesBehavior>();
-		DemSceneConstants.SpeciesType type = DemSceneConstants.getRandomAnimalType ();
-		behavior.setSpeciesType (type);
-		behavior.setPreyList (type);
+		if (behavior != null) {
+			DemSceneConstants.SpeciesType type = DemSceneConstants.getRandomAnimalType ();
+			behavior.setSpeciesType (type);
+			behavior.setPreyList (type);
+		}
+		return enemy;
 	}
 
 
@@ -61,15 +55,14 @@ public class EnemyController : MonoBehaviour
 	// Have the enemy start facing in the direction of the Tree of Life,
 	// which is at the center of the game board.
 	private void placeEnemy(GameObject enemy){
-		
-		int x = DemSceneConstants.FloorXWidth/2;
-		int z = DemSceneConstants.FloorZWidth/2;
+
+		int width = DemSceneConstants.groundWidth / 2;
+		int x = width;
+		int z = Random.Range(-width, width);
 		float angle = 90;		
-		int z_random = Random.Range(-z, z);
-		int x_random = x;
 
 		if (Random.Range(0, 2) == 0) {
-			x_random = -x;
+			x = -x;
 		}
 
 		enemy.transform.position = new Vector3(x, 1, z);
