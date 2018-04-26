@@ -20,11 +20,13 @@ public class EnemyBehavior : SpeciesBehavior {
 		this.setHealth (5);
 		preyList = new ArrayList();
 		preyList.Add (DemSceneConstants.SpeciesType.TreeOfLife);
+
 		// set as goal the location of TreeOfLife
 		TreeOfLifeLocation = new Vector3();
 		// find the Tree of Life on the game board
 		GameObject tree = GameObject.Find("TreeOfLife") as GameObject;
 		TreeOfLifeLocation = tree.transform.position;
+
 	}
 
 
