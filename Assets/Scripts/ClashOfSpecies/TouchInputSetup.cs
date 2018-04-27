@@ -38,7 +38,7 @@ public class TouchInputSetup : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.P))
         {
-			ScreenCapture.CaptureScreenshot("/Users/dusan_cvetkovic/Documents/SFSUdocs/Semester2/CSC831MultGameD/Screenshot.png");
+            ScreenCapture.CaptureScreenshot("/Users/dusan_cvetkovic/Documents/SFSUdocs/Semester2/CSC831MultGameD/Screenshot.png");
             Debug.Log("screenshot taken!!");
         }
 

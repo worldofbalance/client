@@ -155,8 +155,8 @@ public class Login : MonoBehaviour
                 LoginProtocol.Prepare (user_id, password), ProcessLogin
             );
 
-            //RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance ();
-            //cManager.Send (RR_RequestLogin (user_id, password));
+           //RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance ();
+           //cManager.Send (RR_RequestLogin (user_id, password));
 
             SD.SDMain.networkManager.Send (SD.SDLoginProtocol.Prepare (user_id, password), SD_ResponseLogin);
         }

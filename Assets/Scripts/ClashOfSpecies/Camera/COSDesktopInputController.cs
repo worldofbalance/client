@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 using System.Collections;
 using System;
 using UnityEngine.EventSystems;
@@ -48,7 +47,7 @@ public class COSDesktopInputController : COSAbstractInputController
 
     public float minFOV = 10f;
     public float maxFOV = 79.9f;
-    private float minX, maxX, minZ, maxZ, minY = 35.0f, maxY = 80.0f;
+    //private float minX, maxX, minZ, maxZ, minY = 35.0f, maxY = 80.0f;
     public float terrainCameraPadding = 40;
 
     //    Camera _camera;
@@ -80,12 +79,13 @@ public class COSDesktopInputController : COSAbstractInputController
     public override void InputControllerAwake(Terrain surface)
     {
         target = surface;
-        walkableAreaMask = (int)Math.Pow(2, NavMesh.GetAreaFromName("Walkable"));
-
+        walkableAreaMask = (int)Math.Pow(2, UnityEngine.AI.NavMesh.GetAreaFromName("Walkable"));
+		/*
         minX = terrainCameraPadding;
         maxX = Terrain.activeTerrain.terrainData.size.x - terrainCameraPadding;
         minZ = terrainCameraPadding;
         maxZ = Terrain.activeTerrain.terrainData.size.z - terrainCameraPadding;
+        */
     }
 
     public override RaycastHit InputUpdate(Camera _camera)
@@ -125,7 +125,9 @@ public class COSDesktopInputController : COSAbstractInputController
         Debug.DrawRay(reticle.transform.position, tempX, Color.red);
         Debug.DrawRay(reticle.transform.position, tempZ, Color.blue);
 
-        if (dragging)
+
+		//CAMERA STUFF COMMENTING OUT FOR NOW ALFRED ** 4/11
+        /*if (dragging)
         {
             var delta = Input.mousePosition - lastMouse;
             _camera.transform.RotateAround(reticle.transform.position, Vector3.up, yawSpeed * delta.x);
@@ -172,22 +174,15 @@ public class COSDesktopInputController : COSAbstractInputController
         // If succesful, translate both the camera_camera.transform and the reticle by the same amount.
         reticle.transform.Translate(attempt);
         _camera.transform.Translate(attempt, Space.World);
-
+		
         CheckZoom();
-        MyLateUpdate();
+        */
         return hit;
     }
 
-    void MyLateUpdate()
-    {
-        Vector3 pos = new Vector3(
-                          Mathf.Clamp(Camera.main.transform.position.x, minX, maxX),
-                          Camera.main.transform.position.y,
-                          Mathf.Clamp(Camera.main.transform.position.z, minZ, maxZ));
-        Camera.main.transform.position = pos;
-    }
 
-    public void CheckZoom()
+
+    /*public void CheckZoom()
     {
         
 
@@ -211,5 +206,5 @@ public class COSDesktopInputController : COSAbstractInputController
 
 //        transform.position = reticle.transform.position + (zoomAxis * zoomLevel);
 //        transform.LookAt(reticle.transform);
-    }
+    }*/
 }
