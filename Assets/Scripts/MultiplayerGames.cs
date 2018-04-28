@@ -811,9 +811,9 @@ public class MultiplayerGames : MonoBehaviour {
 				
             // switch scene
             if (args.gameID == Constants.MINIGAME_RUNNING_RHINO) {
-                RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance ();
-                cManager.Send (RR_RequestRaceInit ());
-                Game.SwitchScene ("RRReadyScene");
+                //RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance ();
+                //cManager.Send (RR_RequestRaceInit ());
+                //Game.SwitchScene ("RRReadyScene");
             } else if (args.gameID == Constants.MINIGAME_CARDS_OF_WILD) {
                 CW.GameManager.matchID = args.id;
                 gameObject.AddComponent <CWGame>();
