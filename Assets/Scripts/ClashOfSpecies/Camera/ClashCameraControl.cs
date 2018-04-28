@@ -51,7 +51,7 @@ public class ClashCameraControl : MonoBehaviour {
 				transform.position += new Vector3(0,speed*Time.deltaTime,0);
 		}
 		if(Input.GetKey(KeyCode.E)) {
-			if( transform.position.y >= minX)
+			if( transform.position.y >= minY)
 				transform.position += new Vector3(0,-speed*Time.deltaTime,0);
 		}
 	}
