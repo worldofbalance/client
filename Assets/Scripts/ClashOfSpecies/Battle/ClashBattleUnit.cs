@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class ClashBattleUnit : MonoBehaviour
 {
 
-    public NavMeshAgent agent;
+    public UnityEngine.AI.NavMeshAgent agent;
     private ClashBattleController controller;
     private Animator anim;
 
@@ -29,7 +29,7 @@ public class ClashBattleUnit : MonoBehaviour
 
     void Awake ()
     {
-        agent = GetComponent<NavMeshAgent> ();
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent> ();
         anim = GetComponent<Animator> ();
         controller = GameObject.Find ("Battle Menu").GetComponent<ClashBattleController> ();
     }

@@ -21,11 +21,16 @@ public class ClashDefenseSetup : MonoBehaviour
     public GameObject errorCanvas;
     public Text errorMessage;
 
+	//tile building
+	//cube
+	public Transform tileTrans;
+	public MeshRenderer tileRend;
+	//material
+	public Material canPlace;
+	public Material cantPlace;
+
     COSAbstractInputController cosInController;
 
-    public float terrainCameraPadding = 40;
-
-    private float minX, maxX, minZ, maxZ;
 
     void Awake()
     {
@@ -56,10 +61,6 @@ public class ClashDefenseSetup : MonoBehaviour
         terrain.transform.position = Vector3.zero;
         terrain.transform.localScale = Vector3.one;
 
-        minX = terrainCameraPadding;
-        maxX = Terrain.activeTerrain.terrainData.size.x - terrainCameraPadding;
-        minZ = terrainCameraPadding;
-        maxZ = Terrain.activeTerrain.terrainData.size.z - terrainCameraPadding;
 
 //        Camera.main.GetComponent<ClashBattleCamera>().target = terrain;
 
@@ -101,16 +102,97 @@ public class ClashDefenseSetup : MonoBehaviour
         cosInController.InputControllerAwake(Terrain.activeTerrain);
     }
 
+
+	private Vector3 tilePlacer(){
+		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+		RaycastHit hit;
+
+		Vector3 newPos = new Vector3(0,0,0);
+		if (Physics.Raycast (ray, out hit, Mathf.Infinity)) {
+			if (hit.collider.tag == "Terrain") {
+				
+				newPos = showTile (hit.point);
+				if (checkBuildSpace (newPos)) {
+					tileRend.material = canPlace;
+
+					if (Input.GetMouseButtonDown (0)) {
+						return newPos;
+						/*CREATE OBJECT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+						//Transform go = Instantiate(chosenGO.transform, tileTrans.position, Quaternion.identity);
+						//go.gameObject.name = "X : "+(int)Mathf.Floor(tileTrans.position.x)+" Z : "+(int)Mathf.Floor(tileTrans.position.z);
+						//write to map
+						//map [(int)Mathf.Floor(tileTrans.position.x)] [(int)Mathf.Floor(tileTrans.position.z)] = objectSelection;
+					}
+				}
+				//Cant place on this part of terrain
+				else
+					tileRend.material = cantPlace;
+
+			} 
+			else if (hit.collider.tag != "Terrain") {
+				//same as above fo different x y positions
+				tileRend.material = cantPlace;
+				showTile (hit.point);
+			}
+		} 
+		else {
+			tileRend.enabled = false;
+		}
+		return newPos;
+	}
+	//Defense Build
+	private bool checkBuildSpace(Vector3 checkPos)
+	{
+		//attacker gets 5 tile padding, each tile is 10x10
+		//Terrain origin is at 0x0x0
+		if(checkPos.x <= 10 || checkPos.z <= 10 || checkPos.x >= 215 || checkPos.z >= 215){
+			return false;
+		}
+		else
+			return true;
+	}
+	private Vector3 showTile(Vector3 mousePosition)
+	{
+		Vector3 position = mousePosition;
+		//if collider is within bounds of map then show cube, if no object is already in that space canPlace material
+		//else cantPlace material
+		//Y is height
+
+		float x = position.x;
+		float z = position.z;
+		float tileSize = 5.0f;
+		//x = Mathf.Floor (x);
+		//z = Mathf.Floor (z);
+		x /= tileSize;
+		z /= tileSize;
+		x = Mathf.Floor (x);
+		z = Mathf.Floor (z);
+		x *= tileSize;
+		z *= tileSize;
+		x += tileSize/2.0f;
+		z += tileSize/2.0f;
+
+		position.x = x;
+		position.z = z;
+		position.y = 0.0f;
+
+		tileTrans.position = position;
+
+		tileRend.enabled = true;
+		return position;
+	}
+
     void Update()
     {
         RaycastHit hit = cosInController.InputUpdate(Camera.main);
-
+		//from here will run script for tile building
+		Vector3 spawnPosition = tilePlacer(); //this updates position of tile prefab 
         if (selected == null)
             return;
 
-        if (cosInController.TouchState == COSTouchState.TerrainTapped)
+		if (cosInController.TouchState == COSTouchState.TerrainTapped && checkBuildSpace(spawnPosition))
         {
-            var allyObject = cosInController.SpawnAlly(hit, selected, remaining, toggleGroup);
+			var allyObject = cosInController.SpawnAlly(hit, selected, remaining, toggleGroup, spawnPosition);
 
             if (allyObject != null)
             {
@@ -129,14 +211,7 @@ public class ClashDefenseSetup : MonoBehaviour
 
     }
 
-    void LateUpdate()
-    {
-        Vector3 pos = new Vector3(
-                          Mathf.Clamp(Camera.main.transform.position.x, minX, maxX),
-                          Camera.main.transform.position.y, 
-                          Mathf.Clamp(Camera.main.transform.position.z, minZ, maxZ));
-        Camera.main.transform.position = pos;
-    }
+
 
     public void ReturnToShop()
     {
