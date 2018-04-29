@@ -29,9 +29,9 @@ public class UpdateCreditsProtocol : MonoBehaviour
 
         response.action = DataReader.ReadShort(dataStream);
         response.status = DataReader.ReadShort(dataStream);
-        response.credits = DataReader.ReadInt(dataStream);
+        response.newCredits = DataReader.ReadInt(dataStream);
 
-        Debug.Log("UpdateCreditsProtocol parsing: action= "+ response.action + ", status= " + response.status + ", credits= "+response.credits);
+        Debug.Log("UpdateCreditsProtocol parsing: action= "+ response.action + ", status= " + response.status + ", newCredits= "+response.newCredits);
 
         
 
@@ -44,7 +44,7 @@ public class ResponseUpdateCredits : NetworkResponse
 
     public short action { get; set; }
     public short status { get; set; }
-    public int credits { get; set; }
+    public int newCredits { get; set; }
 
     public ResponseUpdateCredits()
     {

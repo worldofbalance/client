@@ -23,6 +23,8 @@ namespace CW
         public string playerName;
         public bool handCentered = false;
         public bool playerFrozen=false;
+
+
         public ProtocolManager getProtocolManager ()
         {
             return protocols;
@@ -294,6 +296,7 @@ namespace CW
         {
             int gold = 100; //100 gold if won
             isGameOver = true;
+            
             Debug.Log ("Battleplayer game_over");
             
             gameOver = (GameObject)Instantiate (Resources.Load ("Prefabs/Battle/GameOver"));
@@ -697,35 +700,14 @@ namespace CW
         {
             ResponseUpdateCredits args = response as ResponseUpdateCredits;
             Debug.Log("ResponseUpdateCredits: action= " + args.action);
-            if (args.action == 0)//gained credits
+
+            if (args.status == 0)
             {
-                
-                if(args.status==0)
-                {
-                    Debug.Log("gaining "+args.credits+" credits");
-                    Debug.Log("credits before +" + (GameState.player.credits));
-                    Debug.Log("credits after +" + (GameState.player.credits + args.credits));
-                    GameState.player.credits += args.credits;
-                }
-                else
-                Debug.Log("failed to gain " + args.credits + " credits");
-
-
+                GameState.player.credits = args.newCredits;
+                Debug.Log("new credits: " + args.newCredits);
             }
-
-            else if (args.action == 1)//lost credits
-            {
-                if(args.status==0)
-                {
-                    Debug.Log("losing " + args.credits + " credits");
-                    Debug.Log("credits before +" + (GameState.player.credits));
-                    Debug.Log("credits after +" + (GameState.player.credits - args.credits));
-                    GameState.player.credits -= args.credits;
-                }
-                else
-                Debug.Log("failed to lose " + args.credits + " credits");
-
-            }
+            else
+            Debug.Log("failed to update credits");
 
         }
 
