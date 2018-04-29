@@ -300,10 +300,12 @@ namespace CW
             if (!isWon) {
                 Debug.Log("lost the game");
                 gold = 25;//25 gold if lost
+                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
                 Texture2D loseTexture = (Texture2D)Resources.Load ("Prefabs/Battle/lose", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = loseTexture;
             } else {
                 Debug.Log("won the game");
+                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
                 Texture2D winTexture = (Texture2D)Resources.Load ("Prefabs/Battle/win", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = winTexture;
             }
@@ -690,5 +692,42 @@ namespace CW
                 }
             }
         }
+
+        public void ProcessUpdateCredits(NetworkResponse response)
+        {
+            ResponseUpdateCredits args = response as ResponseUpdateCredits;
+            Debug.Log("ResponseUpdateCredits: action= " + args.action);
+            if (args.action == 0)//gained credits
+            {
+                
+                if(args.status==0)
+                {
+                    Debug.Log("gaining "+args.credits+" credits");
+                    Debug.Log("credits before +" + (GameState.player.credits));
+                    Debug.Log("credits after +" + (GameState.player.credits + args.credits));
+                    GameState.player.credits += args.credits;
+                }
+                else
+                Debug.Log("failed to gain " + args.credits + " credits");
+
+
+            }
+
+            else if (args.action == 1)//lost credits
+            {
+                if(args.status==0)
+                {
+                    Debug.Log("losing " + args.credits + " credits");
+                    Debug.Log("credits before +" + (GameState.player.credits));
+                    Debug.Log("credits after +" + (GameState.player.credits - args.credits));
+                    GameState.player.credits -= args.credits;
+                }
+                else
+                Debug.Log("failed to lose " + args.credits + " credits");
+
+            }
+
+        }
+
     }
 }

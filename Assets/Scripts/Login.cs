@@ -165,8 +165,8 @@ public class Login : MonoBehaviour
     public IEnumerator AutoLogin ()
     {
         while (true) {
-            user_id = "1";
-            password = "1";
+            user_id = "jeremy";
+            password = "okay";
             Submit ();
 			
             yield return new WaitForSeconds (1.0f);

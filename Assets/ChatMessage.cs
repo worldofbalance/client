@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+
+//hi
 public class ChatMessage : MonoBehaviour {
 
 	// Use this for initialization
