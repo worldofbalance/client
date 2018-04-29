@@ -29,7 +29,10 @@ namespace CW
         }
 
         float showWeatherEffect=CW.Constants.ANIMATE_RATE;
-        
+
+        public Transform weathereffect;
+
+
         //Initializes the player variables
         public void init (bool player1)
         {
@@ -69,7 +72,8 @@ namespace CW
                 handPos = new Vector3 (550, 10, -375);//orig(150, 10, -375)
                 FieldPos = new Vector3 (-450, 10, -150);
                 TreePos = new Vector3 (0, 10, -375);//org(-800,10, -300)
-            
+                
+                
                 //Player 1 takes first turn every time
                 currentMana = 1;
                 maxMana = 1;
@@ -112,9 +116,15 @@ namespace CW
                     isFiring=true;
                     //by Pedro
                     if (currentPlayer && audioSource!=null) {
+                        audioSource.loop = false;
                         audioSource.clip = Resources.Load ("Sounds/fire") as AudioClip;
                         //audioSource.PlayDelayed (1);
                         audioSource.Play ();
+                        
+                        //stop rain
+                        weathereffect = GameObject.Find("WeatherEffect").transform.Find("rain");
+                        weathereffect.gameObject.SetActive(false);
+
                         showWeatherEffect = CW.Constants.ANIMATE_RATE;
                     }
                 }    
@@ -130,12 +140,19 @@ namespace CW
             case 90:
                 if(currentPlayer && audioSource!=null)
                 {
+                    audioSource.loop = false;
                     playerFrozen=true;// used to show frozen text
                     isFreezing=true;
                     //by Pedro
                     audioSource.clip = Resources.Load ("Sounds/freeze") as AudioClip;
                     //audioSource.PlayDelayed (1);
                     audioSource.Play ();
+                    audioSource.loop = true;
+                    
+                    //stop rain
+                    weathereffect = GameObject.Find("WeatherEffect").transform.Find("rain");
+                    weathereffect.gameObject.SetActive(false);
+
                     showWeatherEffect=CW.Constants.ANIMATE_RATE;
                 }
 
@@ -151,9 +168,16 @@ namespace CW
                 if (currentPlayer && audioSource!=null) {
                     isRaining = true;
                     //by Pedro
+                    audioSource.loop = false;
                     audioSource.clip = Resources.Load ("Sounds/rain") as AudioClip;
                     //audioSource.PlayDelayed (1);
                     audioSource.Play ();
+                    audioSource.loop = true;
+
+                    //start rain
+                    weathereffect = GameObject.Find("WeatherEffect").transform.Find("rain");
+                    weathereffect.gameObject.SetActive(true);
+
                     showWeatherEffect = CW.Constants.ANIMATE_RATE;
                     givePlayerFoodCard (2);
                 }
