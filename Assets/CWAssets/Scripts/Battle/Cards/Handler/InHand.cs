@@ -5,10 +5,9 @@ namespace CW
 {
 	public class InHand : AbstractCardHandler
 	{
-		public InHand (AbstractCard card, BattlePlayer player) : base(card, player)
+        public InHand (AbstractCard card, BattlePlayer player) : base(card, player)
 		{
-
-		}
+        }
 
 		override public void affect ()
 		{
@@ -35,11 +34,12 @@ namespace CW
 					card.handler = new InPlay (card, player);
 					Vector3 position = new Vector3 (card.transform.position.x, card.transform.position.y, card.transform.position.z);
 					player.reposition ();
-					Vector3 destination = new Vector3 (card.transform.position.x, card.transform.position.y, card.transform.position.z);
-					card.transform.position = position;
-
+					Vector3 destination = new Vector3 (card.transform.position.x + 300, card.transform.position.y, card.transform.position.z);
+                    card.effect = true;
+                    card.transform.position = position;
 					card.calculateDirection (destination, false);
                     
+
 					GameManager.player1.getProtocolManager ().sendSummon (player.playerID, card.cardID, card.dietChar, 
 			                                        card.level, card.dmg, card.maxHP, 
 			                                        card.name, card.type, 
