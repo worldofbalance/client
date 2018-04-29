@@ -145,7 +145,7 @@ public class ClashDefenseSetup : MonoBehaviour
 	{
 		//attacker gets 5 tile padding, each tile is 10x10
 		//Terrain origin is at 0x0x0
-		if(checkPos.x <= 25 || checkPos.z <= 25 || checkPos.x >= 200 || checkPos.z >= 200){
+		if(checkPos.x <= 10 || checkPos.z <= 10 || checkPos.x >= 215 || checkPos.z >= 215){
 			return false;
 		}
 		else
