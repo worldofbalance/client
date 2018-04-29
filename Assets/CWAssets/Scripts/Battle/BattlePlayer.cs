@@ -80,7 +80,7 @@ namespace CW
 
                 Debug.Log ("Set PLayer Num Working");
                 handPos = new Vector3 (-460, 10, 375);
-                FieldPos = new Vector3 (-450, 10, 150);
+                FieldPos = new Vector3 (-450, 150, 150);
                 DeckPos = new Vector3 (-825, 10, 400);//orig(-825, 10, 400)
                 TreePos = new Vector3 (0, 10, 375);//org(800, 10, 300)
             
