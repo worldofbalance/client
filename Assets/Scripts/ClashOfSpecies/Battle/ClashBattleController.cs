@@ -93,7 +93,7 @@ public class ClashBattleController : MonoBehaviour
                     var trigger = speciesObject.AddComponent<SphereCollider> ();
 					trigger.radius = Constants.UnitColliderRadius;
 					speciesObject.tag = "Enemy";
-					var unit = speciesObject.GetComponent<ClashBattleUnit> ();
+					var unit = speciesObject.AddComponent<ClashBattleUnit> ();
 
                     // Key that is used for the dictionary which keeps track of unit type/name/count
 					var key = unit.name.Split ('(') [0];
@@ -115,7 +115,7 @@ public class ClashBattleController : MonoBehaviour
 
 			// Keeps track of type/name/count of enemies (defenders) when attacking
             List<string> enemyKeyList = new List<string>(this.enemySpecies.Keys);
-			if (enemyKeyList.Count() > 0) {
+			if (enemyKeyList.Count() > 0 && enemyKeyList.Count() < 6) {
 				int i = enemyKeyList.Count() - 1;
                 if (enemySpecies.ContainsKey (enemyKeyList [i]) ) {
 					if (enemyTypeSpecies[i].text == "") 
@@ -139,13 +139,11 @@ public class ClashBattleController : MonoBehaviour
             // Changes the color of the image of the selected unit in the selection menu
 			itemReference.toggle.onValueChanged.AddListener((val) =>
                 {
-                    if (val)
-                    {
+                    if (val){
                         selected = currentSpecies;
                         itemReference.toggle.GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
                     }
-                    else
-                    {
+                    else{
                         selected = null;
                         itemReference.toggle.GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
                     }
@@ -193,11 +191,10 @@ public class ClashBattleController : MonoBehaviour
 				var allyObject = cosInController.SpawnAlly (hit, selected, remaining, toggleGroup, spawnPosition);
 				if (allyObject == null)
 					return;
-				//selected = null;
 
 				var trigger = allyObject.AddComponent<SphereCollider> ();
 				trigger.radius = Constants.UnitColliderRadius;
-				var unit = allyObject.GetComponent<ClashBattleUnit> ();
+				var unit = allyObject.AddComponent<ClashBattleUnit> ();
 				alliesList.Add (unit);
 				unit.species = selected;
                 
@@ -397,7 +394,7 @@ public class ClashBattleController : MonoBehaviour
 	{
 		//attacker gets 5 tile padding, each tile is 5x5
 		//Terrain origin is at 0x0x0
-		if(checkPos.x <= 10 || checkPos.z <= 10 || checkPos.x >= 215 || checkPos.z >= 215){
+		if(checkPos.x <= 10 || checkPos.z <= 10 || checkPos.x >= 215 || checkPos.z >= 215)
 			return true;
 		else
 			return false;

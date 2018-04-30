@@ -6,88 +6,229 @@ using System.Collections.Generic;
 
 public class ClashBattleUnit : MonoBehaviour
 {
-    public NavMeshAgent agent;
+	//ClashBattleUnit is OMNIVORE behavior
+	//Carnivore, Herbivore, and Obstacle are subclasses of ClashBattleUnit
+
+	//The ClashSpecies class holds species id, name, description, cost, hp, attack,
+	//attack speed, move speed, and type - these values are from the database and
+	//are held in a list in the ClashGameManager
 	public ClashSpecies species;
-    private ClashBattleController controller;
-    private Animator anim;
 
-    public ClashBattleUnit target;
-    Vector3 targetPoint = Vector3.zero;
-
-    public Vector3 TargetPoint {
-        get { return targetPoint; }
-        set { targetPoint = value; }
-    }
-
+	//public List<String> someFoodWebStringData? = new List<String>();
+	public string name;
     public int currentHealth = 0;
     public int damage = 0;
+	public string type;
 	// The time in seconds between each attack.
-    public float timeBetweenAttacks = 1.0f;
-    float timer;
+    protected float timeBetweenAttacks = 1.0f;
+	protected float stoppingDistance = 1.7f;
+
+	[HideInInspector]
+	public bool isDead = false;
+	protected float timer;
+	protected float targetTimer;
+	protected ClashBattleController controller;
+	protected Animator anim;
+
+	protected NavMeshAgent agent;
+	protected ClashBattleUnit target = null;
+	protected ClashBattleUnit tempTarget = null;
+	protected List<ClashBattleUnit> favoritePreyList = new List<ClashBattleUnit>();
+	protected List<ClashBattleUnit> omnivoreList = new List<ClashBattleUnit>();
+	protected List<ClashBattleUnit> carnivoreList = new List<ClashBattleUnit>();
+	protected List<ClashBattleUnit> herbivoreList = new List<ClashBattleUnit>();
+	protected List<ClashBattleUnit> animalList = new List<ClashBattleUnit>(); 
+	protected List<ClashBattleUnit> obstacleList = new List<ClashBattleUnit>();
 
     void Awake (){
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent> ();
+        agent = GetComponent<NavMeshAgent> ();
         anim = GetComponent<Animator> ();
         controller = GameObject.Find ("Battle Menu").GetComponent<ClashBattleController> ();
     }
 
     void Start (){
-        // Set current health depending on the species data.
-        currentHealth += species.hp;
-        timeBetweenAttacks = 100f / species.attackSpeed;
-        damage += species.attack;
-        if (agent != null)
-            agent.speed += species.moveSpeed / 20.0f;
+		//Set variables according to species data
+		name = species.name;
+		currentHealth += species.hp;
+		damage += species.attack;
+		timeBetweenAttacks = 100f / species.attackSpeed;
+		type = species.type.ToString ();
+		if (agent != null) {
+			agent.speed += species.moveSpeed / 20.0f;
+			agent.stoppingDistance = stoppingDistance;
+		}			
     }
 
     void Update (){
-        timer += Time.deltaTime;
-        if (!target && targetPoint == Vector3.zero) {
-            Idle ();
-        } else if (targetPoint != Vector3.zero) {
-            anim.SetTrigger ("Walking");
-            if (agent && agent.isActiveAndEnabled)
-                agent.destination = targetPoint;
-        } else if ((target.currentHealth > 0) && (timer >= timeBetweenAttacks) && (currentHealth >= 0.0f)) {
-			Attack();
-        } else if (target.currentHealth <= 0) {
-            target = null;		
-        }
-    }
+		//Find a target
+		targetTimer += Time.deltaTime;
+		if (targetTimer >= 0.25f && !isDead) {
+			findTarget();
+			if (target) {
+				if (!target.isDead) {
+					agent.SetDestination (target.transform.position);
+					targetTimer = 0f;
+				}
+			}
+		}
+		//Attack if there is a target
+		if (!isDead && target) {
+			if (!target.isDead) {
+				timer += Time.deltaTime;
+				if (timer >= timeBetweenAttacks)
+					Attack ();
+			}
+		}
+    } 
+	//End of Update
 
-    void Idle (){
-        //Triggers eating animation
-        if (anim != null)
-            anim.SetTrigger ("Eating");
-    }
+	// Outline
+	// Sort by invaders/defenders -> sort by species type -> get closest target for each type -> set target
+	protected virtual void findTarget () {
+		GameObject[] enemySpecies;
+		float minDistance = Mathf.Infinity;
+		float dist = 0;
+
+		// Sorts all species in the scene by invading and defending species
+		if (gameObject.tag == "Ally")
+			enemySpecies = GameObject.FindGameObjectsWithTag ("Enemy"); //"Enemy" tag is defenders
+		else
+			enemySpecies = GameObject.FindGameObjectsWithTag ("Ally"); //"Ally" tag is attackers
+
+		// Sorts by species type in to their respective list (e.g. omnivore -> omnivoreList)
+		SortSpecies (enemySpecies);
+		
+		// Priority Targeting: favoritePrey > animals > obstacles
+		// Omnivore has no preference towards one species type
+		if (obstacleList.Count > 0) {
+			minDistance = findClosestTarget (obstacleList);
+			target = tempTarget;
+		}
+		if (animalList.Count > 0) {
+			dist = findClosestTarget (animalList);
+			// This 'if' is so that defending units don't go wandering out too far
+			if (dist <= 30.0f || gameObject.tag == "Ally") {
+				if (dist <= 15.0f || dist <= minDistance) {
+					minDistance = dist;
+					target = tempTarget;
+				}
+			}
+		}
+		if (favoritePreyList.Count > 0) {
+			dist = findClosestTarget (favoritePreyList);
+			if (dist <= 30.0f || gameObject.tag == "Ally") {
+				if (dist <= 15.0f || dist <= minDistance) {
+					minDistance = dist;
+					target = tempTarget;
+				}
+			}
+		}
+		// Set anim to walk
+		// anim.SetTrigger ("Walking");
+	}
+	//End of findTarget
+
+	protected virtual void SortSpecies (GameObject[] enemySpeciesArray) {
+		// Sorts by species type in to their respective list (e.g. speciestype == omnivore -> omnivoreList)
+		ClashBattleUnit sortTarget = null;
+		favoritePreyList.Clear ();
+//		omnivoreList.Clear();
+//		carnivoreList.Clear();
+//		herbivoreList.Clear();
+		animalList.Clear ();
+		obstacleList.Clear ();
+
+		foreach (GameObject enemySpecies in enemySpeciesArray) {
+			sortTarget = enemySpecies.GetComponent<ClashBattleUnit> ();
+			if (!sortTarget.isDead) {
+//				if (sortTarget.name == favoritePrey)
+//					favoritePreyList.Add (sortTarget);
+				if (sortTarget.type == "Omnivore" || sortTarget.type == "Carnivore" ||
+					sortTarget.type == "Herbivore")
+				{
+					animalList.Add (sortTarget);
+				}
+				if (sortTarget.type == "Obstacle")
+					obstacleList.Add (sortTarget);
+			}
+		}
+	}
+
+	protected float calculatePathDistance(NavMeshPath path) {
+	    float distance = .0f;
+	    for (var i = 0; i < path.corners.Length - 1; i++) {
+	        distance += Vector3.Distance(path.corners[i], path.corners[i + 1]);
+	    }
+	    return distance;
+	}
+
+	protected float findClosestTarget (List<ClashBattleUnit> targetList) {
+		// Finds the closest target within the list, using remaining navigable distance
+		NavMeshPath path = new NavMeshPath ();
+		float pathDistance = 0;
+		float closestDistance = Mathf.Infinity;
+		
+		foreach (ClashBattleUnit searchTarget in targetList) {
+			if (searchTarget.type == "Obstacle") {
+				pathDistance = Vector3.Distance(transform.position, searchTarget.transform.position);
+			} else {
+				agent.CalculatePath (searchTarget.transform.position, path);
+				pathDistance = calculatePathDistance (path);
+			}
+			if (pathDistance < closestDistance) {
+				closestDistance = pathDistance;
+				tempTarget = searchTarget;
+			}
+		}
+		//debug
+//		if (gameObject.tag == "Ally") 
+//			print ("tempTarget Name: " + tempTarget.name + " | Distance: " + pathDistance);
+
+		return closestDistance;
+	}
+	
+//    void Idle (){
+//        //Triggers eating animation
+//        if (anim != null)
+//            anim.SetTrigger ("Eating");
+//    }
 
     void Attack (){
-        timer = 0f;
-        if (agent && agent.isActiveAndEnabled) {
-            agent.destination = target.transform.position;
-
-//			Debug.Log (tag + " " + species.name +
-//			           " distance to " +
-//			           target.tag + " " + target.species.name +
-//			           " is " + agent.remainingDistance);
-            if (agent.remainingDistance <= agent.stoppingDistance) {
-                //Triggers Attacking animation
-//				Debug.Log(species.name + " attacking " + target.species.name);
-                agent.gameObject.transform.LookAt (target.transform);
-                if (anim != null)
-                    anim.SetTrigger ("Attacking");
-                target.TakeDamage (damage, this);
-            } else {
+		timer = 0f;
+		// Check if the destination has been reached, then deal damage
+		if (!agent.pathPending) {
+			if (agent.remainingDistance <= agent.stoppingDistance) {
+				if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) {
+					transform.LookAt (target.transform);
+//					if (anim != null) {
+//						anim.SetTrigger ("Attacking");
+//					}
+					target.TakeDamage (damage, this);
+				}
+			}
+			else {
                 if (anim != null)
                     anim.SetTrigger ("Walking");
             }
-        }
+     	}
+    }
+
+    void TakeDamage (int damageTaken, ClashBattleUnit source = null){
+		//Debug.Log (tag + " " + species.name + " taking " + damage + " damage from " + source.tag + " " + source.species.name);
+		if (isDead)
+			return;
+
+		currentHealth -= damageTaken;
+        if (currentHealth <= 0)
+            Die ();
     }
 
     void Die (){
+		isDead = true;
         //Disable all functions here
         if (anim != null)
             anim.SetTrigger ("Dead");
+			agent.enabled = false;
 		if (this.gameObject.tag == "Ally")
 			controller.allySpecies[species.name] -= 1;
 			//controller.ActiveSpecies ();
@@ -95,18 +236,8 @@ public class ClashBattleUnit : MonoBehaviour
 			controller.enemySpecies[species.name] -= 1;
 
         target = null;
-        if (agent != null)
-            agent.enabled = false;
         if (species.type == ClashSpecies.SpeciesType.PLANT)
             this.gameObject.GetComponentInChildren<Renderer> ().enabled = false;
-    }
-
-    void TakeDamage (int damage, ClashBattleUnit source = null){
-		//Debug.Log (tag + " " + species.name + " taking " + damage + " damage from " + source.tag + " " + source.species.name);
-
-        currentHealth = Mathf.Max (0, currentHealth - damage);
-        if (currentHealth == 0)
-            Die ();
     }
 
 //    public void setSelected (bool isSelected){
