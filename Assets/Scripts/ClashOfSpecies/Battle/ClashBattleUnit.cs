@@ -85,21 +85,20 @@ public class ClashBattleUnit : MonoBehaviour
 	// Outline
 	// Sort by invaders/defenders -> sort by species type -> get closest target for each type -> set target
 	protected virtual void findTarget () {
-		GameObject[] enemySpecies;
 		float minDistance = Mathf.Infinity;
 		float dist = 0;
 
-		// Sorts all species in the scene by invading and defending species
-		if (gameObject.tag == "Ally")
-			enemySpecies = GameObject.FindGameObjectsWithTag ("Enemy"); //"Enemy" tag is defenders
-		else
-			enemySpecies = GameObject.FindGameObjectsWithTag ("Ally"); //"Ally" tag is attackers
+		// Sorts all species in the scene by invading and defending species then
+		// sorts by species type in to their respective list (e.g. omnivore -> omnivoreList)
+		SortSpecies();
 
-		// Sorts by species type in to their respective list (e.g. omnivore -> omnivoreList)
-		SortSpecies (enemySpecies);
+		//No prioritization for any particular type, so amalgamate them in to one list
+		animalList.AddRange(carnivoreList);
+		animalList.AddRange(omnivoreList);
+		animalList.AddRange(herbivoreList);
 		
-		// Priority Targeting: favoritePrey > animals > obstacles
-		// Omnivore has no preference towards one species type
+		//Priority Targeting: favoritePrey > animals > obstacles
+		//Omnivore has no preference towards one species type
 		if (obstacleList.Count > 0) {
 			minDistance = findClosestTarget (obstacleList);
 			target = tempTarget;
@@ -124,18 +123,26 @@ public class ClashBattleUnit : MonoBehaviour
 			}
 		}
 		// Set anim to walk
-		// anim.SetTrigger ("Walking");
+		 anim.SetTrigger ("Walking");
 	}
 	//End of findTarget
 
-	protected virtual void SortSpecies (GameObject[] enemySpeciesArray) {
-		// Sorts by species type in to their respective list (e.g. speciestype == omnivore -> omnivoreList)
+	protected void SortSpecies () {
 		ClashBattleUnit sortTarget = null;
+		GameObject[] enemySpeciesArray;
+
+		// Sorts all species in the scene by invading and defending species
+		if (gameObject.tag == "Ally")
+			enemySpeciesArray = GameObject.FindGameObjectsWithTag ("Enemy"); //"Enemy" tag is defenders
+		else
+			enemySpeciesArray = GameObject.FindGameObjectsWithTag ("Ally"); //"Ally" tag is attackers
+		// Sorts by species type in to their respective list (e.g. speciestype == omnivore -> omnivoreList)
+
 		favoritePreyList.Clear ();
-//		omnivoreList.Clear();
-//		carnivoreList.Clear();
-//		herbivoreList.Clear();
-		animalList.Clear ();
+		animalList.Clear();
+		omnivoreList.Clear();
+		carnivoreList.Clear();
+		herbivoreList.Clear();
 		obstacleList.Clear ();
 
 		foreach (GameObject enemySpecies in enemySpeciesArray) {
@@ -143,12 +150,13 @@ public class ClashBattleUnit : MonoBehaviour
 			if (!sortTarget.isDead) {
 //				if (sortTarget.name == favoritePrey)
 //					favoritePreyList.Add (sortTarget);
-				if (sortTarget.type == "Omnivore" || sortTarget.type == "Carnivore" ||
-					sortTarget.type == "Herbivore")
-				{
-					animalList.Add (sortTarget);
-				}
-				if (sortTarget.type == "Obstacle")
+				if (sortTarget.species.type == ClashSpecies.SpeciesType.OMNIVORE)
+					omnivoreList.Add (sortTarget);
+				if (sortTarget.species.type == ClashSpecies.SpeciesType.CARNIVORE)
+					carnivoreList.Add (sortTarget);
+				if (sortTarget.species.type == ClashSpecies.SpeciesType.HERBIVORE)
+					herbivoreList.Add (sortTarget);
+				if (sortTarget.species.type == ClashSpecies.SpeciesType.PLANT)
 					obstacleList.Add (sortTarget);
 			}
 		}
@@ -193,16 +201,15 @@ public class ClashBattleUnit : MonoBehaviour
 //            anim.SetTrigger ("Eating");
 //    }
 
-    void Attack (){
+    protected virtual void Attack (){
 		timer = 0f;
 		// Check if the destination has been reached, then deal damage
 		if (!agent.pathPending) {
 			if (agent.remainingDistance <= agent.stoppingDistance) {
 				if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) {
 					transform.LookAt (target.transform);
-//					if (anim != null) {
-//						anim.SetTrigger ("Attacking");
-//					}
+					if (anim != null)
+						anim.SetTrigger ("Attacking");
 					target.TakeDamage (damage, this);
 				}
 			}
@@ -213,7 +220,7 @@ public class ClashBattleUnit : MonoBehaviour
      	}
     }
 
-    void TakeDamage (int damageTaken, ClashBattleUnit source = null){
+    public void TakeDamage (int damageTaken, ClashBattleUnit source = null){
 		//Debug.Log (tag + " " + species.name + " taking " + damage + " damage from " + source.tag + " " + source.species.name);
 		if (isDead)
 			return;
@@ -223,7 +230,7 @@ public class ClashBattleUnit : MonoBehaviour
             Die ();
     }
 
-    void Die (){
+    protected void Die (){
 		isDead = true;
         //Disable all functions here
         if (anim != null)

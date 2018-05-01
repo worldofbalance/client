@@ -66,34 +66,44 @@ public class ClashBattleController : MonoBehaviour
         toggleGroup = unitList.gameObject.GetComponent<ToggleGroup>();
     } 
 
-    void Start() {
+    void Start ()
+	{
 		//Creating the terrain
-        walkableAreaMask = (int)Math.Pow(2, UnityEngine.AI.NavMesh.GetAreaFromName("Walkable"));
-        var terrainResource = Resources.Load("Prefabs/ClashOfSpecies/Terrains/" + manager.currentTarget.terrain);
-        var terrainObject = Instantiate(terrainResource, Vector3.zero, Quaternion.identity) as GameObject;
-        terrain = terrainObject.GetComponentInChildren<Terrain>();
+		walkableAreaMask = (int)Math.Pow (2, UnityEngine.AI.NavMesh.GetAreaFromName ("Walkable"));
+		var terrainResource = Resources.Load ("Prefabs/ClashOfSpecies/Terrains/" + manager.currentTarget.terrain);
+		var terrainObject = Instantiate (terrainResource, Vector3.zero, Quaternion.identity) as GameObject;
+		terrain = terrainObject.GetComponentInChildren<Terrain> ();
 
-        foreach (var pair in manager.currentTarget.layout) {
-            var species = pair.Key;
+		foreach (var pair in manager.currentTarget.layout) {
+			var species = pair.Key;
 
-            // Place navmesh agent.
-            List<Vector2> positions = pair.Value;
-            foreach (var pos in positions) {
+			// Place navmesh agent.
+			List<Vector2> positions = pair.Value;
+			foreach (var pos in positions) {
 				//Debug.DrawRay()
-                var speciesPos = new Vector3(pos.x * terrain.terrainData.size.x, 0.0f, pos.y * terrain.terrainData.size.z);
-                RaycastHit hitInfo;
-                Physics.Raycast(new Vector3(speciesPos.x, 50, speciesPos.z), 50 * Vector3.down, out hitInfo);
+				var speciesPos = new Vector3 (pos.x * terrain.terrainData.size.x, 0.0f, pos.y * terrain.terrainData.size.z);
+				RaycastHit hitInfo;
+				Physics.Raycast (new Vector3 (speciesPos.x, 50, speciesPos.z), 50 * Vector3.down, out hitInfo);
 				//Debug.DrawRay(new Vector3(speciesPos.x, 50, speciesPos.z), 50 * Vector3.down, Color.green, 10f);
-                UnityEngine.AI.NavMeshHit placement;
+				UnityEngine.AI.NavMeshHit placement;
 
 				//Place objects/species down here AQ
-                if (UnityEngine.AI.NavMesh.SamplePosition(hitInfo.point, out placement, 1000, walkableAreaMask)) {
-                    var speciesResource = Resources.Load<GameObject>("Prefabs/ClashOfSpecies/Units/" + species.name);
-                    var speciesObject = Instantiate(speciesResource, placement.position, Quaternion.identity) as GameObject;
-                    var trigger = speciesObject.AddComponent<SphereCollider> ();
+				if (UnityEngine.AI.NavMesh.SamplePosition (hitInfo.point, out placement, 1000, walkableAreaMask)) {
+					var speciesResource = Resources.Load<GameObject> ("Prefabs/ClashOfSpecies/Units/" + species.name);
+					var speciesObject = Instantiate (speciesResource, placement.position, Quaternion.identity) as GameObject;
+					var trigger = speciesObject.AddComponent<SphereCollider> ();
 					trigger.radius = Constants.UnitColliderRadius;
 					speciesObject.tag = "Enemy";
-					var unit = speciesObject.AddComponent<ClashBattleUnit> ();
+
+//					if (species.type == ClashSpecies.SpeciesType.OMNIVORE)
+						speciesObject.AddComponent<ClashBattleUnit> ();
+//					else if (species.type == ClashSpecies.SpeciesType.CARNIVORE)
+//						speciesObject.AddComponent<Carnivore> ();
+//					else if (species.type == ClashSpecies.SpeciesType.HERBIVORE)
+//						speciesObject.AddComponent<Herbivore> ();
+//					else
+//						speciesObject.AddComponent<Obstacle> ();
+					var unit = speciesObject.GetComponent<ClashBattleUnit> ();
 
                     // Key that is used for the dictionary which keeps track of unit type/name/count
 					var key = unit.name.Split ('(') [0];
