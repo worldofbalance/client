@@ -303,12 +303,12 @@ namespace CW
             if (!isWon) {
                 Debug.Log("lost the game");
                 gold = 25;//25 gold if lost
-                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
+                //Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
                 Texture2D loseTexture = (Texture2D)Resources.Load ("Prefabs/Battle/lose", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = loseTexture;
             } else {
                 Debug.Log("won the game");
-                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
+                //Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
                 Texture2D winTexture = (Texture2D)Resources.Load ("Prefabs/Battle/win", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = winTexture;
             }
