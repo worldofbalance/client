@@ -116,7 +116,7 @@ namespace CW
                     isFiring=true;
                     //by Pedro
                     if (currentPlayer && audioSource!=null) {
-                        audioSource.loop = false;
+                        //audioSource.loop = false;
                         audioSource.clip = Resources.Load ("Sounds/burning_fire") as AudioClip;
                         //audioSource.PlayDelayed (1);
                         audioSource.Play ();
@@ -151,7 +151,7 @@ namespace CW
                     audioSource.clip = Resources.Load ("Sounds/freeze") as AudioClip;
                     //audioSource.PlayDelayed (1);
                     audioSource.Play ();
-                    audioSource.loop = true;
+                    //audioSource.loop = true;
                     
                     //stop rain
                     weathereffect = GameObject.Find("WeatherEffect").transform.Find("rain");
@@ -180,7 +180,7 @@ namespace CW
                     audioSource.clip = Resources.Load ("Sounds/rain") as AudioClip;
                     //audioSource.PlayDelayed (1);
                     audioSource.Play ();
-                    audioSource.loop = true;
+                    //audioSource.loop = true;
                     
                     //stop blizzard
                     weathereffect = GameObject.Find("WeatherEffect").transform.Find("blizzard");
