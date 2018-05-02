@@ -62,6 +62,7 @@ public class SummonCardAction : TurnAction {
         script.isInPlay=true;
 		GameObject.Destroy((GameObject)GameManager.player2.hand[0]);
 		GameManager.player2.hand.RemoveAt(0);
+        script.effect = true; 
 
 		GameManager.player2.reposition();
 

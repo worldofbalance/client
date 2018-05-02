@@ -34,7 +34,7 @@ namespace CW
 					card.handler = new InPlay (card, player);
 					Vector3 position = new Vector3 (card.transform.position.x, card.transform.position.y, card.transform.position.z);
 					player.reposition ();
-					Vector3 destination = new Vector3 (card.transform.position.x + 300, card.transform.position.y, card.transform.position.z);
+					Vector3 destination = new Vector3 (card.transform.position.x, card.transform.position.y, card.transform.position.z);
                     card.effect = true;
                     card.transform.position = position;
 					card.calculateDirection (destination, false);
