@@ -15,7 +15,7 @@ public class ClashBattleUnit : MonoBehaviour
 	public ClashSpecies species;
 
 	//public List<String> someFoodWebStringData? = new List<String>();
-	public string name;
+	public string speciesName;
     public int currentHealth = 0;
     public int damage = 0;
 	public string type;
@@ -48,7 +48,7 @@ public class ClashBattleUnit : MonoBehaviour
 
     void Start (){
 		//Set variables according to species data
-		name = species.name;
+		speciesName = species.name;
 		currentHealth += species.hp;
 		damage += species.attack;
 		timeBetweenAttacks = 100f / species.attackSpeed;
@@ -60,23 +60,25 @@ public class ClashBattleUnit : MonoBehaviour
     }
 
     void Update (){
-		//Find a target
-		targetTimer += Time.deltaTime;
-		if (targetTimer >= 0.25f && !isDead) {
-			findTarget();
-			if (target) {
-				if (!target.isDead) {
-					agent.SetDestination (target.transform.position);
-					targetTimer = 0f;
+		if (controller.isStarted && !controller.finished) {
+			//Find a target
+			targetTimer += Time.deltaTime;
+			if (targetTimer >= 0.25f && !isDead) {
+				findTarget ();
+				if (target) {
+					if (!target.isDead) {
+						agent.SetDestination (target.transform.position);
+						targetTimer = 0f;
+					}
 				}
 			}
-		}
-		//Attack if there is a target
-		if (!isDead && target) {
-			if (!target.isDead) {
-				timer += Time.deltaTime;
-				if (timer >= timeBetweenAttacks)
-					Attack ();
+			//Attack if there is a target
+			if (!isDead && target) {
+				if (!target.isDead) {
+					timer += Time.deltaTime;
+					if (timer >= timeBetweenAttacks)
+						Attack ();
+				}
 			}
 		}
     } 
@@ -99,6 +101,33 @@ public class ClashBattleUnit : MonoBehaviour
 		
 		//Priority Targeting: favoritePrey > animals > obstacles
 		//Omnivore has no preference towards one species type
+//		if (favoritePreyList.Count > 0) {
+//			dist = findClosestTarget (favoritePreyList);
+//			if (dist <= 30.0f || gameObject.tag == "Ally") {
+//				if (dist <= 15.0f) {
+//					target = tempTarget;
+//					anim.SetTrigger ("Walking");
+//					return;
+//				}
+//			}
+//		}
+//		if (animalList.Count > 0) {
+//			dist = findClosestTarget (animalList);
+//			// This 'if' is so that defending units don't go wandering out too far
+//			if (dist <= 30.0f || gameObject.tag == "Ally") {
+//				if (dist <= 15.0f) {
+//					target = tempTarget;
+//					anim.SetTrigger ("Walking");
+//					return;
+//				}
+//			}
+//		}
+//		if (obstacleList.Count > 0) {
+//			target = tempTarget;
+//			anim.SetTrigger ("Walking");
+//			return;
+//		}
+
 		if (obstacleList.Count > 0) {
 			minDistance = findClosestTarget (obstacleList);
 			target = tempTarget;
@@ -122,8 +151,6 @@ public class ClashBattleUnit : MonoBehaviour
 				}
 			}
 		}
-		// Set anim to walk
-		 anim.SetTrigger ("Walking");
 	}
 	//End of findTarget
 
@@ -136,7 +163,6 @@ public class ClashBattleUnit : MonoBehaviour
 			enemySpeciesArray = GameObject.FindGameObjectsWithTag ("Enemy"); //"Enemy" tag is defenders
 		else
 			enemySpeciesArray = GameObject.FindGameObjectsWithTag ("Ally"); //"Ally" tag is attackers
-		// Sorts by species type in to their respective list (e.g. speciestype == omnivore -> omnivoreList)
 
 		favoritePreyList.Clear ();
 		animalList.Clear();
@@ -145,10 +171,11 @@ public class ClashBattleUnit : MonoBehaviour
 		herbivoreList.Clear();
 		obstacleList.Clear ();
 
+		//Sorts by species type in to their respective list (e.g. speciestype == omnivore -> omnivoreList)
 		foreach (GameObject enemySpecies in enemySpeciesArray) {
 			sortTarget = enemySpecies.GetComponent<ClashBattleUnit> ();
 			if (!sortTarget.isDead) {
-//				if (sortTarget.name == favoritePrey)
+//				if (sortTarget.speciesName == favoritePrey)
 //					favoritePreyList.Add (sortTarget);
 				if (sortTarget.species.type == ClashSpecies.SpeciesType.OMNIVORE)
 					omnivoreList.Add (sortTarget);

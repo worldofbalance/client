@@ -60,7 +60,7 @@ public class Herbivore : ClashBattleUnit {
 		// sorts by species type in to their respective list (e.g. omnivore -> omnivoreList)
 		SortSpecies();
 		
-		animalList.AddRange(omnivoreList);
+		animalList.AddRange(omnivoreList); //combines the omnivoreList and herbivoreList in to animalList
 		animalList.AddRange(herbivoreList);
 		// Priority Targeting: favoritePrey > very close animals > obstacles > herbivore/omnivore > carnivore
 		if (carnivoreList.Count > 0) {

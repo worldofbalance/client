@@ -36,6 +36,8 @@ public class ClashBattleController : MonoBehaviour
 
     public Text timer;
     public float timeLeft = 120f;
+    public bool finished = false;
+    public bool isStarted = false;
 
 	//tile building
 	//cube
@@ -50,9 +52,6 @@ public class ClashBattleController : MonoBehaviour
     private ClashSpecies selected;
     private Terrain terrain;
     private ToggleGroup toggleGroup;
-
-    private Boolean finished = false;
-    private bool isStarted = false;
 	private int walkableAreaMask;
 
 	//For mobile/touchscreen
