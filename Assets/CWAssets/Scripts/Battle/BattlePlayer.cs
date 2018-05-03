@@ -51,7 +51,27 @@ namespace CW
             createTree ();
             createMana ();
         }
-        
+
+        //use this init to initialize player 2
+        public void init2(bool player2)
+        {
+            // get protocolManager from GameManager
+            protocols = GameManager.protocols;
+
+            deck = new ArrayList();
+            hand = new ArrayList();
+            GraveYard = new ArrayList();
+            cardsInPlay = new ArrayList();
+            treeID = new ArrayList();
+
+            //Set's player's coordinates of interest for p1 and p2
+            setPlayerNum(player2);
+
+            //Creates the player's tree and mana displayer
+            createTree2();
+            createMana();
+        }
+
         public GameObject instantiateCard ()
         {
             return (GameObject)Instantiate (Resources.Load ("Prefabs/Battle/Card"));
@@ -245,8 +265,18 @@ namespace CW
             script.init (this);
             treeID.Add (obj);
         }
-        
-        
+
+        //use this version of createTree to make the tree for player2
+        public void createTree2()
+        {
+            GameObject obj = (GameObject)Instantiate(Resources.Load("Prefabs/Battle/Tree"));
+            obj.AddComponent<Trees>();
+            Trees script = obj.GetComponent<Trees>();
+            script.init2(this);
+            treeID.Add(obj);
+        }
+
+
         //Creates a visual for the text that displays how much mana a player has
         private void createMana ()
         {
@@ -303,12 +333,12 @@ namespace CW
             if (!isWon) {
                 Debug.Log("lost the game");
                 gold = 25;//25 gold if lost
-                //Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
+                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
                 Texture2D loseTexture = (Texture2D)Resources.Load ("Prefabs/Battle/lose", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = loseTexture;
             } else {
                 Debug.Log("won the game");
-                //Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
+                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
                 Texture2D winTexture = (Texture2D)Resources.Load ("Prefabs/Battle/win", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = winTexture;
             }
