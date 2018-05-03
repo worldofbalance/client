@@ -36,6 +36,13 @@ public abstract class COSAbstractInputController:ScriptableObject
            // Debug.Log("mask is" + placement.mask);
             var allyResource = Resources.Load<GameObject>("Prefabs/ClashOfSpecies/Units/" + selected.name);
             var allyObject = Instantiate(allyResource, position, Quaternion.identity) as GameObject;
+		if (selected.name == "Rock_Wall") {
+			allyObject.tag = "Rock_Wall";
+		}
+		else if (selected.name.Contains("_Bush")){
+			allyObject.tag = "Bush_Wall";
+		}
+		else
             allyObject.tag = "Ally";
 
             remaining[selected.id]--;
