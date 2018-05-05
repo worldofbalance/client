@@ -1,261 +1,283 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 
 public class ClashBattleUnit : MonoBehaviour
 {
+	//ClashBattleUnit is OMNIVORE behavior
+	//Carnivore, Herbivore, and Obstacle are subclasses of ClashBattleUnit
 
-    public UnityEngine.AI.NavMeshAgent agent;
-    private ClashBattleController controller;
-    private Animator anim;
+	//The ClashSpecies class holds species id, name, description, cost, hp, attack,
+	//attack speed, move speed, and type - these values are from the database and
+	//are held in a list in the ClashGameManager
+	public ClashSpecies species;
 
-    public ClashBattleUnit target;
-    Vector3 targetPoint = Vector3.zero;
-
-    public Vector3 TargetPoint {
-        get { return targetPoint; }
-        set { targetPoint = value; }
-    }
-
-    public ClashSpecies species;
+	//public List<String> someFoodWebStringData? = new List<String>();
+	public string speciesName;
     public int currentHealth = 0;
     public int damage = 0;
-    public float timeBetweenAttacks = 1.0f;
-    // The time in seconds between each attack.
-    float timer;
-    // Timer for counting up to the next attack.
-    float timeSinceSpawn = 0.0f;
+	public string type;
+	// The time in seconds between each attack.
+    protected float timeBetweenAttacks = 1.0f;
+	protected float stoppingDistance = 1.7f;
 
-    void Awake ()
-    {
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent> ();
+	[HideInInspector]
+	public bool isDead = false;
+	protected float timer;
+	protected float targetTimer;
+	protected ClashBattleController controller;
+	protected Animator anim;
+
+	protected NavMeshAgent agent;
+	protected ClashBattleUnit target = null;
+	protected ClashBattleUnit tempTarget = null;
+	protected List<ClashBattleUnit> favoritePreyList = new List<ClashBattleUnit>();
+	protected List<ClashBattleUnit> omnivoreList = new List<ClashBattleUnit>();
+	protected List<ClashBattleUnit> carnivoreList = new List<ClashBattleUnit>();
+	protected List<ClashBattleUnit> herbivoreList = new List<ClashBattleUnit>();
+	protected List<ClashBattleUnit> animalList = new List<ClashBattleUnit>(); 
+	protected List<ClashBattleUnit> obstacleList = new List<ClashBattleUnit>();
+
+    void Awake (){
+        agent = GetComponent<NavMeshAgent> ();
         anim = GetComponent<Animator> ();
         controller = GameObject.Find ("Battle Menu").GetComponent<ClashBattleController> ();
     }
 
-    void Start ()
-    {
-        // Set current health depending on the species data.
-        currentHealth += species.hp;
-        timeBetweenAttacks = 100f / species.attackSpeed;
-        damage += species.attack;
-        if (agent != null) {
-            agent.speed += species.moveSpeed / 20.0f;
-        }
+    void Start (){
+		//Set variables according to species data
+		speciesName = species.name;
+		currentHealth += species.hp;
+		damage += species.attack;
+		timeBetweenAttacks = 100f / species.attackSpeed;
+		type = species.type.ToString ();
+		if (agent != null) {
+			agent.speed += species.moveSpeed / 20.0f;
+			agent.stoppingDistance = stoppingDistance;
+		}			
     }
 
-    void Update ()
-    {
-        timer += Time.deltaTime;
-        timeSinceSpawn += Time.deltaTime;
-        if (!target && targetPoint == Vector3.zero) {
-            Idle ();
-        } else if (targetPoint != Vector3.zero) {
-            anim.SetTrigger ("Walking");
-            if (agent && agent.isActiveAndEnabled)
-                agent.destination = targetPoint;
-        } else if ((target.currentHealth > 0) && (timer >= timeBetweenAttacks) && (currentHealth >= 0.0f)) {
-			SpeciesAttack ();
-        } else if (target.currentHealth <= 0) {
-            target = null;		
-        }
+    void Update (){
+		if (controller.isStarted && !controller.finished) {
+			//Find a target
+			targetTimer += Time.deltaTime;
+			if (targetTimer >= 0.25f && !isDead) {
+				findTarget ();
+				if (target) {
+					if (!target.isDead) {
+						agent.SetDestination (target.transform.position);
+						targetTimer = 0f;
+					}
+				}
+			}
+			//Attack if there is a target
+			if (!isDead && target) {
+				if (!target.isDead) {
+					timer += Time.deltaTime;
+					if (timer >= timeBetweenAttacks)
+						Attack ();
+				}
+			}
+		}
+    } 
+	//End of Update
 
-    }
+	// Outline
+	// Sort by invaders/defenders -> sort by species type -> get closest target for each type -> set target
+	protected virtual void findTarget () {
+		float minDistance = Mathf.Infinity;
+		float dist = 0;
 
-	void SpeciesAttack() {
-	
-		if (target.name == "African Clawless Otter(Clone)" && (agent.name == "Nile Crocodile(Clone)")) {
-			Attack ();
-		}else if (target.name == "Nile Crocodile(Clone)" && (agent.name == "Nile Crocodile(Clone)")) {
-			Attack ();
-		}else if (target.name == "Southern Ground Hornbill(Clone)" && (agent.name == "Leopard(Clone)" || agent.name == "Lion(Clone)")) {
-			Attack ();
-		}else if (target.name == "Leopard(Clone)" && (agent.name == "Nile Crocodile(Clone)" || agent.name == "Lion(Clone)")) {
-			Attack ();
-		}else if (target.name == "Lion(Clone)" && (agent.name == "Lion(Clone)")) {
-			Attack ();
-		}else if (target.name == "Black Mamba(Clone)" && (agent.name == "Southern Ground Hornbill(Clone)")) {
-			Attack ();
-		}else if (target.name == "Cape Dwarf Gecko(Clone)" && (agent.name == "Black Mamba(Clone)" || agent.name == "Southern Ground Hornbill(Clone)" || agent.name == "Leopard(Clone)" || agent.name == "Greater Bushbaby(Clone)")) {
-			Attack ();
-		}else if (target.name == "Catfish(Clone)" && (agent.name == "African Clawless Otter(Clone)" || agent.name == "African Grey Hornbill(Clone)" || agent.name == "Black Mamba(Clone)" || agent.name == "Catfish(Clone)" || agent.name == "Leopard(Clone)" || agent.name == "Nile Crocodile(Clone)")) {
-			Attack ();
-		}else if (target.name == "Centipede(Clone)" && (agent.name == "Centipede(Clone)")) {
-			Attack ();
-		}else if (target.name == "Cockroach(Clone)" && (agent.name == "Centipede(Clone)")) {
-			Attack ();
-		}else if (target.name == "African Grey Hornbill(Clone)" && (agent.name == "African Clawless Otter(Clone)")) {
-			Attack ();
-		}else if (target.name == "Ants(Clone)" && (agent.name == "Cape Dwarf Gecko(Clone)" || agent.name == "Cape Teal(Clone)")) {
-			Attack ();
-		}else if (target.name == "Black and White Columbus Monkey(Clone)" && (agent.name == "Black Mamba(Clone)" || agent.name == "Leopard(Clone)")) {
-			Attack ();
-		}else if (target.name == "Bush Pig(Clone)" && (agent.name == "Lion(Clone)")) {
-			Attack ();
-		}else if (target.name == "Cape Teal(Clone)" && (agent.name == "African Grey Hornbill(Clone)" || agent.name == "Black Mamba(Clone)"|| agent.name == "Bush Pig(Clone)" || agent.name == "Greater Bushbaby(Clone)")) {
-			Attack ();
-		}else if (target.name == "Crickets(Clone)" && (agent.name == "African Grey Hornbill(Clone)" || agent.name == "Southern Ground Hornbill(Clone)" || agent.name == "Greater Bushbaby(Clone)" || agent.name == "Crickets(Clone)" || agent.name == "Centipede(Clone)" || agent.name == "Cape Teal(Clone)" || agent.name == "Cape Dwarf Gecko(Clone)")) {
-			Attack ();
-		}else if (target.name == "Decaying Material(Clone)" && (agent.name == "Ants(Clone)" || agent.name == "Black and White Columbus Monkey(Clone)" || agent.name == "Bush Pig(Clone)" || agent.name == "Catfish(Clone)" || agent.name == "Cockroach(Clone)" || agent.name == "Crickets(Clone)" || agent.name == "Flies(Clone)" || agent.name == "Harvester Termite(Clone)")) {
-			Attack ();
-		}else if (target.name == "Flies(Clone)" && (agent.name == "African Grey Hornbill(Clone)" || agent.name == "Cape Dwarf Gecko(Clone)" || agent.name == "Southern Ground Hornbill(Clone)")) {
-			Attack ();
-		}else if (target.name == "Greater Bushbaby(Clone)" && (agent.name == "Leopard(Clone)" || agent.name == "Nile Crocodile(Clone)")) {
-			Attack ();
-		}else if (target.name == "African Grey Hornbill(Clone)" && (agent.name == "African Clawless Otter(Clone)")) {
-			Attack ();
-		}else if (target.name == "Bohor Reedbuck(Clone)" && (agent.name == "Lion(Clone)" || agent.name == "Nile Crocodile(Clone)")) {
-			Attack ();
-		}else if (target.name == "Buffalo(Clone)" && (agent.name == "Lion(Clone)")) {
-			Attack ();
-		}else if (target.name == "Bush Hyrax(Clone)" && (agent.name == "Black Mamba(Clone)" || agent.name == "Leopard(Clone)")) {
-			Attack ();
-		}else if (target.name == "Crested Porcupine(Clone)" && (agent.name == "Black Mamba(Clone)" || agent.name == "Leopard(Clone)")) {
-			Attack ();
-		}else if (target.name == "Harvester Termite(Clone)" && (agent.name == "Ants(Clone)")) {
-			Attack ();
-		}else if (target.name == "Herbivorous True Bugs(Clone)" && (agent.name == "African Grey Hornbill(Clone)" || agent.name == "Cape Dwarf Gecko(Clone)")) {
-			Attack ();
-		}else if (target.name == "Kirk's Dik-dik(Clone)" && (agent.name == "Leopard(Clone)" || agent.name == "Lion(Clone)")) {
-			Attack ();
-		}else if (target.name == "Oribi(Clone)" && (agent.name == "Leopard(Clone)" || agent.name == "Lion(Clone)")) {
-			Attack ();
-		}else if (target.name == "Red-Faced Crombec(Clone)" && (agent.name == "Black Mamba(Clone)")) {
-			Attack ();
-		}else if (target.name == "Smith's Red Hock Hare(Clone)" && (agent.name == "Greater Bushbaby(Clone)" || agent.name == "Kirk's Dik-dik(Clone)" || agent.name == "Leopard(Clone)")) {
-			Attack ();
-		}else if (target.name == "Acacia(Clone)" && (agent.name == "Crickets(Clone)" || agent.name == "Greater Bushbaby(Clone)" || agent.name == "African Grey Hornbill(Clone)" || agent.name == "Black and White Columbus Monkey(Clone)" || agent.name == "Bush Pig(Clone)" || agent.name == "Cape Teal(Clone)"
-			|| agent.name == "Crested Porcupine(Clone)" || agent.name == "Flies(Clone)" || agent.name == "Kirk's Dik-dik(Clone)" || agent.name == "Oribi(Clone)" || agent.name == "Red-Faced Crombec(Clone)" || agent.name == "Bohor Reedbuck(Clone)" || agent.name == "Ants(Clone)" || agent.name == "Bush Hyrax(Clone)" || agent.name == "Smith's Red Hock Hare(Clone)")) {
-			Attack ();
-		}else if (target.name == "Baobab(Clone)" && (agent.name == "Crickets(Clone)" || agent.name == "Greater Bushbaby(Clone)" || agent.name == "African Grey Hornbill(Clone)" || agent.name == "Black and White Columbus Monkey(Clone)" || agent.name == "Bush Pig(Clone)" || agent.name == "Cape Teal(Clone)"
-			|| agent.name == "Crested Porcupine(Clone)" || agent.name == "Flies(Clone)" || agent.name == "Kirk's Dik-dik(Clone)" || agent.name == "Oribi(Clone)" || agent.name == "Red-Faced Crombec(Clone)" || agent.name == "Bohor Reedbuck(Clone)" || agent.name == "Ants(Clone)" || agent.name == "Bush Hyrax(Clone)" || agent.name == "Smith's Red Hock Hare(Clone)")) {
-			Attack ();
-		}else if (target.name == "Big Tree(Clone)" && (agent.name == "Crickets(Clone)" || agent.name == "Greater Bushbaby(Clone)" || agent.name == "African Grey Hornbill(Clone)" || agent.name == "Black and White Columbus Monkey(Clone)" || agent.name == "Bush Pig(Clone)" || agent.name == "Cape Teal(Clone)"
-			|| agent.name == "Crested Porcupine(Clone)" || agent.name == "Flies(Clone)" || agent.name == "Kirk's Dik-dik(Clone)" || agent.name == "Oribi(Clone)" || agent.name == "Red-Faced Crombec(Clone)" || agent.name == "Bohor Reedbuck(Clone)" || agent.name == "Ants(Clone)" || agent.name == "Bush Hyrax(Clone)" || agent.name == "Smith's Red Hock Hare(Clone)")) {
-			Attack ();
-		}else if (target.name == "Fruits and Nectar(Clone)" && (agent.name == "Greater Bushbaby(Clone)" || agent.name == "African Grey Hornbill(Clone)" || agent.name == "Black and White Columbus Monkey(Clone)" || agent.name == "Bush Pig(Clone)" || agent.name == "Cape Teal(Clone)"
-			|| agent.name == "Crested Porcupine(Clone)" || agent.name == "Flies(Clone)" || agent.name == "Kirk's Dik-dik(Clone)" || agent.name == "Oribi(Clone)" || agent.name == "Red-Faced Crombec(Clone)")) {
-			Attack ();
-		}else if (target.name == "Grains and Seeds(Clone)" && (agent.name == "Greater Bushbaby(Clone)" || agent.name == "African Grey Hornbill(Clone)" || agent.name == "Bush Pig(Clone)" || agent.name == "Cape Teal(Clone)"
-			|| agent.name == "Crested Porcupine(Clone)" || agent.name == "Kirk's Dik-dik(Clone)" || agent.name == "Oribi(Clone)" || agent.name == "Red-Faced Crombec(Clone)" || agent.name == "Bohor Reedbuck(Clone)")) {
-			Attack ();
-		}else if (target.name == "Grass and Herbs(Clone)" && (agent.name == "Crickets(Clone)" || agent.name == "African Grey Hornbill(Clone)"
-			|| agent.name == "Kirk's Dik-dik(Clone)" || agent.name == "Oribi(Clone)" || agent.name == "Bohor Reedbuck(Clone)" || agent.name == "Smith's Red Hock Hare(Clone)")) {
-			Attack ();
-		}else if (target.name == "Plant Juices(Clone)" && (agent.name == "Crickets(Clone)" || agent.name == "Greater Bushbaby(Clone)")) {
-			Attack ();
-		}else if (target.name == "Trees and Shrubs(Clone)" && (agent.name == "Crickets(Clone)" || agent.name == "Black and White Columbus Monkey(Clone)" || agent.name == "Cape Teal(Clone)"
-			|| agent.name == "Kirk's Dik-dik(Clone)" || agent.name == "Oribi(Clone)" || agent.name == "Bohor Reedbuck(Clone)" || agent.name == "Ants(Clone)" || agent.name == "Bush Hyrax(Clone)" || agent.name == "Smith's Red Hock Hare(Clone)")) {
-			Attack ();
+		// Sorts all species in the scene by invading and defending species then
+		// sorts by species type in to their respective list (e.g. omnivore -> omnivoreList)
+		SortSpecies();
+
+		//No prioritization for any particular type, so amalgamate them in to one list
+		animalList.AddRange(carnivoreList);
+		animalList.AddRange(omnivoreList);
+		animalList.AddRange(herbivoreList);
+		
+		//Priority Targeting: favoritePrey > animals > obstacles
+		//Omnivore has no preference towards one species type
+//		if (favoritePreyList.Count > 0) {
+//			dist = findClosestTarget (favoritePreyList);
+//			if (dist <= 30.0f || gameObject.tag == "Ally") {
+//				if (dist <= 15.0f) {
+//					target = tempTarget;
+//					anim.SetTrigger ("Walking");
+//					return;
+//				}
+//			}
+//		}
+//		if (animalList.Count > 0) {
+//			dist = findClosestTarget (animalList);
+//			// This 'if' is so that defending units don't go wandering out too far
+//			if (dist <= 30.0f || gameObject.tag == "Ally") {
+//				if (dist <= 15.0f) {
+//					target = tempTarget;
+//					anim.SetTrigger ("Walking");
+//					return;
+//				}
+//			}
+//		}
+//		if (obstacleList.Count > 0) {
+//			target = tempTarget;
+//			anim.SetTrigger ("Walking");
+//			return;
+//		}
+
+		if (obstacleList.Count > 0) {
+			minDistance = findClosestTarget (obstacleList);
+			target = tempTarget;
+		}
+		if (animalList.Count > 0) {
+			dist = findClosestTarget (animalList);
+			// This 'if' is so that defending units don't go wandering out too far
+			if (dist <= 30.0f || gameObject.tag == "Ally") {
+				if (dist <= 15.0f || dist <= minDistance) {
+					minDistance = dist;
+					target = tempTarget;
+				}
+			}
+		}
+		if (favoritePreyList.Count > 0) {
+			dist = findClosestTarget (favoritePreyList);
+			if (dist <= 30.0f || gameObject.tag == "Ally") {
+				if (dist <= 15.0f || dist <= minDistance) {
+					minDistance = dist;
+					target = tempTarget;
+				}
+			}
+		}
+	}
+	//End of findTarget
+
+	protected void SortSpecies () {
+		ClashBattleUnit sortTarget = null;
+		GameObject[] enemySpeciesArray;
+
+		// Sorts all species in the scene by invading and defending species
+		if (gameObject.tag == "Ally")
+			enemySpeciesArray = GameObject.FindGameObjectsWithTag ("Enemy"); //"Enemy" tag is defenders
+		else
+			enemySpeciesArray = GameObject.FindGameObjectsWithTag ("Ally"); //"Ally" tag is attackers
+
+		favoritePreyList.Clear ();
+		animalList.Clear();
+		omnivoreList.Clear();
+		carnivoreList.Clear();
+		herbivoreList.Clear();
+		obstacleList.Clear ();
+
+		//Sorts by species type in to their respective list (e.g. speciestype == omnivore -> omnivoreList)
+		foreach (GameObject enemySpecies in enemySpeciesArray) {
+			sortTarget = enemySpecies.GetComponent<ClashBattleUnit> ();
+			if (!sortTarget.isDead) {
+//				if (sortTarget.speciesName == favoritePrey)
+//					favoritePreyList.Add (sortTarget);
+				if (sortTarget.species.type == ClashSpecies.SpeciesType.OMNIVORE)
+					omnivoreList.Add (sortTarget);
+				if (sortTarget.species.type == ClashSpecies.SpeciesType.CARNIVORE)
+					carnivoreList.Add (sortTarget);
+				if (sortTarget.species.type == ClashSpecies.SpeciesType.HERBIVORE)
+					herbivoreList.Add (sortTarget);
+				if (sortTarget.species.type == ClashSpecies.SpeciesType.PLANT)
+					obstacleList.Add (sortTarget);
+			}
 		}
 	}
 
-    void Idle ()
-    {
-        //Added by Omar triggers eating animation
-        if (anim != null) {
-            anim.SetTrigger ("Eating");
-        }
-    }
+	protected float calculatePathDistance(NavMeshPath path) {
+	    float distance = .0f;
+	    for (var i = 0; i < path.corners.Length - 1; i++) {
+	        distance += Vector3.Distance(path.corners[i], path.corners[i + 1]);
+	    }
+	    return distance;
+	}
 
-    void Attack ()
-    {
-        timer = 0f;
-        if (agent && agent.isActiveAndEnabled) {
-            agent.destination = target.transform.position;
+	protected float findClosestTarget (List<ClashBattleUnit> targetList) {
+		// Finds the closest target within the list, using remaining navigable distance
+		NavMeshPath path = new NavMeshPath ();
+		float pathDistance = 0;
+		float closestDistance = Mathf.Infinity;
+		
+		foreach (ClashBattleUnit searchTarget in targetList) {
+			if (searchTarget.type == "Obstacle") {
+				pathDistance = Vector3.Distance(transform.position, searchTarget.transform.position);
+			} else {
+				agent.CalculatePath (searchTarget.transform.position, path);
+				pathDistance = calculatePathDistance (path);
+			}
+			if (pathDistance < closestDistance) {
+				closestDistance = pathDistance;
+				tempTarget = searchTarget;
+			}
+		}
+		//debug
+//		if (gameObject.tag == "Ally") 
+//			print ("tempTarget Name: " + tempTarget.name + " | Distance: " + pathDistance);
 
-//			Debug.Log (tag + " " + species.name +
-//			           " distance to " +
-//			           target.tag + " " + target.species.name +
-//			           " is " + agent.remainingDistance);
-            if (agent.remainingDistance <= agent.stoppingDistance) {
-                //Added by Omar triggers Attacking animation
-//				Debug.Log(species.name + " attacking " + target.species.name);
-                agent.gameObject.transform.LookAt (target.transform);
-                if (anim != null) {
-                    anim.SetTrigger ("Attacking");
-                }
-                target.TakeDamage (damage, this);
-            } else {
-                if (anim != null) {
+		return closestDistance;
+	}
+	
+//    void Idle (){
+//        //Triggers eating animation
+//        if (anim != null)
+//            anim.SetTrigger ("Eating");
+//    }
+
+    protected virtual void Attack (){
+		timer = 0f;
+		// Check if the destination has been reached, then deal damage
+		if (!agent.pathPending) {
+			if (agent.remainingDistance <= agent.stoppingDistance) {
+				if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) {
+					transform.LookAt (target.transform);
+					if (anim != null)
+						anim.SetTrigger ("Attacking");
+					target.TakeDamage (damage, this);
+				}
+			}
+			else {
+                if (anim != null)
                     anim.SetTrigger ("Walking");
-                }
             }
-        }
+     	}
     }
 
-    void Die ()
-    {
+    public void TakeDamage (int damageTaken, ClashBattleUnit source = null){
+		//Debug.Log (tag + " " + species.name + " taking " + damage + " damage from " + source.tag + " " + source.species.name);
+		if (isDead)
+			return;
+
+		currentHealth -= damageTaken;
+        if (currentHealth <= 0)
+            Die ();
+    }
+
+    protected void Die (){
+		isDead = true;
         //Disable all functions here
-        if (anim != null) {
+        if (anim != null)
             anim.SetTrigger ("Dead");
-        }
-		if (this.gameObject.tag == "Ally") {
+			agent.enabled = false;
+		if (this.gameObject.tag == "Ally")
 			controller.allySpecies[species.name] -= 1;
 			//controller.ActiveSpecies ();
-		}
-		if (this.gameObject.tag == "Enemy") {
+		if (this.gameObject.tag == "Enemy")
 			controller.enemySpecies[species.name] -= 1;
-		}
-
 
         target = null;
-        if (agent != null)
-            agent.enabled = false;
-        if (species.type == ClashSpecies.SpeciesType.PLANT) {
-            RemoveBuffs (species, this.gameObject.tag);
-            if (this.gameObject.tag == "Ally")
-                controller.UpdateBuffPanel (species, false);
+        if (species.type == ClashSpecies.SpeciesType.PLANT)
             this.gameObject.GetComponentInChildren<Renderer> ().enabled = false;
-        }
     }
 
-    void TakeDamage (int damage, ClashBattleUnit source = null)
-    {
-        if (timeSinceSpawn < 1.0)
-            return; // Be invincible for the first second after being spawned
-//		Debug.Log (tag + " " + species.name + " taking " + damage + " damage from " + source.tag + " " + source.species.name);
-
-        currentHealth = Mathf.Max (0, currentHealth - damage);
-        if (currentHealth == 0) {
-            Die ();
-        }
-    }
-
-    void RemoveBuffs (ClashSpecies cs, string tag)
-    {
-        var team = GameObject.FindGameObjectsWithTag (tag);
-		
-        foreach (var teammate in team) {
-            //teammate != this.gameObject so it doesn't get a buff from itself
-            if (teammate != this.gameObject) {
-                var teammateAttribute = teammate.GetComponent<ClashBattleUnit> ();
-
-                switch (cs.name) {
-                case "Big Tree":	//hp buff
-                    teammateAttribute.currentHealth -= 100;
-                    //teammateAttribute.TakeDamage (100);
-                    break;
-                case "Baobab":	//damage buff
-                    teammateAttribute.damage -= 8;
-                    break;
-                case "Trees and Shrubs":	//attack speed buff
-                    if (teammateAttribute.agent != null)
-                        teammateAttribute.agent.speed -= 5.0f;
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
-    }
-
-    public void setSelected (bool isSelected)
-    {
-        foreach (Transform child in transform) {
-            if (child.CompareTag (Constants.TAG_HEALTH_BAR))
-                child.gameObject.SetActive (isSelected);
-        }
-    }
+//    public void setSelected (bool isSelected){
+//        foreach (Transform child in transform) {
+//            if (child.CompareTag (Constants.TAG_HEALTH_BAR))
+//                child.gameObject.SetActive (isSelected);
+//        }
+//    }
 }

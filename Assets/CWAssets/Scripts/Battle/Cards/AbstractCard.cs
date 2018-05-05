@@ -21,11 +21,14 @@ namespace CW
 		private bool zoomed = false;
         private bool clicked = false, removeAfterDelay;
         public bool frozen = false;
+        private bool receivedmg = false;
 		//VELOCITY
 		private Vector3 targetPosition, startPosition;
 		private float velocity, terminalVelocity, angle, distance;
 		private float delayTimer, DELAY_CONSTANT = 1.5f;
-		//Enum for Animal Type
+        //Enum for Animal Type
+        private ParticleSystem ground;
+        private ParticleSystem dead;
 		public enum DIET
 		{
 			OMNIVORE,
@@ -40,9 +43,20 @@ namespace CW
         private float raised = 50f;
         public bool isInHand = true;
         public bool isInPlay = false;
+        public Vector3 temp;
 
-        //2018/03/21 Added mouse hover
+        //mouse hover
         private bool _mouseOver = false;
+
+        //shaking
+        private bool shake = true;
+
+        //Summon effects
+        public bool effect = false;
+        public float  z = 0.1f;
+
+        //Die Effects
+        public bool deffect = false;
 
 		//Initialization for a card and sets it's position to (1000, 1000, 1000)
 		public void init(BattlePlayer player, int cardID, string diet, int level, int attack, int health, string species_name, string type, string description)
@@ -65,8 +79,7 @@ namespace CW
             naturalDmg = dmg = attack;
             //this.type = type; //hide temporarily
             this.description = description; //hide temporarily
-		
-			
+
             Texture2D cardTexture;
             Texture2D speciesTexture;
             //o-omnivore, c-carnivore, h-herbivore, f-food, w-weather
@@ -116,9 +129,14 @@ namespace CW
 			transform.Find ("DoneText").GetComponent<MeshRenderer> ().material.color = Color.red;
 			transform.Find ("DamageText").GetComponent<TextMesh> ().text = "";
 			transform.Find ("DamageText").GetComponent<MeshRenderer> ().material.color = Color.red;
+            ground = transform.Find("Basic_aura/Ground_pulse").GetComponent<ParticleSystem>();
+            ground.Stop();
+            //dead = transform.Find("Basic_pop/DeathPop").GetComponent<ParticleSystem>();
+            //dead.Stop();
 
-			//Initializes off screen
-			transform.position = new Vector3 (9999, 9999, 9999);
+
+            //Initializes off screen
+            transform.position = new Vector3 (9999, 9999, 9999);
 
 			//rotate facedown if player 2
 			if (!player.player1 && !Constants.SINGLE_PLAYER) {
@@ -256,32 +274,25 @@ namespace CW
 			}*/
 			zoomed = false;
 			clicked = false;
-            //2018/03/22 
+            //if the mouse leave the card, set the _mouseOver false
             _mouseOver = false;
 		}
 
-        //2018/03/22 
-        /*How to do? 1) put card prefab to hierarchy 
-         * 2) under card create empty 
-         * 3) for plane: add mesh filter and plane and add mesh renderer 
-         * 4) for text: add mesh renderer and text 
-         * Caution: adjust camera carefully */
+        //when mouse hover on card
         void OnMouseOver()
-        {
-            _mouseOver = true;
+        {    
+            //AND when mouse right click the card, it would set the _mouseOver true
+            if (Input.GetMouseButtonDown(1))
+            {
+                _mouseOver = true;
+            }
         }
 
-        //2018/03/22 
+        
         void OnGUI()
         {
-            //if mouse not hover
-            if (!_mouseOver)
-            {
-                transform.Find("Hello").GetComponent<TextMesh>().text = "---";
-                transform.Find("Canvas/Pop").gameObject.SetActive(false);
-            }
-            //if mouse hover
-            else
+            //if _mouseOver true, then display the description panel
+            if (_mouseOver)
             {
                 transform.Find("Hello").GetComponent<TextMesh>().text = "-^-";
                 transform.Find("Canvas/Pop").gameObject.SetActive(true);
@@ -299,7 +310,7 @@ namespace CW
 
                 child = transform.Find("Canvas/Pop/Stype");
                 t = child.GetComponent<Text>();
-                t.text = "Type: " + TextWrap(this.type, 70);  
+                t.text = "Type: " + TextWrap(this.type, 70);
 
                 try
                 {
@@ -335,6 +346,13 @@ namespace CW
                 {
                     Console.WriteLine("{0} Second exception caught.", e);
                 }
+            }
+            //if _mouseOver false, then turn off the description
+            else
+            {
+                transform.Find("Hello").GetComponent<TextMesh>().text = "---";
+                transform.Find("Canvas/Pop").gameObject.SetActive(false);
+               
 
             }
         }
@@ -432,14 +450,34 @@ namespace CW
 			dmgTimer = 120;
 			transform.Find ("DamageText").GetComponent<TextMesh> ().text = "-" + dmg;
 			hp -= dmg;
-			//Debug.Log ("Was dealt " + dmg + " damage and is now at " + hp + " hp");
-		
-			if (hp <= 0) {
-				Debug.Log ("DEAD");	
-				//handler = new RemoveFromPlay (this, player);
-				//handler.affect ();
+            //Debug.Log ("Was dealt " + dmg + " damage and is now at " + hp + " hp");
+            
+            //transform.position = transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * 50;
+            //transform.position = new Vector3(transform.position.x + 50 * 1.3f * Time.deltaTime * 3, transform.position.y, transform.position.z);
+            //transform.position = new Vector3(transform.position.x - 100 * 1.3f * Time.deltaTime * 5, transform.position.y, transform.position.z);
+            //transform.position = new Vector3(transform.position.x + 150 * 1.3f * Time.deltaTime * 3, transform.position.y, transform.position.z);
+            //transform.position = new Vector3(transform.position.x - 200 * 1.3f * Time.deltaTime * 7, transform.position.y, transform.position.z);
 
-				removeAfterDelay = true;
+
+            receivedmg = true;
+            temp = transform.position;
+
+            if (hp <= 0) {
+				Debug.Log ("DEAD");
+                //handler = new RemoveFromPlay (this, player);
+                //handler.affect ();
+
+                //transform.Find("CardArt").GetComponent<Renderer>().material.SetColor("_Color", new Color32(0, 0, 0, 255));
+                Renderer rend = transform.Find("CardArt").GetComponent<Renderer>();
+                rend.material.mainTexture = (Texture2D)Resources.Load("Images/Battle/Death1", typeof(Texture2D));
+
+                //deffect = true;
+
+                //when card dead
+                audioSource.clip = Resources.Load("Sounds/card_destroyed") as AudioClip;
+                //audioSource.PlayDelayed (1);
+                audioSource.Play();
+                removeAfterDelay = true;
 			}
 		
 		}
@@ -462,7 +500,6 @@ namespace CW
 		
 	
 			distance = Mathf.Sqrt (deltaX * deltaX + deltaZ * deltaZ);
-		
 
 		
 		}
@@ -483,7 +520,6 @@ namespace CW
 				distance -= Mathf.Sqrt (deltaX * deltaX + deltaZ * deltaZ);
 				transform.position = new Vector3 (transform.position.x + deltaX, transform.position.y, transform.position.z + deltaZ);
 			
-			
 				return true;
 			} else if (inMotion) {
 			
@@ -494,8 +530,7 @@ namespace CW
 					terminalVelocity = 2500;
 					velocity = 50;
 
-
-				}
+                }
 			}
 		
 			return false;
@@ -504,19 +539,29 @@ namespace CW
 		void Update ()
 		{
             if (removeAfterDelay) {
-				delayTimer += Time.deltaTime;
-
-				if (delayTimer > DELAY_CONSTANT) {
-
-					handler = new RemoveFromPlay (this, player);
-					handler.affect ();
-					removeAfterDelay = false;
-					delayTimer = 0;
-				}
-
-				Debug.Log (Time.deltaTime);
-
+                cardremove();
 			}
+
+            
+            if (receivedmg)
+            {
+                cardshake();
+            }
+
+            if(effect)
+            {
+                //when card receive attack
+                audioSource.clip = Resources.Load("Sounds/card_placed") as AudioClip;
+                //audioSource.PlayDelayed (1);
+                audioSource.Play();
+                cardsummon();
+            }
+
+            //if(deffect)
+           // {
+            //    carddead();
+           // }
+
 
 			//Change text on card
 			transform.Find ("AttackText").GetComponent<TextMesh> ().text = dmg.ToString ();
@@ -580,8 +625,84 @@ namespace CW
                 }*/
 		}
 
-		//For wrapping long text
-		public static string TextWrap (string originaltext, int chars_in_line)
+
+        public void cardshake()
+        {
+            //Debug.Log(transform.position.x);
+            float d = 10f;
+
+            if (shake)
+            {
+                //Debug.Log("R : " + transform.position.x);
+                transform.position = new Vector3(transform.position.x + d, transform.position.y, transform.position.z);
+                shake = false;
+
+            }
+            else
+            {
+
+                //Debug.Log("L : " + transform.position.x);
+                transform.position = new Vector3(transform.position.x - d, transform.position.y, transform.position.z);
+                shake = true;
+            }
+
+            d = d * 10f;
+
+            delayTimer += Time.deltaTime;
+            if (delayTimer > 1f)
+            {
+                receivedmg = false;
+                transform.position = temp;
+            }
+        }
+
+        public void cardsummon()
+        {
+            delayTimer += Time.deltaTime;
+
+            if (!ground.isPlaying)
+            {
+                ground.Play();
+            }
+
+            if (delayTimer > 0.5f)
+            {
+                effect = false;
+                ground.Stop();
+            }
+        }
+
+        public void carddead()
+        {
+            delayTimer += Time.deltaTime;
+
+            if (!dead.isPlaying)
+            {
+                dead.Play();
+            }
+
+            if (delayTimer > 0.5f)
+            {
+                deffect = false;
+                dead.Stop();
+            }
+        }
+
+        public void cardremove()
+        {
+            delayTimer += Time.deltaTime;
+            if (delayTimer > 3.0f)
+            {
+                handler = new RemoveFromPlay(this, player);
+                handler.affect();
+                removeAfterDelay = false;
+                delayTimer = 0;
+            }
+            //Debug.Log (Time.deltaTime);
+        }
+
+        //For wrapping long text
+        public static string TextWrap (string originaltext, int chars_in_line)
 		{
 			string output = "";
 			string[] words = originaltext.Split (' ');

@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Scripts/ClashOfSpecies/GridBuilding.meta
 guid: 3c4c11f7f40b34fb5b1a714fcf15d1f3
 folderAsset: yes
 timeCreated: 1520885849
+=======
+guid: f984c7a247fe1b645973c42dc0572c80
+folderAsset: yes
+timeCreated: 1523319662
+>>>>>>> master:Assets/Resources/Models/ClashOfSpecies/Buffalo.fbm.meta
 licenseType: Free
 DefaultImporter:
   externalObjects: {}

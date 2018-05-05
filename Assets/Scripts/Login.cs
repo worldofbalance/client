@@ -16,8 +16,8 @@ public class Login : MonoBehaviour
     public Texture background;
     private Texture2D bgTexture;
     private Font font;
-    private string user_id = "";
-    private string password = "";
+    private string user_id = "rrex";
+    private string password = "1234";
     private Rect windowRect;
     private bool isActive = true;
     private bool isInitial = true;

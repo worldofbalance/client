@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Prefabs/ClashOfSpecies/TreesOfLife.meta
 guid: eed3c7f95aea84cb1b18a78e00b1f336
 folderAsset: yes
 timeCreated: 1524597868
+=======
+guid: af697b7c3d0bbe14aa90cc8b7adeeafc
+folderAsset: yes
+timeCreated: 1523319662
+>>>>>>> master:Assets/Resources/Models/ClashOfSpecies/African Elephant.fbm.meta
 licenseType: Free
 DefaultImporter:
   externalObjects: {}
