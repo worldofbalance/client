@@ -219,8 +219,14 @@ public class ClashDefenseShop : MonoBehaviour
             foreach (ClashSelectedUnit csu in selectedGroup.GetComponentsInChildren<ClashSelectedUnit>()) {
                 var species = manager.availableSpecies.Single (x => x.name == csu.label.text);
                 manager.pendingDefenseConfig.layout.Add (species, new List<Vector2> ());
-            }
-            Game.LoadScene ("ClashDefense");
+			}
+
+			//add rock wall into pending defense config ******* AQ temp 
+			/*ClashSpecies rockWall;
+			rockWall.name = "RockWall";
+			manager.pendingDefenseConfig.layout.Add (rockWall, new List<Vector2> ());
+            *///not sure if will work
+			Game.LoadScene ("ClashDefense");
         } else {
             errorCanvas.SetActive (true);
             if (selectedTerrain.transform.childCount != 1) {

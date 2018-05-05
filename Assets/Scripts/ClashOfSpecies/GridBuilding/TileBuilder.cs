@@ -5,6 +5,8 @@ using UnityEngine;
 using System.IO;
 
 
+//THIS SCRIPT IS NOT CALLED AND WAS USED AS A BASE TO BEGIN TILE BUILDING IN GAME
+
 
 public class TileBuilder : MonoBehaviour {
 	//Will Read from a file set up as an 2d array of binary values that can be used to

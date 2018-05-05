@@ -29,7 +29,7 @@ public class ClashSpecies
         string stats = "Stats:\n\n" + name;
         stats += "\nType: " + type; 
         stats += "\nCost: " + cost; 
-        stats += "\nHealth: " + hp; 
+        stats += "\nHealth: " + hp;
         stats += "\nAttack: " + attack; 
         stats += "\nAttack Speed: " + attackSpeed; 
         stats += "\nMovement Speed: " + moveSpeed;

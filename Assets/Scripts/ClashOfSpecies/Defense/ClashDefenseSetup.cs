@@ -23,6 +23,8 @@ public class ClashDefenseSetup : MonoBehaviour
 
 	//tile building
 	//cube
+	private int tileSize = 5;
+	private int mapSize = 0; //mapSize is determined at start. will be 45 of tileSize. 45x45 tile grid.
 	public Transform tileTrans;
 	public MeshRenderer tileRend;
 	//material
@@ -46,9 +48,18 @@ public class ClashDefenseSetup : MonoBehaviour
         toggleGroup = unitList.GetComponent<ToggleGroup>();
     }
     
-    // Use this for initialization
+    /* Start will set the mapSize
+	// will try to load the terrain specified by the the manager by loading it from the Prefabs/ClashOfSpecies/ folder
+	//and instantiate it as the terrain.
+	// if it catches an exception it will set from active terrain.
+	//then changes position and scale to 0 and 1 respectively
+	//next for earch species in the manager pending defense configuration//i.e waiting to be set on terrain
+	//
+	*/
     void Start()
     {
+		//get map size for finding boundries
+		mapSize = tileSize * 45; //45 is the amount of tiles used in game 
         try
         {
             var terrainObject = Resources.Load<GameObject>("Prefabs/ClashOfSpecies/Terrains/" + manager.pendingDefenseConfig.terrain);
@@ -61,18 +72,24 @@ public class ClashDefenseSetup : MonoBehaviour
         terrain.transform.position = Vector3.zero;
         terrain.transform.localScale = Vector3.one;
 
+		ClashSpecies currentSpecies;
+		GameObject item;
+		ClashUnitListItem itemReference;
 
-//        Camera.main.GetComponent<ClashBattleCamera>().target = terrain;
-
-        foreach (var species in manager.pendingDefenseConfig.layout.Keys)
+		foreach (ClashSpecies species in manager.pendingDefenseConfig.layout.Keys)
         {
-            var currentSpecies = species;
-            var item = Instantiate(defenseItemPrefab) as GameObject;
+			//current species is set
+            currentSpecies = species;
+			// item is set to a itemPrefab that was set in the Editor
+			// this item has a ClashUnitListItem component
+			// load texture from Images/
+			//
+            item = Instantiate(defenseItemPrefab) as GameObject;
             remaining.Add(currentSpecies.id, 5);
 
-            var itemReference = item.GetComponent<ClashUnitListItem>();
+            itemReference = item.GetComponent<ClashUnitListItem>();
 
-            var texture = Resources.Load<Texture2D>("Images/" + currentSpecies.name);
+			Texture2D texture = Resources.Load<Texture2D>("Images/" + currentSpecies.name);
             itemReference.toggle.GetComponent<Image>().sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             itemReference.toggle.onValueChanged.AddListener((val) =>
                 {
@@ -89,11 +106,53 @@ public class ClashDefenseSetup : MonoBehaviour
                 });
 
             itemReference.toggle.group = toggleGroup;
+			//set unitList to parent of item
+			//set transform and scale
+
             item.transform.SetParent(unitList.transform);
             item.transform.position = new Vector3(item.transform.position.x, item.transform.position.y, 0.0f);
             item.transform.localScale = Vector3.one;
             itemReference.amountLabel.text = remaining[currentSpecies.id].ToString();
         }
+		//add bush walls and rock walls 
+		item = Instantiate(defenseItemPrefab) as GameObject;
+		remaining.Add(5, 25);
+		itemReference = item.GetComponent<ClashUnitListItem>();
+
+		Texture2D text2D = Resources.Load<Texture2D>("Images/Rock_Wall");
+		itemReference.toggle.GetComponent<Image>().sprite = Sprite.Create(text2D, new Rect(0, 0, text2D.width, text2D.height), new Vector2(0.5f, 0.5f));
+		selected = null;
+		itemReference.toggle.GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+		itemReference.toggle.group = toggleGroup;
+		//set unitList to parent of item
+		//set transform and scale
+
+		item.transform.SetParent(unitList.transform);
+		item.transform.position = new Vector3(item.transform.position.x, item.transform.position.y, 0.0f);
+		item.transform.localScale = Vector3.one;
+		itemReference.amountLabel.text = remaining[5].ToString();
+
+		//BUSH
+		/*item = Instantiate(defenseItemPrefab) as GameObject;
+		remaining.Add("RockWall", 25);
+		itemReference = item.GetComponent<ClashUnitListItem>();
+
+		Texture2D text2D = Resources.Load<Texture2D>("Images/Rock_Wall");
+		itemReference.toggle.GetComponent<Image>().sprite = Sprite.Create(text2D, new Rect(0, 0, text2D.width, text2D.height), new Vector2(0.5f, 0.5f));
+		selected = null;
+		itemReference.toggle.GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+		itemReference.toggle.group = toggleGroup;
+		//set unitList to parent of item
+		//set transform and scale
+
+		item.transform.SetParent(unitList.transform);
+		item.transform.position = new Vector3(item.transform.position.x, item.transform.position.y, 0.0f);
+		item.transform.localScale = Vector3.one;
+		itemReference.amountLabel.text = remaining["RockWall"].ToString();*/
+
+		//if running on mobile use  runt COSMobileInputControler
+		// else use COSDesktopController
+		//Both of which are from COSAbstractInputController
 
         if (manager.isRunningOnMobile)
             cosInController = ScriptableObject.CreateInstance<COSMobileInputControler>();
@@ -143,9 +202,9 @@ public class ClashDefenseSetup : MonoBehaviour
 	//Defense Build
 	private bool checkBuildSpace(Vector3 checkPos)
 	{
-		//attacker gets 5 tile padding, each tile is 10x10
+		//attacker gets 5 tile padding, each tile is 5x5
 		//Terrain origin is at 0x0x0
-		if(checkPos.x <= 10 || checkPos.z <= 10 || checkPos.x >= 215 || checkPos.z >= 215){
+		if(checkPos.x <= 2*tileSize|| checkPos.z <= 2*tileSize || checkPos.x >= mapSize-2*tileSize || checkPos.z >= mapSize-2*tileSize){
 			return false;
 		}
 		else
@@ -184,26 +243,38 @@ public class ClashDefenseSetup : MonoBehaviour
 
     void Update()
     {
+		//get the information from where a ray from the main camera
+		//is pointing into the screen.
+		//will be used for calculating where the terrain is being placed and
+		//
         RaycastHit hit = cosInController.InputUpdate(Camera.main);
 		//from here will run script for tile building
 		Vector3 spawnPosition = tilePlacer(); //this updates position of tile prefab 
         if (selected == null)
             return;
-
-		if (cosInController.TouchState == COSTouchState.TerrainTapped && checkBuildSpace(spawnPosition))
+		//if touchState in current COSAbstractInputController 
+		//check that is it the terrain that was tapped
+		//and check that the position is withing building space
+		if ((cosInController.TouchState == COSTouchState.TerrainTapped) && checkBuildSpace(spawnPosition))
         {
+			//spawn selected gameObject , sending remaining information, toggleGroup and 
+			//the spawnPosition which is set by the tilePlacer
 			var allyObject = cosInController.SpawnAlly(hit, selected, remaining, toggleGroup, spawnPosition);
 
+			//if allyObject is set
             if (allyObject != null)
             {
-
+				//set position.
                 Vector2 normPos = new Vector2(allyObject.transform.position.x - terrain.transform.position.x,
                                       allyObject.transform.position.z - terrain.transform.position.z);
                 normPos.x = normPos.x / terrain.terrainData.size.x;
                 normPos.y = normPos.y / terrain.terrainData.size.z;
 
+				//set position in manager
                 manager.pendingDefenseConfig.layout[selected].Add(normPos);
 
+				//if no more remaining for selected 
+				//selected is set to null
                 if (remaining[selected.id] == 0)
                     selected = null;
             }
@@ -212,17 +283,21 @@ public class ClashDefenseSetup : MonoBehaviour
     }
 
 
-
+	//Return to Shop
     public void ReturnToShop()
     {
         Game.LoadScene("ClashDefenseShop");
     }
 
+	//ConfirmDefense Method is
+	//started on GUI button press.
     public void ConfirmDefense()
     {
+		//Ensure all objects are placed
         if (GameObject.FindGameObjectsWithTag("Ally").Count() != 25)
         {
             errorCanvas.SetActive(true);
+			//set a message, instead use a pre defined texture/gameobject?
             errorMessage.text = "Place all your units down before confirming";
             return;
         }
