@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Prefabs/ClashOfSpecies/Walls.meta
 guid: 30c726bfd86ef451884dd27d64a0dba6
 folderAsset: yes
 timeCreated: 1524597878
+=======
+guid: 6e072920532969f4281a85f3b1912af5
+folderAsset: yes
+timeCreated: 1523319662
+>>>>>>> master:Assets/Resources/Models/ClashOfSpecies/Bat-Eared Fox.fbm.meta
 licenseType: Free
 DefaultImporter:
   externalObjects: {}
