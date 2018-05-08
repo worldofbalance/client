@@ -11,10 +11,10 @@ public class Trees : MonoBehaviour {
     private bool removeAfterDelay;
     private float delayTimer = 0, DELAY_CONSTANT = 3;
     private bool surrendering = false;
-    
-    Texture2D tree1Texture = (Texture2D) Resources.Load ("Images/Battle/tree1", typeof(Texture2D));
-    Texture2D tree2Texture = (Texture2D) Resources.Load ("Images/Battle/tree2", typeof(Texture2D));
-    Texture2D tree3Texture = (Texture2D) Resources.Load ("Images/Battle/tree3", typeof(Texture2D));
+
+    Texture2D tree1Texture;
+    Texture2D tree2Texture;
+    Texture2D tree3Texture;
         //initializing all canvases and buttons
     GameObject optionsButton;
     GameObject surrenderButton;
@@ -33,6 +33,9 @@ public class Trees : MonoBehaviour {
     }
 
     public void init(BattlePlayer player){
+        tree1Texture = (Texture2D) Resources.Load ("Images/Battle/tree1", typeof(Texture2D));
+        tree2Texture = (Texture2D) Resources.Load ("Images/Battle/tree2", typeof(Texture2D));
+        tree3Texture = (Texture2D) Resources.Load ("Images/Battle/tree3", typeof(Texture2D));
         this.player = player;
         maxHP =hp= 30; 
 
