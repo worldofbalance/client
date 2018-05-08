@@ -279,6 +279,9 @@ namespace CW
                     this.transform.position = newPosition;
                 }*/
             
+            } else
+            {
+                _mouseOver = false;
             }
         }
 
@@ -733,12 +736,30 @@ namespace CW
 
         void TaskOnClick1()
         {
-            //Output this to console when the Button is clicked
-            Debug.Log("You have clicked the button!");
+
+            Database foodWeb = null;
+            ConvergeManager manager = new ConvergeManager();
+            
+
+            if (foodWeb == null)
+            {
+                foodWeb = Database.NewDatabase(
+                    GameObject.Find("Global Object"),
+                    Constants.MODE_ECOSYSTEM,
+                    manager
+                );
+            }
+            else
+            {
+                foodWeb.manager = manager;
+            }
+
         }
 
+        //close description window
         void TaskOnClick2()
         {
+            //xbutton
             _mouseOver = false;
         }
 
