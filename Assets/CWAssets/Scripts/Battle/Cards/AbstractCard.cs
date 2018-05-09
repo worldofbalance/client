@@ -153,12 +153,13 @@ namespace CW
             //by Pedro
             audioSource = gameObject.AddComponent<AudioSource> ();
 
-            //init prey predator button
+            //PreyPreadatorButton
             pbtn = transform.Find("Canvas/Pop/pbutton").GetComponent<Button>();
-            pbtn.onClick.AddListener(TaskOnClick1);
+            pbtn.onClick.AddListener(pppout);
 
+            //closebutton
             xbtn = transform.Find("Canvas/Pop/xbutton").GetComponent<Button>();
-            xbtn.onClick.AddListener(TaskOnClick2);
+            xbtn.onClick.AddListener(closebutton);
 
         }
 
@@ -734,7 +735,7 @@ namespace CW
             //Debug.Log (Time.deltaTime);
         }
 
-        void TaskOnClick1()
+        void pppout()
         {
 
             Database foodWeb = null;
@@ -745,7 +746,7 @@ namespace CW
             {
                 foodWeb = Database.NewDatabase(
                     GameObject.Find("Global Object"),
-                    Constants.MODE_ECOSYSTEM,
+                    Constants.MODE_SHOP,
                     manager
                 );
             }
@@ -754,10 +755,15 @@ namespace CW
                 foodWeb.manager = manager;
             }
 
+            foodWeb.selected = SpeciesTable.GetSpeciesName("Tree Mouse [31]");
+            Debug.Log(foodWeb.selected);
+            Debug.Log(this.name);
+            foodWeb.SetActive(true, this.name);
+
         }
 
         //close description window
-        void TaskOnClick2()
+        void closebutton()
         {
             //xbutton
             _mouseOver = false;
