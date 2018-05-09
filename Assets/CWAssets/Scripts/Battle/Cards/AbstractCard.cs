@@ -327,7 +327,10 @@ namespace CW
             if (_mouseOver)
             {
                 transform.Find("opening").GetComponent<TextMesh>().text = "Opening";
-                transform.Find("Canvas/Pop").gameObject.SetActive(true);
+                if (type != "weather")
+                {
+                    transform.Find("Canvas/Pop").gameObject.SetActive(true);
+                }
                 //transform.Find("Pop/Image").GetComponent<Image>().sprite = sImage;
                 //transform.Find("Canvas/Pop/Sname").GetComponent<TextMesh>().text = TextWrap(this.name, 16);
                 //transform.Find("Canvas/Pop/Stype").GetComponent<TextMesh>().text = this.type;
@@ -755,9 +758,6 @@ namespace CW
                 foodWeb.manager = manager;
             }
 
-            foodWeb.selected = SpeciesTable.GetSpeciesName("Tree Mouse [31]");
-            Debug.Log(foodWeb.selected);
-            Debug.Log(this.name);
             foodWeb.SetActive(true, this.name);
 
         }
