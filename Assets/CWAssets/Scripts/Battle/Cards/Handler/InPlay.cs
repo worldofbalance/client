@@ -88,7 +88,7 @@ namespace CW
 
                         //currentPlayer.clickedCard.applyFood(currentPlayer.targetCard, 1, 1);
                         //currentPlayer.getProtocolManager ().sendFoodBuff (currentPlayer.cardID, currentPlayer.targetCard.fieldIndex);
-                        currentPlayer.getProtocolManager ().sendFoodBuff (currentPlayer.playerID, currentPlayer.targetCard.fieldIndex);
+                        currentPlayer.getProtocolManager ().sendFoodBuff (currentPlayer.playerID, currentPlayer.clickedCard.cardID, currentPlayer.targetCard.fieldIndex);
                         currentPlayer.hand.Remove (currentPlayer.clickedCard.gameObject);
                         GameObject.Destroy (currentPlayer.clickedCard.gameObject);
                         currentPlayer.currentMana -= currentPlayer.clickedCard.getManaCost ();

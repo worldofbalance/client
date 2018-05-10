@@ -5,12 +5,13 @@ namespace CW
 	public class ApplyFoodBuffProtocol
 	{
 
-		public static NetworkRequest Prepare (int playerID, int target)
+		public static NetworkRequest Prepare (int playerID, int cardID, int target)
 		{
 		
 			NetworkRequest request = new NetworkRequest (NetworkCode.APPLY_FOOD);
 			request.AddInt32 (playerID);
-			request.AddInt32 (target);
+            request.AddInt32(cardID);
+            request.AddInt32 (target);
 			return request;
 		}
 	
