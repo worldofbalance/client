@@ -11,17 +11,17 @@ public class ClashBattleUnit : MonoBehaviour
 
 	//The ClashSpecies class holds species id, name, description, cost, hp, attack,
 	//attack speed, move speed, and type - these values are from the database and
-	//are held in a list in the ClashGameManager
+	//are held in a list in the ClashGameManager which is attached to the Main Menu
+	//GameObject in the hierachy
 	public ClashSpecies species;
 
-	//public List<String> someFoodWebStringData? = new List<String>();
 	public string speciesName;
-    public int currentHealth = 0;
+    public int currentHealth;
     public int damage = 0;
 	public string type;
 	// The time in seconds between each attack.
     protected float timeBetweenAttacks = 1.0f;
-	protected float stoppingDistance = 1.7f;
+	protected float stoppingDistance = 1.8f;
 
 	[HideInInspector]
 	public bool isDead = false;
@@ -56,19 +56,23 @@ public class ClashBattleUnit : MonoBehaviour
 		if (agent != null) {
 			agent.speed += species.moveSpeed / 20.0f;
 			agent.stoppingDistance = stoppingDistance;
-		}			
+		}		
+
+		// Sorts all species in the scene by invading and defending species then
+		// sorts by species type in to their respective list (e.g. omnivore -> omnivoreList)
+		SortSpecies();	
     }
 
     void Update (){
 		if (controller.isStarted && !controller.finished) {
 			//Find a target
 			targetTimer += Time.deltaTime;
-			if (targetTimer >= 0.25f && !isDead) {
+			if (targetTimer >= 1.0f && !isDead) {
 				findTarget ();
 				if (target) {
 					if (!target.isDead) {
 						agent.SetDestination (target.transform.position);
-						targetTimer = 0f;
+						targetTimer = 0.0f;
 					}
 				}
 			}
@@ -86,13 +90,15 @@ public class ClashBattleUnit : MonoBehaviour
 
 	// Outline
 	// Sort by invaders/defenders -> sort by species type -> get closest target for each type -> set target
-	protected virtual void findTarget () {
+	protected virtual void findTarget ()
+	{
 		float minDistance = Mathf.Infinity;
 		float dist = 0;
-
-		// Sorts all species in the scene by invading and defending species then
-		// sorts by species type in to their respective list (e.g. omnivore -> omnivoreList)
-		SortSpecies();
+		
+//		if (targetTimer > 5.0f) {
+		SortSpecies ();
+//			targetTimer = 0.0f;
+//		}
 
 		//No prioritization for any particular type, so amalgamate them in to one list
 		animalList.AddRange(carnivoreList);
@@ -100,7 +106,7 @@ public class ClashBattleUnit : MonoBehaviour
 		animalList.AddRange(herbivoreList);
 		
 		//Priority Targeting: favoritePrey > animals > obstacles
-		//Omnivore has no preference towards one species type
+//		Omnivore has no preference towards one species type
 //		if (favoritePreyList.Count > 0) {
 //			dist = findClosestTarget (favoritePreyList);
 //			if (dist <= 30.0f || gameObject.tag == "Ally") {
@@ -112,14 +118,12 @@ public class ClashBattleUnit : MonoBehaviour
 //			}
 //		}
 //		if (animalList.Count > 0) {
-//			dist = findClosestTarget (animalList);
+//			dist = findClosestTarget (animalList); //sets tempTarget
 //			// This 'if' is so that defending units don't go wandering out too far
-//			if (dist <= 30.0f || gameObject.tag == "Ally") {
-//				if (dist <= 15.0f) {
-//					target = tempTarget;
-//					anim.SetTrigger ("Walking");
-//					return;
-//				}
+//			if ((dist <= 30.0f || gameObject.tag == "Ally") && dist < 500.0f) {
+//				target = tempTarget;
+//				anim.SetTrigger ("Walking");
+//				return;
 //			}
 //		}
 //		if (obstacleList.Count > 0) {
@@ -136,21 +140,23 @@ public class ClashBattleUnit : MonoBehaviour
 			dist = findClosestTarget (animalList);
 			// This 'if' is so that defending units don't go wandering out too far
 			if (dist <= 30.0f || gameObject.tag == "Ally") {
-				if (dist <= 15.0f || dist <= minDistance) {
+				if (dist <= 30.0f || dist <= minDistance) {
 					minDistance = dist;
 					target = tempTarget;
 				}
 			}
 		}
-		if (favoritePreyList.Count > 0) {
-			dist = findClosestTarget (favoritePreyList);
-			if (dist <= 30.0f || gameObject.tag == "Ally") {
-				if (dist <= 15.0f || dist <= minDistance) {
-					minDistance = dist;
-					target = tempTarget;
-				}
-			}
-		}
+		anim.SetTrigger ("Walking");
+
+//		if (favoritePreyList.Count > 0) {
+//			dist = findClosestTarget (favoritePreyList);
+//			if (dist <= 30.0f || gameObject.tag == "Ally") {
+//				if (dist <= 15.0f || dist <= minDistance) {
+//					minDistance = dist;
+//					target = tempTarget;
+//				}
+//			}
+//		}
 	}
 	//End of findTarget
 
@@ -204,12 +210,12 @@ public class ClashBattleUnit : MonoBehaviour
 		float closestDistance = Mathf.Infinity;
 		
 		foreach (ClashBattleUnit searchTarget in targetList) {
-			if (searchTarget.type == "Obstacle") {
+//			if (searchTarget.species.type == ClashSpecies.SpeciesType.PLANT) {
 				pathDistance = Vector3.Distance(transform.position, searchTarget.transform.position);
-			} else {
-				agent.CalculatePath (searchTarget.transform.position, path);
-				pathDistance = calculatePathDistance (path);
-			}
+//			} else {
+//				agent.CalculatePath (searchTarget.transform.position, path);
+//				pathDistance = calculatePathDistance (path);
+//			}
 			if (pathDistance < closestDistance) {
 				closestDistance = pathDistance;
 				tempTarget = searchTarget;
@@ -262,11 +268,12 @@ public class ClashBattleUnit : MonoBehaviour
         //Disable all functions here
         if (anim != null)
             anim.SetTrigger ("Dead");
+		if (agent)
 			agent.enabled = false;
 		if (this.gameObject.tag == "Ally")
 			controller.allySpecies[species.name] -= 1;
 			//controller.ActiveSpecies ();
-		if (this.gameObject.tag == "Enemy")
+		if (this.gameObject.tag == "Enemy" && species.type != ClashSpecies.SpeciesType.PLANT)
 			controller.enemySpecies[species.name] -= 1;
 
         target = null;

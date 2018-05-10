@@ -10,7 +10,6 @@ public class Obstacle : ClashBattleUnit {
 
 	// Use this for initialization
 	void Start () {
-		currentHealth = species.hp;
 	}
 	
 	// Update is called once per frame
