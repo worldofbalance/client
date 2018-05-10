@@ -101,7 +101,7 @@ public class ClashDefenseShop : MonoBehaviour
                 });
             }); 
 			item.foodWebButton.onClick.AddListener (() => {
-				Debug.Log("yayayayayayay");
+				showFoodWeb(species.name);
 			});
 
             switch (species.type) {
@@ -256,4 +256,16 @@ public class ClashDefenseShop : MonoBehaviour
         errorMessage.text = "";
         errorCanvas.SetActive (false);
     }
+
+	private void showFoodWeb(string name) {
+		Database foodweb = null;
+		ConvergeManager convergeManager = new ConvergeManager ();
+		if (foodweb == null) {
+			foodweb = Database.NewDatabase (GameObject.Find ("Global Object"), Constants.MODE_SHOP, convergeManager);
+		} else {
+			foodweb.manager = convergeManager;
+		}
+		foodweb.SetActive (true, name);
+			
+	}
 }
