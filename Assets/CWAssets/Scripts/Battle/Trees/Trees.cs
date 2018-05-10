@@ -85,6 +85,9 @@ public class Trees : MonoBehaviour {
     //use this version of init to initialize player 2, so that we dont add redundant listeners on certain buttons(ie. surrender) -Jeremy
     public void init2(BattlePlayer player)
     {
+        tree1Texture = (Texture2D) Resources.Load ("Images/Battle/tree1", typeof(Texture2D));
+        tree2Texture = (Texture2D) Resources.Load ("Images/Battle/tree2", typeof(Texture2D));
+        tree3Texture = (Texture2D) Resources.Load ("Images/Battle/tree3", typeof(Texture2D));
         this.player = player;
         maxHP = hp = 30;
 
