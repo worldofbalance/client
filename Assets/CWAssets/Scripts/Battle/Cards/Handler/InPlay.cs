@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 using System.Linq;
 
 namespace CW
@@ -55,42 +54,36 @@ namespace CW
                         {
                             Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                             currentPlayer.applyFoodBuff(currentPlayer.targetCard, 3, 3);
-                            foodactive = true;
                         //Decaying Materials < Tree Mouse
                         }
                         else if (currentPlayer.clickedCard.cardID == 89 && currentPlayer.targetCard.cardID == 31)
                         {
                             Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                             currentPlayer.applyFoodBuff(currentPlayer.targetCard, 3, 3);
-                            foodactive = true;
                         //Decaying Materials < Cockroach
                         }
                         else if (currentPlayer.clickedCard.cardID == 89 && currentPlayer.targetCard.cardID == 19)
                         {
                             Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                             currentPlayer.applyFoodBuff(currentPlayer.targetCard, 3, 3);
-                            foodactive = true;
                         //Grass and Herbs < Tree Mouse
                         }
                         else if (currentPlayer.clickedCard.cardID == 96 && currentPlayer.targetCard.cardID == 31)
                         {
                             Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                             currentPlayer.applyFoodBuff(currentPlayer.targetCard, 3, 3);
-                            foodactive = true;
                         //Grass and Herbs < Buffalo
                         }
                         else if (currentPlayer.clickedCard.cardID == 96 && currentPlayer.targetCard.cardID == 7)
                         {
                             Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                             currentPlayer.applyFoodBuff(currentPlayer.targetCard, 3, 3);
-                            foodactive = true;
                         //Normal Food Apply
                         }
                         else
                         {
                             Debug.Log("Normal Food Apply");
                             currentPlayer.applyFoodBuff(currentPlayer.targetCard, 1, 1);
-                            foodactive = false;
                         }
 
                         //currentPlayer.clickedCard.applyFood(currentPlayer.targetCard, 1, 1);

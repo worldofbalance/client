@@ -23,7 +23,7 @@ namespace CW
         public string playerName;
         public bool handCentered = false;
         public bool playerFrozen=false;
-
+        public bool foodwebactive = false;
 
         public ProtocolManager getProtocolManager ()
         {
@@ -353,7 +353,6 @@ namespace CW
         }
         
         public void applyFoodBuff(AbstractCard target, int deltaAttack, int deltaHealth){
-            
             target.applyFood (target, deltaAttack, deltaHealth);
         }
         

@@ -17,13 +17,13 @@ namespace CW{
 		
 		override public void execute(){
 			readData ();
-            
 
-			GameObject obj = (GameObject)GameManager.player2.cardsInPlay[attackersPosition];
+            GameObject obj = (GameObject)GameManager.player2.cardsInPlay[attackersPosition];
+
 
             //GameObject obj = (GameObject)GameManager.player2.cardsInPlay[attackedPosition];
             AbstractCard target = obj.GetComponent<AbstractCard> ();
-            
+
 
             //When Player2(Client 2) used food card, this will apply to Player 1 (Client 1) but not Client 2
             //GameManager.player2.applyFoodBuff(target, 3, 3);
