@@ -41,6 +41,8 @@ public class ClashBattleController : MonoBehaviour
 
 	//tile building
 	//cube
+
+	public float tileSize = 5.0f;
 	public Transform tileTrans;
 	public MeshRenderer tileRend;
 	//tile material
@@ -376,7 +378,6 @@ public class ClashBattleController : MonoBehaviour
 
 		float x = position.x;
 		float z = position.z;
-		float tileSize = 5.0f;
 		//x = Mathf.Floor (x);
 		//z = Mathf.Floor (z);
 		x /= tileSize;

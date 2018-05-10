@@ -7,6 +7,7 @@ using System.Linq;
 
 public abstract class COSAbstractInputController:ScriptableObject
 {
+	private float tileSize = 0.5f;
     protected COSTouchState eTouchRes;
     protected static int walkableAreaMask;
 
@@ -36,6 +37,7 @@ public abstract class COSAbstractInputController:ScriptableObject
            // Debug.Log("mask is" + placement.mask);
             var allyResource = Resources.Load<GameObject>("Prefabs/ClashOfSpecies/Units/" + selected.name);
             var allyObject = Instantiate(allyResource, position, Quaternion.identity) as GameObject;
+
 		if (selected.name == "Rock_Wall") {
 			allyObject.tag = "Rock_Wall";
 		}

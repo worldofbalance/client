@@ -60,7 +60,8 @@ public class ClashDefenseSetup : MonoBehaviour
     {
 		//get map size for finding boundries
 		mapSize = tileSize * 45; //45 is the amount of tiles used in game 
-        try
+        //No need to instantiate terrain
+		/*try
         {
             var terrainObject = Resources.Load<GameObject>("Prefabs/ClashOfSpecies/Terrains/" + manager.pendingDefenseConfig.terrain);
             terrain = (Instantiate(terrainObject, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<Terrain>();
@@ -71,7 +72,11 @@ public class ClashDefenseSetup : MonoBehaviour
         }
         terrain.transform.position = Vector3.zero;
         terrain.transform.localScale = Vector3.one;
-
+		*/
+		terrain = Terrain.activeTerrain;
+		terrain.transform.position = Vector3.zero;
+		terrain.transform.localScale = Vector3.one;
+	
 		ClashSpecies currentSpecies;
 		GameObject item;
 		ClashUnitListItem itemReference;
@@ -114,45 +119,6 @@ public class ClashDefenseSetup : MonoBehaviour
             item.transform.localScale = Vector3.one;
             itemReference.amountLabel.text = remaining[currentSpecies.id].ToString();
         }
-		//add bush walls and rock walls 
-		item = Instantiate(defenseItemPrefab) as GameObject;
-		remaining.Add(5, 25);
-		itemReference = item.GetComponent<ClashUnitListItem>();
-
-		Texture2D text2D = Resources.Load<Texture2D>("Images/Rock_Wall");
-		itemReference.toggle.GetComponent<Image>().sprite = Sprite.Create(text2D, new Rect(0, 0, text2D.width, text2D.height), new Vector2(0.5f, 0.5f));
-		selected = null;
-		itemReference.toggle.GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-		itemReference.toggle.group = toggleGroup;
-		//set unitList to parent of item
-		//set transform and scale
-
-		item.transform.SetParent(unitList.transform);
-		item.transform.position = new Vector3(item.transform.position.x, item.transform.position.y, 0.0f);
-		item.transform.localScale = Vector3.one;
-		itemReference.amountLabel.text = remaining[5].ToString();
-
-		//BUSH
-		/*item = Instantiate(defenseItemPrefab) as GameObject;
-		remaining.Add("RockWall", 25);
-		itemReference = item.GetComponent<ClashUnitListItem>();
-
-		Texture2D text2D = Resources.Load<Texture2D>("Images/Rock_Wall");
-		itemReference.toggle.GetComponent<Image>().sprite = Sprite.Create(text2D, new Rect(0, 0, text2D.width, text2D.height), new Vector2(0.5f, 0.5f));
-		selected = null;
-		itemReference.toggle.GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-		itemReference.toggle.group = toggleGroup;
-		//set unitList to parent of item
-		//set transform and scale
-
-		item.transform.SetParent(unitList.transform);
-		item.transform.position = new Vector3(item.transform.position.x, item.transform.position.y, 0.0f);
-		item.transform.localScale = Vector3.one;
-		itemReference.amountLabel.text = remaining["RockWall"].ToString();*/
-
-		//if running on mobile use  runt COSMobileInputControler
-		// else use COSDesktopController
-		//Both of which are from COSAbstractInputController
 
         if (manager.isRunningOnMobile)
             cosInController = ScriptableObject.CreateInstance<COSMobileInputControler>();
@@ -219,7 +185,7 @@ public class ClashDefenseSetup : MonoBehaviour
 
 		float x = position.x;
 		float z = position.z;
-		float tileSize = 5.0f;
+		//float tileSize = 5.0f;
 		//x = Mathf.Floor (x);
 		//z = Mathf.Floor (z);
 		x /= tileSize;
