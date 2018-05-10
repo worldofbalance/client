@@ -100,6 +100,9 @@ public class ClashDefenseShop : MonoBehaviour
                     }
                 });
             }); 
+			item.foodWebButton.onClick.AddListener (() => {
+				Debug.Log("yayayayayayay");
+			});
 
             switch (species.type) {
             case SpeciesType.CARNIVORE:
