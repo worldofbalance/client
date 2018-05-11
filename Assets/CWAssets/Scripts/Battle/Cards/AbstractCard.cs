@@ -25,7 +25,7 @@ namespace CW
 		//VELOCITY
 		private Vector3 targetPosition, startPosition;
 		private float velocity, terminalVelocity, angle, distance;
-		private float delayTimer, DELAY_CONSTANT = 1.5f;
+		private float delayTimer, DELAY_CONSTANT = 3.5f;
         //Enum for Animal Type
         private ParticleSystem ground;
         private ParticleSystem dead;
@@ -728,7 +728,7 @@ namespace CW
         public void cardremove()
         {
             delayTimer += Time.deltaTime;
-            if (delayTimer > 3.0f)
+            if (delayTimer > DELAY_CONSTANT)
             {
                 handler = new RemoveFromPlay(this, player);
                 handler.affect();

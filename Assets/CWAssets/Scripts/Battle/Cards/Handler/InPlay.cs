@@ -121,6 +121,7 @@ namespace CW
                     //Grass and Herbs (96)
                     */
 
+                    
                     //Predator > Prey
                     //Lion > Bufflao
                     if(currentPlayer.clickedCard.cardID == 86 && currentPlayer.targetCard.cardID == 7)
@@ -295,7 +296,7 @@ namespace CW
                             + (currentPlayer.targetCard.hp - currentPlayer.clickedCard.dmg));
                         Debug.Log("New Predator (" + currentPlayer.targetCard.name + ") dmg : " + currentPlayer.targetCard.dmg);
                     }
-
+                    
 
                     /*
                     int[] ecoID1 = { 86, 7, 83, 31, 19 };
