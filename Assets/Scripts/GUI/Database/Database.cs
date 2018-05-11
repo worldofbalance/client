@@ -258,7 +258,8 @@ public class Database : MonoBehaviour
 
 				if (GUI.Button (btnRect, "Details") || showDetails.Equals (card.name)) {
 					if (!FindObjectOfType<View> ()) {
-						View view = View.NewView (gameObject, mode, manager);
+
+                        View view = View.NewView (gameObject, mode, manager);
 
 						view.SetCard (new Card (card.name, card.image, card.species, new Rect (0, 0, 160, 200), card.color));
 						showDetails = "";

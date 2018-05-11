@@ -25,7 +25,7 @@ namespace CW
 		//VELOCITY
 		private Vector3 targetPosition, startPosition;
 		private float velocity, terminalVelocity, angle, distance;
-		private float delayTimer, DELAY_CONSTANT = 1.5f;
+		private float delayTimer, DELAY_CONSTANT = 3.5f;
         //Enum for Animal Type
         private ParticleSystem ground;
         private ParticleSystem dead;
@@ -58,8 +58,15 @@ namespace CW
         //Die Effects
         public bool deffect = false;
 
-		//Initialization for a card and sets it's position to (1000, 1000, 1000)
-		public void init(BattlePlayer player, int cardID, string diet, int level, int attack, int health, string species_name, string type, string description)
+
+        //Prey Predator Button
+        Button pbtn;
+
+        //x button
+        Button xbtn;
+
+        //Initialization for a card and sets it's position to (1000, 1000, 1000)
+        public void init(BattlePlayer player, int cardID, string diet, int level, int attack, int health, string species_name, string type, string description)
         {
             this.player = player;
             this.cardID = cardID;
@@ -145,10 +152,19 @@ namespace CW
 
             //by Pedro
             audioSource = gameObject.AddComponent<AudioSource> ();
-		}
-	
-		//Returns the enum for the animal's diet. Herbivore, Omnivore, Carnivore
-		DIET getDietType (string diet)
+
+            //PreyPreadatorButton
+            pbtn = transform.Find("Canvas/Pop/pbutton").GetComponent<Button>();
+            pbtn.onClick.AddListener(pppout);
+
+            //closebutton
+            xbtn = transform.Find("Canvas/Pop/xbutton").GetComponent<Button>();
+            xbtn.onClick.AddListener(closebutton);
+
+        }
+
+        //Returns the enum for the animal's diet. Herbivore, Omnivore, Carnivore
+        DIET getDietType (string diet)
 		{
 			if (diet == "o") {
                 //added
@@ -220,6 +236,7 @@ namespace CW
                     else
                     {
                         //DebugConsole.Log("handler is null");
+                        _mouseOver = false;
                     }
                 }
 
@@ -231,7 +248,10 @@ namespace CW
                         handler.clicked();
                     }
                 }
+
                 
+                
+
 
                 //if right-click is held down
                 /*if (Input.GetMouseButton(1))
@@ -260,6 +280,9 @@ namespace CW
                     this.transform.position = newPosition;
                 }*/
             
+            } else
+            {
+                _mouseOver = false;
             }
         }
 
@@ -275,17 +298,26 @@ namespace CW
 			zoomed = false;
 			clicked = false;
             //if the mouse leave the card, set the _mouseOver false
-            _mouseOver = false;
+            //_mouseOver = false;
 		}
 
         //when mouse hover on card
         void OnMouseOver()
-        {    
+        {
             //AND when mouse right click the card, it would set the _mouseOver true
             if (Input.GetMouseButtonDown(1))
             {
-                _mouseOver = true;
+                _mouseOver = !_mouseOver;
+
             }
+            
+            if (Input.GetMouseButtonDown(0))
+            {
+                _mouseOver = false;
+
+            }
+            
+
         }
 
         
@@ -294,8 +326,11 @@ namespace CW
             //if _mouseOver true, then display the description panel
             if (_mouseOver)
             {
-                transform.Find("Hello").GetComponent<TextMesh>().text = "-^-";
-                transform.Find("Canvas/Pop").gameObject.SetActive(true);
+                transform.Find("opening").GetComponent<TextMesh>().text = "Opening";
+                if (type != "weather")
+                {
+                    transform.Find("Canvas/Pop").gameObject.SetActive(true);
+                }
                 //transform.Find("Pop/Image").GetComponent<Image>().sprite = sImage;
                 //transform.Find("Canvas/Pop/Sname").GetComponent<TextMesh>().text = TextWrap(this.name, 16);
                 //transform.Find("Canvas/Pop/Stype").GetComponent<TextMesh>().text = this.type;
@@ -311,6 +346,8 @@ namespace CW
                 child = transform.Find("Canvas/Pop/Stype");
                 t = child.GetComponent<Text>();
                 t.text = "Type: " + TextWrap(this.type, 70);
+
+                //GUI.Button(new Rect(8, 0, 70, 30), "Details");
 
                 try
                 {
@@ -350,7 +387,7 @@ namespace CW
             //if _mouseOver false, then turn off the description
             else
             {
-                transform.Find("Hello").GetComponent<TextMesh>().text = "---";
+                transform.Find("opening").GetComponent<TextMesh>().text = "---";
                 transform.Find("Canvas/Pop").gameObject.SetActive(false);
                
 
@@ -691,7 +728,7 @@ namespace CW
         public void cardremove()
         {
             delayTimer += Time.deltaTime;
-            if (delayTimer > 3.0f)
+            if (delayTimer > DELAY_CONSTANT)
             {
                 handler = new RemoveFromPlay(this, player);
                 handler.affect();
@@ -700,6 +737,38 @@ namespace CW
             }
             //Debug.Log (Time.deltaTime);
         }
+
+        void pppout()
+        {
+
+            Database foodWeb = null;
+            ConvergeManager manager = new ConvergeManager();
+            
+
+            if (foodWeb == null)
+            {
+                foodWeb = Database.NewDatabase(
+                    GameObject.Find("Global Object"),
+                    Constants.MODE_SHOP,
+                    manager
+                );
+            }
+            else
+            {
+                foodWeb.manager = manager;
+            }
+
+            foodWeb.SetActive(true, this.name);
+
+        }
+
+        //close description window
+        void closebutton()
+        {
+            //xbutton
+            _mouseOver = false;
+        }
+
 
         //For wrapping long text
         public static string TextWrap (string originaltext, int chars_in_line)

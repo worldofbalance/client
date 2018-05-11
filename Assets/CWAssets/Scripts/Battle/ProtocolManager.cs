@@ -203,10 +203,10 @@ public class ProtocolManager : MonoBehaviour{
 	}
 
 
-	public void sendFoodBuff(int playerId, int targetPosition){
+	public void sendFoodBuff(int playerId, int cardId, int targetPosition){
             
 			CWGame.networkManager.Send (
-                ApplyFoodBuffProtocol.Prepare(playerId, targetPosition),
+                ApplyFoodBuffProtocol.Prepare(playerId, cardId, targetPosition),
 				ProcessFoodBuff);
 		}
 
