@@ -50,19 +50,19 @@ namespace CW
                         */
 
                         //Decaying Materials < Bush Pig
-                        if (currentPlayer.clickedCard.cardID == 89 && currentPlayer.targetCard.cardID == 83)
+                        if (currentPlayer.clickedCard.cardID == 95 && currentPlayer.targetCard.cardID == 83)
                         {
                             Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                             currentPlayer.applyFoodBuff(currentPlayer.targetCard, 3, 3);
                         //Decaying Materials < Tree Mouse
                         }
-                        else if (currentPlayer.clickedCard.cardID == 89 && currentPlayer.targetCard.cardID == 31)
+                        else if (currentPlayer.clickedCard.cardID == 95 && currentPlayer.targetCard.cardID == 31)
                         {
                             Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                             currentPlayer.applyFoodBuff(currentPlayer.targetCard, 3, 3);
                         //Decaying Materials < Cockroach
                         }
-                        else if (currentPlayer.clickedCard.cardID == 89 && currentPlayer.targetCard.cardID == 19)
+                        else if (currentPlayer.clickedCard.cardID == 95 && currentPlayer.targetCard.cardID == 19)
                         {
                             Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                             currentPlayer.applyFoodBuff(currentPlayer.targetCard, 3, 3);

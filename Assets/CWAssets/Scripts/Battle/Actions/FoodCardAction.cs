@@ -45,19 +45,19 @@ namespace CW{
             */
 
             //Decaying Materials < Bush Pig
-            if (food == 89 && species == 83)
+            if (food == 95 && species == 83)
             {
                 Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                 GameManager.player2.applyFoodBuff(target, 3, 3);
                 //Decaying Materials < Tree Mouse
             }
-            else if (food == 89 && species == 31)
+            else if (food == 95 && species == 31)
             {
                 Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                 GameManager.player2.applyFoodBuff(target, 3, 3);
                 //Decaying Materials < Cockroach
             }
-            else if (food == 89 && species == 19)
+            else if (food == 95 && species == 19)
             {
                 Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                 GameManager.player2.applyFoodBuff(target, 3, 3);
