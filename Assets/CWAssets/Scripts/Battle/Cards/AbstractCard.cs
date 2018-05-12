@@ -119,10 +119,37 @@ namespace CW
             GetComponent<Renderer>().material.mainTexture = cardTexture;
 			transform.Find ("CardArt").GetComponent<MeshRenderer> ().material.mainTexture = speciesTexture;
 
-            Transform child = transform.Find("Canvas/Pop/Image");
+            Transform child = transform.Find("Canvas/Pop/SImage/Image");
             Image i = child.GetComponent<Image>();
             Sprite s = Sprite.Create(speciesTexture, new Rect(0, 0, speciesTexture.width, speciesTexture.height), Vector2.zero);
             i.sprite = s;
+
+            Texture2D TypeTexture;
+            if (diet == "o")
+            {
+                TypeTexture = (Texture2D)Resources.Load("Images/Battle/omnivore", typeof(Texture2D));
+            } else if (diet == "c")
+            {
+                TypeTexture = (Texture2D)Resources.Load("Images/Battle/carnivore", typeof(Texture2D));
+            }
+            else if (diet == "h")
+            {
+                TypeTexture = (Texture2D)Resources.Load("Images/Battle/herbivore", typeof(Texture2D));
+            }
+            else if (diet == "f")
+            {
+                TypeTexture = (Texture2D)Resources.Load("Images/Battle/plant", typeof(Texture2D));
+            } else
+            {
+                TypeTexture = (Texture2D)Resources.Load("Images/Battle/plant", typeof(Texture2D));
+            }
+
+            Transform child1 = transform.Find("Canvas/Pop/SImageType");
+            
+            Image j = child1.GetComponent<Image>();
+            Sprite r = Sprite.Create(TypeTexture, new Rect(0, 0, TypeTexture.width, TypeTexture.height), Vector2.zero);
+            j.sprite = r;
+            
 
             //Changing card text 
             //		Color gold = new Color (209f, 234f, 50f, 255f);
@@ -335,17 +362,17 @@ namespace CW
                 //transform.Find("Canvas/Pop/Sname").GetComponent<TextMesh>().text = TextWrap(this.name, 16);
                 //transform.Find("Canvas/Pop/Stype").GetComponent<TextMesh>().text = this.type;
                 //transform.Find("Canvas/Pop/Sdescription").GetComponent<TextMesh>().text = TextWrap(this.description, 16);
-                Transform child = transform.Find("Canvas/Pop/Sname");
+                Transform child = transform.Find("Canvas/Pop/SImageName/Sname");
                 Text t = child.GetComponent<Text>();
-                t.text = "Name: " + TextWrap(this.name, 70);
+                t.text = this.name;
 
-                child = transform.Find("Canvas/Pop/Sdescription");
+                child = transform.Find("Canvas/Pop/SImageDescription/Sdescription");
                 t = child.GetComponent<Text>();
-                t.text = "Description:" + this.description;
+                t.text = "What is " + this.name + " ? "  + this.description;
 
                 child = transform.Find("Canvas/Pop/Stype");
                 t = child.GetComponent<Text>();
-                t.text = "Type: " + TextWrap(this.type, 70);
+                t.text = TextWrap(this.type, 70);
 
                 //GUI.Button(new Rect(8, 0, 70, 30), "Details");
 
