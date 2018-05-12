@@ -196,8 +196,17 @@ public class View : MonoBehaviour {
 
 			cardList[i].Translate(cardList[i].x, y, 1.2f);
 		}
-
-		List<Card> tempList = new List<Card>();
+        /*
+        //2018 Spring semester WoB Ecosystem
+        //Lion (86) > Bufflao, Bush Pig
+        //Buffalo (7) > Grass and Herbs
+        //Bush Pig (83) > Decayling Material, Tree Mouse
+        //Tree Mouse (31) > Grass and Herbs, Decaying Materials, Cockroach
+        //Cockroach (19) > Decaying Materials
+        //Decaying Materials (89) 
+        //Grass and Herbs (96 or 1005)
+        */
+        List<Card> tempList = new List<Card>();
 		GameState gs = GameObject.Find ("Global Object").GetComponent<GameState> ();
         int [] foodweb = { 86, 7, 83, 31, 19, 89, 1005 };
 
