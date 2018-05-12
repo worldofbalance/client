@@ -369,47 +369,7 @@ namespace CW
                 child = transform.Find("Canvas/Pop/SImageDescription/Sdescription");
                 t = child.GetComponent<Text>();
                 t.text = "What is " + this.name + " ? "  + this.description;
-
-                child = transform.Find("Canvas/Pop/Stype");
-                t = child.GetComponent<Text>();
-                t.text = TextWrap(this.type, 70);
-
-                //GUI.Button(new Rect(8, 0, 70, 30), "Details");
-
-                try
-                {
-                    SpeciesData speciesData = SpeciesTable.speciesList[this.cardID];
-                    //Debug.Log("SpeciesId(" + temp + ")" + " : " + speciesData.name);
-                    List<string> predatorList = new List<string>(speciesData.predatorList.Values);
-                    predatorList.Sort();
-                    string predatorText = predatorList.Count > 0 ? string.Join(", ", predatorList.ToArray()) : "None";
-                    //Debug.Log("Predator: " + predatorText);
-
-                    List<string> preyList = new List<string>(speciesData.preyList.Values);
-                    preyList.Sort();
-                    string preyText = preyList.Count > 0 ? string.Join(", ", preyList.ToArray()) : "None";
-                    //Debug.Log("Prey: " + preyText);
-
-
-                    child = transform.Find("Canvas/Pop/Spredator");
-                    t = child.GetComponent<Text>();
-                    t.text = "Predator:" + predatorText;
-
-                    child = transform.Find("Canvas/Pop/Sprey");
-                    t = child.GetComponent<Text>();
-                    t.text = "Prey: " + preyText;
-
-                }
-                // Most specific:
-                catch (ArgumentNullException e)
-                {
-                    Console.WriteLine("{0} First exception caught.", e);
-                }
-                // Least specific:
-                catch (Exception e)
-                {
-                    Console.WriteLine("{0} Second exception caught.", e);
-                }
+               
             }
             //if _mouseOver false, then turn off the description
             else
@@ -776,7 +736,7 @@ namespace CW
             {
                 foodWeb = Database.NewDatabase(
                     GameObject.Find("Global Object"),
-                    Constants.MODE_SHOP,
+                    Constants.MODE_FOODWEB,
                     manager
                 );
             }

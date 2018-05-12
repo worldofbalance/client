@@ -1,5 +1,7 @@
 using UnityEngine;
-
+using System.Text;
+using System.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -197,6 +199,7 @@ public class View : MonoBehaviour {
 
 		List<Card> tempList = new List<Card>();
 		GameState gs = GameObject.Find ("Global Object").GetComponent<GameState> ();
+        int [] foodweb = { 86, 7, 83, 31, 19, 89, 1005 };
 
 		foreach (int species_id in card.species.predatorList.Keys) {
 			SpeciesData species = SpeciesTable.speciesList[species_id];
@@ -204,8 +207,13 @@ public class View : MonoBehaviour {
 			if (mode == Constants.MODE_CONVERGE_GAME && !gs.speciesList.ContainsKey(species_id)) {
 				continue;
 			}
+            //for foodweb, ignore predators not currently in mini-game ecosystem
+            if (mode == Constants.MODE_FOODWEB && !foodweb.Contains(species_id))
+            {
+                continue;
+            }
 
-			string name = manager.MatchSeriesLabel (species.name);
+            string name = manager.MatchSeriesLabel (species.name);
 			Texture2D image = Resources.Load<Texture2D>(Constants.IMAGE_RESOURCES_PATH + species.name);
 			Card temp = new Card(
 				species.name, 
@@ -229,8 +237,13 @@ public class View : MonoBehaviour {
 			if (mode == Constants.MODE_CONVERGE_GAME && !gs.speciesList.ContainsKey(species_id)) {
 				continue;
 			}
+            //for foodweb, ignore predators not currently in mini-game ecosystem
+            if (mode == Constants.MODE_FOODWEB && !foodweb.Contains(species_id))
+            {
+                continue;
+            }
 
-			string name = manager.MatchSeriesLabel (species.name);
+            string name = manager.MatchSeriesLabel (species.name);
 			Texture2D image = Resources.Load<Texture2D>(Constants.IMAGE_RESOURCES_PATH + species.name);
 			Card temp = new Card(
 				species.name, 
