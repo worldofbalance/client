@@ -150,6 +150,10 @@ namespace CW
                         //stop rain
                         weathereffect = GameObject.Find("WeatherEffect").transform.Find("rain");
                         weathereffect.gameObject.SetActive(false);
+                        
+                        //Start Fire
+                        weathereffect = GameObject.Find("WeatherEffect").transform.Find("Fire");
+                        weathereffect.gameObject.SetActive(true);
 
                         showWeatherEffect = CW.Constants.ANIMATE_RATE;
                     }
@@ -183,6 +187,10 @@ namespace CW
                     weathereffect = GameObject.Find("WeatherEffect").transform.Find("blizzard");
                     weathereffect.gameObject.SetActive(true);
 
+                    //Stop Fire
+                    weathereffect = GameObject.Find("WeatherEffect").transform.Find("Fire");
+                    weathereffect.gameObject.SetActive(false);
+
                     showWeatherEffect=CW.Constants.ANIMATE_RATE;
                 }
 
@@ -211,6 +219,10 @@ namespace CW
                     //start rain
                     weathereffect = GameObject.Find("WeatherEffect").transform.Find("rain");
                     weathereffect.gameObject.SetActive(true);
+                    
+                    //Stop Fire
+                    weathereffect = GameObject.Find("WeatherEffect").transform.Find("Fire");
+                    weathereffect.gameObject.SetActive(false);
 
                     showWeatherEffect = CW.Constants.ANIMATE_RATE;
                     givePlayerFoodCard (2);
