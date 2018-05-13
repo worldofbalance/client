@@ -30,6 +30,7 @@ public class Constants {
 	public static readonly int MODE_ECOSYSTEM = 0;
 	public static readonly int MODE_SHOP = 1;
 	public static readonly int MODE_CONVERGE_GAME = 2;
+    public static readonly int MODE_FOODWEB = 4;
 
 	//author: Lobby Team
 	public static readonly float BATTLE_REQUEST_RATE = 1f;

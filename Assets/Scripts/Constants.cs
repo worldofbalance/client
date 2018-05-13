@@ -40,6 +40,7 @@ public class Constants
 	public const int MODE_SHOP = 1;
 	public const int MODE_CONVERGE_GAME = 2;
 	public const int MODE_OWNED = 3;
+    public const int MODE_FOODWEB = 4;
 
     //author: Lobby Team
     public static readonly float BATTLE_REQUEST_RATE = 1f;

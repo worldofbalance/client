@@ -25,7 +25,7 @@ namespace CW
 		//VELOCITY
 		private Vector3 targetPosition, startPosition;
 		private float velocity, terminalVelocity, angle, distance;
-		private float delayTimer, DELAY_CONSTANT = 3.5f;
+		private float delayTimer, DELAY_CONSTANT = 2.5f;
         //Enum for Animal Type
         private ParticleSystem ground;
         private ParticleSystem dead;
@@ -87,6 +87,21 @@ namespace CW
             //this.type = type; //hide temporarily
             this.description = description; //hide temporarily
 
+            /* Founded Bug:
+             * 1. (Sometimes) When Player A species W attacked Player B species X, 
+             * and Species X is dead (take time to disappear), 
+             * and Player A species Y attacked Player B species Z, there a chance that species Y attacked species W (already dead) instead of species Z 
+             * and turn out species Z didn't lose any hp and make both game client species status is different.
+             * 2. (Sometimes) When Player clicked the a food card, then clicked hand card (cancel the food card action), 
+             * there is a chance that create a bug that player can no longer apply that food card to species on the field 
+             * to fix it, you have to click the field species to attack, then you may able to click that food card again
+             * 3. (Always) The rule of the game is the game will set both player win when both player didn't win or lose in some turns (maybe 10?)
+             * After those turns and player A playing turn, the game will be terminate and set Player A win even Player A didn't beat Player B
+             * Player A will receive that victory screen and return to lobby
+             * Player B will idle
+             * to fix it, when Player A received that victory screen, he has to click end the turn to let Player B know Player A won, then Player B will receive the victory screen
+             * /
+
             Texture2D cardTexture;
             Texture2D speciesTexture;
             //o-omnivore, c-carnivore, h-herbivore, f-food, w-weather
@@ -119,10 +134,37 @@ namespace CW
             GetComponent<Renderer>().material.mainTexture = cardTexture;
 			transform.Find ("CardArt").GetComponent<MeshRenderer> ().material.mainTexture = speciesTexture;
 
-            Transform child = transform.Find("Canvas/Pop/Image");
+            Transform child = transform.Find("Canvas/Pop/SImage/Image");
             Image i = child.GetComponent<Image>();
             Sprite s = Sprite.Create(speciesTexture, new Rect(0, 0, speciesTexture.width, speciesTexture.height), Vector2.zero);
             i.sprite = s;
+
+            Texture2D TypeTexture;
+            if (diet == "o")
+            {
+                TypeTexture = (Texture2D)Resources.Load("Images/Battle/omnivore", typeof(Texture2D));
+            } else if (diet == "c")
+            {
+                TypeTexture = (Texture2D)Resources.Load("Images/Battle/carnivore", typeof(Texture2D));
+            }
+            else if (diet == "h")
+            {
+                TypeTexture = (Texture2D)Resources.Load("Images/Battle/herbivore", typeof(Texture2D));
+            }
+            else if (diet == "f")
+            {
+                TypeTexture = (Texture2D)Resources.Load("Images/Battle/plant", typeof(Texture2D));
+            } else
+            {
+                TypeTexture = (Texture2D)Resources.Load("Images/Battle/plant", typeof(Texture2D));
+            }
+
+            Transform child1 = transform.Find("Canvas/Pop/SImageType");
+            
+            Image j = child1.GetComponent<Image>();
+            Sprite r = Sprite.Create(TypeTexture, new Rect(0, 0, TypeTexture.width, TypeTexture.height), Vector2.zero);
+            j.sprite = r;
+            
 
             //Changing card text 
             //		Color gold = new Color (209f, 234f, 50f, 255f);
@@ -335,54 +377,14 @@ namespace CW
                 //transform.Find("Canvas/Pop/Sname").GetComponent<TextMesh>().text = TextWrap(this.name, 16);
                 //transform.Find("Canvas/Pop/Stype").GetComponent<TextMesh>().text = this.type;
                 //transform.Find("Canvas/Pop/Sdescription").GetComponent<TextMesh>().text = TextWrap(this.description, 16);
-                Transform child = transform.Find("Canvas/Pop/Sname");
+                Transform child = transform.Find("Canvas/Pop/SImageName/Sname");
                 Text t = child.GetComponent<Text>();
-                t.text = "Name: " + TextWrap(this.name, 70);
+                t.text = this.name;
 
-                child = transform.Find("Canvas/Pop/Sdescription");
+                child = transform.Find("Canvas/Pop/SImageDescription/Sdescription");
                 t = child.GetComponent<Text>();
-                t.text = "Description:" + this.description;
-
-                child = transform.Find("Canvas/Pop/Stype");
-                t = child.GetComponent<Text>();
-                t.text = "Type: " + TextWrap(this.type, 70);
-
-                //GUI.Button(new Rect(8, 0, 70, 30), "Details");
-
-                try
-                {
-                    SpeciesData speciesData = SpeciesTable.speciesList[this.cardID];
-                    //Debug.Log("SpeciesId(" + temp + ")" + " : " + speciesData.name);
-                    List<string> predatorList = new List<string>(speciesData.predatorList.Values);
-                    predatorList.Sort();
-                    string predatorText = predatorList.Count > 0 ? string.Join(", ", predatorList.ToArray()) : "None";
-                    //Debug.Log("Predator: " + predatorText);
-
-                    List<string> preyList = new List<string>(speciesData.preyList.Values);
-                    preyList.Sort();
-                    string preyText = preyList.Count > 0 ? string.Join(", ", preyList.ToArray()) : "None";
-                    //Debug.Log("Prey: " + preyText);
-
-
-                    child = transform.Find("Canvas/Pop/Spredator");
-                    t = child.GetComponent<Text>();
-                    t.text = "Predator:" + predatorText;
-
-                    child = transform.Find("Canvas/Pop/Sprey");
-                    t = child.GetComponent<Text>();
-                    t.text = "Prey: " + preyText;
-
-                }
-                // Most specific:
-                catch (ArgumentNullException e)
-                {
-                    Console.WriteLine("{0} First exception caught.", e);
-                }
-                // Least specific:
-                catch (Exception e)
-                {
-                    Console.WriteLine("{0} Second exception caught.", e);
-                }
+                t.text = "What is " + this.name + " ? "  + this.description;
+               
             }
             //if _mouseOver false, then turn off the description
             else
@@ -749,7 +751,7 @@ namespace CW
             {
                 foodWeb = Database.NewDatabase(
                     GameObject.Find("Global Object"),
-                    Constants.MODE_SHOP,
+                    Constants.MODE_FOODWEB,
                     manager
                 );
             }

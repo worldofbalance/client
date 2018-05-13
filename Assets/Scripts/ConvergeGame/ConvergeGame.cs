@@ -1301,7 +1301,8 @@ public class ConvergeGame : MonoBehaviour
 			foodWeb = Database.NewDatabase (
 				GameObject.Find ("Global Object"), 
 		        Constants.MODE_CONVERGE_GAME,
-				manager
+                //Constants.MODE_FOODWEB,
+                manager
 			);
 		} else {
 			foodWeb.manager = manager;
