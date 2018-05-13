@@ -96,12 +96,12 @@ public class ClashBattleController : MonoBehaviour
 					trigger.radius = Constants.UnitColliderRadius;
 					speciesObject.tag = "Enemy";
 
-//					if (species.type == ClashSpecies.SpeciesType.OMNIVORE)
-						speciesObject.AddComponent<ClashBattleUnit> ();
-//					else if (species.type == ClashSpecies.SpeciesType.CARNIVORE)
-//						speciesObject.AddComponent<Carnivore> ();
-//					else if (species.type == ClashSpecies.SpeciesType.HERBIVORE)
-//						speciesObject.AddComponent<Herbivore> ();
+					if (species.type == ClashSpecies.SpeciesType.CARNIVORE)
+						speciesObject.AddComponent<Carnivore> ();
+					else if (species.type == ClashSpecies.SpeciesType.HERBIVORE)
+						speciesObject.AddComponent<Herbivore> ();
+					else 
+						speciesObject.AddComponent<ClashBattleUnit> (); //omnivore
 //					else
 //						speciesObject.AddComponent<Obstacle> ();
 					var unit = speciesObject.GetComponent<ClashBattleUnit> ();

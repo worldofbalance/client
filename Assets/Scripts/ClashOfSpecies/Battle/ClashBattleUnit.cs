@@ -21,7 +21,7 @@ public class ClashBattleUnit : MonoBehaviour
 	public string type;
 	// The time in seconds between each attack.
     protected float timeBetweenAttacks = 1.0f;
-	protected float stoppingDistance = 1.8f;
+	protected float stoppingDistance = 5.0f;
 
 	[HideInInspector]
 	public bool isDead = false;
@@ -67,7 +67,7 @@ public class ClashBattleUnit : MonoBehaviour
 		if (controller.isStarted && !controller.finished) {
 			//Find a target
 			targetTimer += Time.deltaTime;
-			if (targetTimer >= 1.0f && !isDead) {
+			if (targetTimer >= Random.Range(2.0f, 3.5f) && !isDead) {
 				findTarget ();
 				if (target) {
 					if (!target.isDead) {
@@ -95,10 +95,7 @@ public class ClashBattleUnit : MonoBehaviour
 		float minDistance = Mathf.Infinity;
 		float dist = 0;
 		
-//		if (targetTimer > 5.0f) {
 		SortSpecies ();
-//			targetTimer = 0.0f;
-//		}
 
 		//No prioritization for any particular type, so amalgamate them in to one list
 		animalList.AddRange(carnivoreList);
@@ -106,57 +103,29 @@ public class ClashBattleUnit : MonoBehaviour
 		animalList.AddRange(herbivoreList);
 		
 		//Priority Targeting: favoritePrey > animals > obstacles
-//		Omnivore has no preference towards one species type
+		//Omnivore has no preference towards one species type
 //		if (favoritePreyList.Count > 0) {
-//			dist = findClosestTarget (favoritePreyList);
-//			if (dist <= 30.0f || gameObject.tag == "Ally") {
-//				if (dist <= 15.0f) {
-//					target = tempTarget;
-//					anim.SetTrigger ("Walking");
-//					return;
-//				}
-//			}
-//		}
-//		if (animalList.Count > 0) {
-//			dist = findClosestTarget (animalList); //sets tempTarget
-//			// This 'if' is so that defending units don't go wandering out too far
-//			if ((dist <= 30.0f || gameObject.tag == "Ally") && dist < 500.0f) {
+//			dist = findClosestTarget (favoritePreyList); //sets tempTarget
+//			if (dist <= 45.0f || (gameObject.tag == "Ally" && dist < 80.0f)) {
 //				target = tempTarget;
 //				anim.SetTrigger ("Walking");
 //				return;
 //			}
 //		}
-//		if (obstacleList.Count > 0) {
-//			target = tempTarget;
-//			anim.SetTrigger ("Walking");
-//			return;
-//		}
-
-		if (obstacleList.Count > 0) {
-			minDistance = findClosestTarget (obstacleList);
-			target = tempTarget;
-		}
 		if (animalList.Count > 0) {
-			dist = findClosestTarget (animalList);
-			// This 'if' is so that defending units don't go wandering out too far
-			if (dist <= 30.0f || gameObject.tag == "Ally") {
-				if (dist <= 30.0f || dist <= minDistance) {
-					minDistance = dist;
-					target = tempTarget;
-				}
+			dist = findClosestTarget (animalList); //sets tempTarget
+			if (dist <= 45.0f || (gameObject.tag == "Ally" && dist < 80.0f)) {
+				target = tempTarget;
+				anim.SetTrigger ("Walking");
+				return;
 			}
 		}
-		anim.SetTrigger ("Walking");
-
-//		if (favoritePreyList.Count > 0) {
-//			dist = findClosestTarget (favoritePreyList);
-//			if (dist <= 30.0f || gameObject.tag == "Ally") {
-//				if (dist <= 15.0f || dist <= minDistance) {
-//					minDistance = dist;
-//					target = tempTarget;
-//				}
-//			}
-//		}
+		if (obstacleList.Count > 0) {
+			dist = findClosestTarget (obstacleList); //sets tempTarget
+			target = tempTarget;
+			anim.SetTrigger ("Walking");
+			return;
+		}
 	}
 	//End of findTarget
 
@@ -170,7 +139,7 @@ public class ClashBattleUnit : MonoBehaviour
 		else
 			enemySpeciesArray = GameObject.FindGameObjectsWithTag ("Ally"); //"Ally" tag is attackers
 
-		favoritePreyList.Clear ();
+//		favoritePreyList.Clear ();
 		animalList.Clear();
 		omnivoreList.Clear();
 		carnivoreList.Clear();
@@ -181,8 +150,10 @@ public class ClashBattleUnit : MonoBehaviour
 		foreach (GameObject enemySpecies in enemySpeciesArray) {
 			sortTarget = enemySpecies.GetComponent<ClashBattleUnit> ();
 			if (!sortTarget.isDead) {
-//				if (sortTarget.speciesName == favoritePrey)
-//					favoritePreyList.Add (sortTarget);
+//				foreach (ClashBattleUnit prey in favoritePreyList){
+	//				if (sortTarget.speciesName == prey)
+	//					favoritePreyList.Add (sortTarget);
+//				}
 				if (sortTarget.species.type == ClashSpecies.SpeciesType.OMNIVORE)
 					omnivoreList.Add (sortTarget);
 				if (sortTarget.species.type == ClashSpecies.SpeciesType.CARNIVORE)
@@ -210,20 +181,17 @@ public class ClashBattleUnit : MonoBehaviour
 		float closestDistance = Mathf.Infinity;
 		
 		foreach (ClashBattleUnit searchTarget in targetList) {
-//			if (searchTarget.species.type == ClashSpecies.SpeciesType.PLANT) {
+			if (searchTarget.species.type == ClashSpecies.SpeciesType.PLANT) {
 				pathDistance = Vector3.Distance(transform.position, searchTarget.transform.position);
-//			} else {
-//				agent.CalculatePath (searchTarget.transform.position, path);
-//				pathDistance = calculatePathDistance (path);
-//			}
+			} else {
+				agent.CalculatePath (searchTarget.transform.position, path);
+				pathDistance = calculatePathDistance (path);
+			}
 			if (pathDistance < closestDistance) {
 				closestDistance = pathDistance;
 				tempTarget = searchTarget;
 			}
 		}
-		//debug
-//		if (gameObject.tag == "Ally") 
-//			print ("tempTarget Name: " + tempTarget.name + " | Distance: " + pathDistance);
 
 		return closestDistance;
 	}
@@ -243,6 +211,11 @@ public class ClashBattleUnit : MonoBehaviour
 					transform.LookAt (target.transform);
 					if (anim != null)
 						anim.SetTrigger ("Attacking");
+//					foreach (ClashBattleUnit prey in favoritePreyList){
+//						if (target.speciesName == prey)
+//							target.TakeDamage (damage + 100, this);
+//					}
+//					else
 					target.TakeDamage (damage, this);
 				}
 			}
@@ -272,7 +245,6 @@ public class ClashBattleUnit : MonoBehaviour
 			agent.enabled = false;
 		if (this.gameObject.tag == "Ally")
 			controller.allySpecies[species.name] -= 1;
-			//controller.ActiveSpecies ();
 		if (this.gameObject.tag == "Enemy" && species.type != ClashSpecies.SpeciesType.PLANT)
 			controller.enemySpecies[species.name] -= 1;
 

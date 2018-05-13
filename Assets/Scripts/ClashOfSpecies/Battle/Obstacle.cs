@@ -5,8 +5,8 @@ using UnityEngine.AI;
 
 public class Obstacle : ClashBattleUnit {
 
-	// Child class of ClashBattleUnit (Omnivore)
-	// Doesn't need to find targets or attack so just initializes health
+	//Child class of ClashBattleUnit (Omnivore)
+	//Doesn't need to find targets or attack
 
 	// Use this for initialization
 	void Start () {

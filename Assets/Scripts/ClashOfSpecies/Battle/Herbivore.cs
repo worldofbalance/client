@@ -15,7 +15,7 @@ public class Herbivore : ClashBattleUnit {
 
     void Start (){
 		//Set variables according to species data
-		name = species.name;
+		speciesName = species.name;
 		currentHealth += species.hp;
 		damage += species.attack;
 		timeBetweenAttacks = 100f / species.attackSpeed;
@@ -23,27 +23,33 @@ public class Herbivore : ClashBattleUnit {
 		if (agent != null) {
 			agent.speed += species.moveSpeed / 20.0f;
 			agent.stoppingDistance = stoppingDistance;
-		}			
+		}		
+
+		// Sorts all species in the scene by invading and defending species then
+		// sorts by species type in to their respective list (e.g. omnivore -> omnivoreList)
+		SortSpecies();	
     }
 
     void Update (){
-		//Find a target
-		targetTimer += Time.deltaTime;
-		if (targetTimer >= 0.25f && !isDead) {
-			findTarget();
-			if (target) {
-				if (!target.isDead) {
-					agent.SetDestination (target.transform.position);
-					targetTimer = 0f;
+		if (controller.isStarted && !controller.finished) {
+			//Find a target
+			targetTimer += Time.deltaTime;
+			if (targetTimer >= Random.Range(2.0f, 3.5f) && !isDead) {
+				findTarget ();
+				if (target) {
+					if (!target.isDead) {
+						agent.SetDestination (target.transform.position);
+						targetTimer = 0.0f;
+					}
 				}
 			}
-		}
-		//Attack if there is a target
-		if (!isDead && target) {
-			if (!target.isDead) {
-				timer += Time.deltaTime;
-				if (timer >= timeBetweenAttacks)
-					Attack ();
+			//Attack if there is a target
+			if (!isDead && target) {
+				if (!target.isDead) {
+					timer += Time.deltaTime;
+					if (timer >= timeBetweenAttacks)
+						Attack ();
+				}
 			}
 		}
     } 
@@ -62,53 +68,49 @@ public class Herbivore : ClashBattleUnit {
 		
 		animalList.AddRange(omnivoreList); //combines the omnivoreList and herbivoreList in to animalList
 		animalList.AddRange(herbivoreList);
-		// Priority Targeting: favoritePrey > very close animals > obstacles > herbivore/omnivore > carnivore
-		if (carnivoreList.Count > 0) {
-			minDistance = findClosestTarget (carnivoreList);
-			target = tempTarget;
-		}
+		// Priority Targeting: favorite plants > very close animals > obstacles > herbivore/omnivore > carnivore
+//		if (favoritePreyList.Count > 0) {
+//			dist = findClosestTarget (favoritePreyList); //sets tempTarget
+//			if (dist <= 45.0f || (gameObject.tag == "Ally" && dist < 80.0f)) {
+//				target = tempTarget;
+//				anim.SetTrigger ("Walking");
+//				return;
+//			}
+//		}
 		if (animalList.Count > 0) {
-			dist = findClosestTarget (animalList);
-			animalDist = dist;
-			// This 'if' is so that defending units don't go wandering out too far
-			if (dist <= 30.0f || gameObject.tag == "InvadingSpecies") {
-				if (dist <= 15.0f || dist <= minDistance) {
-					minDistance = dist;
-					target = tempTarget;
-				}
+			dist = findClosestTarget (animalList); //sets tempTarget
+			if (dist <= 8.0f) {
+				target = tempTarget;
+				anim.SetTrigger ("Walking");
+				return;
 			}
 		}
 		if (obstacleList.Count > 0) {
 			dist = findClosestTarget (obstacleList);
-			if (dist <= 30.0f || gameObject.tag == "InvadingSpecies") {
-				if (dist <= 15.0f || dist <= minDistance) {
-					minDistance = dist;
-					target = tempTarget;
-				}
+			if (dist < 80.0f) {
+				target = tempTarget;
+				anim.SetTrigger ("Walking");
+				return;
 			}
 		}
-		if (animalDist <= 2.5f){
-			dist = findClosestTarget(animalList);
-			target = tempTarget;
-		}
-		else if (carnivoreDist <= 2.5f){
-			dist = findClosestTarget(carnivoreList);
-			target = tempTarget;
-		}
-		if (favoritePreyList.Count > 0) {
-			dist = findClosestTarget (favoritePreyList);
-			if (dist <= 30.0f || gameObject.tag == "InvadingSpecies") {
-				if (dist <= 15.0f || dist <= minDistance) {
-					minDistance = dist;
-					target = tempTarget;
-				}
+		if (animalList.Count > 0) {
+			dist = findClosestTarget (animalList); //sets tempTarget
+			if (dist <= 45.0f || (gameObject.tag == "Ally" && dist < 80.0f)) {
+				target = tempTarget;
+				anim.SetTrigger ("Walking");
+				return;
 			}
 		}
-		//End Priority Targeting
-		
-		// Set anim to walk
-		 anim.SetTrigger ("Walking");
+		if (carnivoreList.Count > 0) {
+			dist = findClosestTarget (animalList); //sets tempTarget
+			if (dist <= 45.0f || (gameObject.tag == "Ally" && dist < 80.0f)) {
+				target = tempTarget;
+				anim.SetTrigger ("Walking");
+				return;
+			}
+		}
 	}
+	//End of findTarget
 
 	protected override void Attack () {
 		timer = 0f;
@@ -120,12 +122,20 @@ public class Herbivore : ClashBattleUnit {
 					transform.LookAt (target.transform);
 					if (anim != null)
 						anim.SetTrigger ("Attacking");
+//					foreach (ClashBattleUnit prey in favoritePreyList){
+//						if (target.speciesName == prey)
+//							target.TakeDamage (damage + 100, this);
+//					}
 					if (target.species.type == ClashSpecies.SpeciesType.PLANT)
-						target.TakeDamage (damage + 15, this);
+						target.TakeDamage (damage + 50, this);
 					else
 						target.TakeDamage (damage, this);
 				}
 			}
+			else {
+                if (anim != null)
+                    anim.SetTrigger ("Walking");
+            }
      	}
  	}
 }
