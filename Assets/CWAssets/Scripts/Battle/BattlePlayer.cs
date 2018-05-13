@@ -139,7 +139,7 @@ namespace CW
                     //by Pedro
                     if (currentPlayer && audioSource!=null) {
                         //audioSource.loop = false;
-                        audioSource.clip = Resources.Load ("Sounds/burning_fire") as AudioClip;
+                        audioSource.clip = Resources.Load ("Sounds/NewFire") as AudioClip;
                         //audioSource.PlayDelayed (1);
                         audioSource.Play ();
                         
