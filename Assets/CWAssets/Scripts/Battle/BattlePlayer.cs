@@ -551,6 +551,28 @@ namespace CW
                     + (attackedCard.hp - attackerCard.dmg));
                 Debug.Log("New Prey (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
 
+                //Lion > Lion
+            }
+            else if (attackerCard.cardID == 86 && attackedCard.cardID == 86)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " > " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg += 3;
+                attackerCard.hp += 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Predator (" + attackerCard.name + ") hp : " + "Predator hp (" + attackerCard.hp + ") - Prey dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Predator (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") hp : " + "prey hp (" + attackedCard.hp + ") - Predator dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Prey (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+
                 //Lion > Bush Pig
             }
             else if (attackerCard.cardID == 86 && attackedCard.cardID == 83)
@@ -616,6 +638,27 @@ namespace CW
                 Debug.Log("New Prey (" + attackedCard.name + ") hp : " + "prey hp (" + attackedCard.hp + ") - Predator dmg (" + attackerCard.dmg + ") = "
                     + (attackedCard.hp - attackerCard.dmg));
                 Debug.Log("New Prey (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+                //Tree Mouse > Tree Mouse
+            }
+            else if (attackerCard.cardID == 31 && attackedCard.cardID == 31)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " > " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg += 3;
+                attackerCard.hp += 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Predator (" + attackerCard.name + ") hp : " + "Predator hp (" + attackerCard.hp + ") - Prey dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Predator (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") hp : " + "prey hp (" + attackedCard.hp + ") - Predator dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Prey (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
             }
 
             //Prey < Predator
@@ -662,9 +705,53 @@ namespace CW
                     + (attackedCard.hp - attackerCard.dmg));
                 Debug.Log("New Predator (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
 
+                //Lion < Lion
+            }
+            else if (attackerCard.cardID == 86 && attackedCard.cardID == 86)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " < " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg -= 3;
+                attackerCard.hp -= 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Prey (" + attackerCard.name + ") hp : " + "prey hp (" + attackerCard.hp + ") - Predator dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Prey (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") hp : " + "Predator hp (" + attackedCard.hp + ") - Prey dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Predator (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+
                 //Tree Mouse < Bush Pig
             }
             else if (attackerCard.cardID == 31 && attackedCard.cardID == 83)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " < " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg -= 3;
+                attackerCard.hp -= 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Prey (" + attackerCard.name + ") hp : " + "prey hp (" + attackerCard.hp + ") - Predator dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Prey (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") hp : " + "Predator hp (" + attackedCard.hp + ") - Prey dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Predator (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+
+                //Tree Mouse < Tree Mouse 
+            }
+            else if (attackerCard.cardID == 31 && attackedCard.cardID == 31)
             {
                 Debug.Log("FOOD WEB SYSTEM ACTIVATED");
                 Debug.Log("Species: " + attackerCard.name + " < " + attackedCard.name);

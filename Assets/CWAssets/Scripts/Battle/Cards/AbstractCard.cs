@@ -25,7 +25,7 @@ namespace CW
 		//VELOCITY
 		private Vector3 targetPosition, startPosition;
 		private float velocity, terminalVelocity, angle, distance;
-		private float delayTimer, DELAY_CONSTANT = 3.5f;
+		private float delayTimer, DELAY_CONSTANT = 2.5f;
         //Enum for Animal Type
         private ParticleSystem ground;
         private ParticleSystem dead;
@@ -86,6 +86,21 @@ namespace CW
             naturalDmg = dmg = attack;
             //this.type = type; //hide temporarily
             this.description = description; //hide temporarily
+
+            /* Founded Bug:
+             * 1. (Sometimes) When Player A species W attacked Player B species X, 
+             * and Species X is dead (take time to disappear), 
+             * and Player A species Y attacked Player B species Z, there a chance that species Y attacked species W (already dead) instead of species Z 
+             * and turn out species Z didn't lose any hp and make both game client species status is different.
+             * 2. (Sometimes) When Player clicked the a food card, then clicked hand card (cancel the food card action), 
+             * there is a chance that create a bug that player can no longer apply that food card to species on the field 
+             * to fix it, you have to click the field species to attack, then you may able to click that food card again
+             * 3. (Always) The rule of the game is the game will set both player win when both player didn't win or lose in some turns (maybe 10?)
+             * After those turns and player A playing turn, the game will be terminate and set Player A win even Player A didn't beat Player B
+             * Player A will receive that victory screen and return to lobby
+             * Player B will idle
+             * to fix it, when Player A received that victory screen, he has to click end the turn to let Player B know Player A won, then Player B will receive the victory screen
+             * /
 
             Texture2D cardTexture;
             Texture2D speciesTexture;
