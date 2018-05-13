@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace CW
 {
@@ -199,8 +200,14 @@ namespace CW
             audioSource = gameObject.AddComponent<AudioSource>();
 
             //PreyPreadatorButton
-            pbtn = transform.Find("Canvas/Pop/pbutton").GetComponent<Button>();
-            pbtn.onClick.AddListener(pppout);
+            int[] foodweb = { 86, 7, 83, 31, 19, 95, 96 };
+                pbtn = transform.Find("Canvas/Pop/pbutton").GetComponent<Button>();
+                pbtn.onClick.AddListener(pppout);
+
+            if (!foodweb.Contains(this.cardID))
+            {
+                pbtn.gameObject.SetActive(false);
+            }
 
             //closebutton
             xbtn = transform.Find("Canvas/Pop/xbutton").GetComponent<Button>();

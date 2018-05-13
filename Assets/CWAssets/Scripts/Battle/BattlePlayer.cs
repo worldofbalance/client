@@ -524,7 +524,7 @@ namespace CW
             //Bush Pig (83) > Decayling Material, Tree Mouse
             //Tree Mouse (31) > Grass and Herbs, Decaying Materials, Cockroach
             //Cockroach (19) > Decaying Materials
-            //Decaying Materials (89) 
+            //Decaying Materials (89 or 95) 
             //Grass and Herbs (96)
             */
 
