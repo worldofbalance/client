@@ -18,10 +18,10 @@ public class ClashBattleUnit : MonoBehaviour
 	public string speciesName;
     public int currentHealth;
     public int damage = 0;
+	//not used, just for display in inspector. the type is stored in the species variable
 	public string type;
-	// The time in seconds between each attack.
     protected float timeBetweenAttacks = 1.0f;
-	protected float stoppingDistance = 5.0f;
+	protected float stoppingDistance = 5.5f;
 
 	[HideInInspector]
 	public bool isDead = false;
@@ -40,13 +40,15 @@ public class ClashBattleUnit : MonoBehaviour
 	protected List<ClashBattleUnit> animalList = new List<ClashBattleUnit>(); 
 	protected List<ClashBattleUnit> obstacleList = new List<ClashBattleUnit>();
 
-    void Awake (){
+    void Awake ()
+	{
         agent = GetComponent<NavMeshAgent> ();
         anim = GetComponent<Animator> ();
         controller = GameObject.Find ("Battle Menu").GetComponent<ClashBattleController> ();
     }
 
-    void Start (){
+    void Start ()
+	{
 		//Set variables according to species data
 		speciesName = species.name;
 		currentHealth += species.hp;
@@ -56,14 +58,11 @@ public class ClashBattleUnit : MonoBehaviour
 		if (agent != null) {
 			agent.speed += species.moveSpeed / 20.0f;
 			agent.stoppingDistance = stoppingDistance;
-		}		
-
-		// Sorts all species in the scene by invading and defending species then
-		// sorts by species type in to their respective list (e.g. omnivore -> omnivoreList)
-		SortSpecies();	
+		}
     }
 
-    void Update (){
+    void Update ()
+	{
 		if (controller.isStarted && !controller.finished) {
 			//Find a target
 			targetTimer += Time.deltaTime;
