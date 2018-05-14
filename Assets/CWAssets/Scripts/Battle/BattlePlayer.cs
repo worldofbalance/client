@@ -873,6 +873,11 @@ namespace CW
         // Deal new card for layer
         public void startTurn ()
         {
+            AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.clip = Resources.Load("Sounds/TurnStart") as AudioClip;
+            //audioSource.PlayDelayed (1);
+            audioSource.Play();
+
             showTurn = 120;
             if (hand.Count != 5) {
                 dealCard (1);
