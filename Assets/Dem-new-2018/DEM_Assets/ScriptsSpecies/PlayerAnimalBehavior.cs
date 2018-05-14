@@ -8,83 +8,77 @@ using UnityEngine.AI;
 public class PlayerAnimalBehavior : SpeciesBehavior 
 {
 	// distance for an enemy prey to be in range for attack
-	public float attackDistance = 7.0f;
-	// for finding nearest enemy
-	public Transform gameBord;
-	private int gameBordWidth;
+	public float attackDistance = 15.0f;
+	private int gameBordWidth = 200;
 	public NavMeshAgent agent;
+	private GameObject nearestEnemy;
+	private float distance;
 
 	// the current target enemy to be navigated to for attack
 	GameObject targetEnemy = null;
 
 	// the initial state
 	void Start() {
-		gameBordWidth = (int)(gameBord.localScale.x);
 		agent = GetComponent<NavMeshAgent>();
+		agent.speed = agent.speed + 5;
 	}
+
 
 	// TODO make this a better motion model by making first located enemy, 
 	// or the nearest enemy, the next direction of motion ??
 	// to be done in every frame
 	void Update() {
 
-		float distance;
-		string enemyDietType;
+		if (agent != null && targetEnemy != null) {			
+			// get distance to the enemy
+			distance = Vector3.Distance (agent.transform.position, targetEnemy.transform.position);
 
-		if (getAlive ()) 
-		{
-			if (targetEnemy == null) {
-				targetEnemy = findNearestEnemy ();
-				if (targetEnemy != null) {
-					enemyDietType = targetEnemy.GetComponent<SpeciesBehavior> ().getDietType();
-					if (preyList.Contains (enemyDietType)) {
-						agent.destination = targetEnemy.transform.position;
-					} 
-					else {
-						targetEnemy = null;
-					}
-				}
-			}
-			else
-			{				
-				// get distance to the enemy
-				distance = Vector3.Distance (agent.transform.position, targetEnemy.transform.position);
-
-				// check if enemy has been reached
-				if (distance <= attackDistance && agent != null && targetEnemy != null) 
-				{
-					agent.isStopped = true;
-					targetEnemy.GetComponent<NavMeshAgent> ().isStopped = true;
-					targetEnemy.GetComponent<SpeciesBehavior> ().ReactToHit ();
-				}
+			// check if enemy has been reached
+			if (distance <= attackDistance) {
+				targetEnemy.GetComponent<NavMeshAgent> ().isStopped = true;
+				targetEnemy.GetComponent<SpeciesBehavior> ().ReactToHit ();
 			}
 		} 
+		else if(agent != null)
+		{
+			findNearestEnemy ();
+		}
+
 
 	} 
-
-
-
+		
 
 	// finds the nearest enemy and makes them the new navmesh agent target for this player animal object
 	// based partially on code from github.com/Brackeys/Tower-Defence-Tutorial
 	//     /tree/master/Tower%20Defence%20Unity%20Project/Assets/Scripts/Turret.cs
-	public GameObject findNearestEnemy()
+	public void findNearestEnemy()
 	{
 		GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
-		float minDistance = 10 * gameBordWidth;
+		float minDistance = gameBordWidth/2;
 		float distance = 0;
-		GameObject nearestEnemy = null;
+		string diet;
 
 		foreach (GameObject enemy in enemies) 
 		{
 			distance = Vector3.Distance (transform.position, enemy.transform.position);
-			if (distance < minDistance) {
-				minDistance = distance;
-				nearestEnemy = enemy;
+
+			if (distance < minDistance) 
+			{
+				//diet = nearestEnemy.GetComponent<SpeciesBehavior> ().getDietType();
+
+				// only call this an enemy target if it is the correct prey type
+				//if (preyList.Contains (diet)) {
+					nearestEnemy = enemy;
+					minDistance = distance;
+				//}
 			}
 		}
 
-		return nearestEnemy;
+		if (nearestEnemy != null && agent != null) 
+		{
+			agent.SetDestination (nearestEnemy.transform.position);
+		}
+			
 	}
 
 

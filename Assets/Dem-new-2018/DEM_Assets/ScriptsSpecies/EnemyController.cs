@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
 {
 	// the enemy AI prefab
 	private GameObject enemy;
+	private GameObject testPlayer;
 	// the current number of enemies alive in the game
 	public static int numberOfEnemies;
 	// The maximum number of enemies on the game board at the same time.
@@ -42,13 +43,18 @@ public class EnemyController : MonoBehaviour
 			// Create a new instance of an enemy based on a random animal species.
 			enemy = factory.getRandomAnimal (true);
 			placeEnemy (enemy);
+
+			// for testing only
+			testPlayer = factory.getRandomAnimal(false);
+			placeEnemy (testPlayer);
+
 			oldTime = Time.time;
 		}
 
 	}
 
 
-	// Put the new enemy at a point on the edge of the game board.
+	// Put the new animal at a point on the edge of the game board.
 	// Have the enemy start facing in the direction of the Tree of Life,
 	// which is at the center of the game board.
 	private void placeEnemy(GameObject enemy){
@@ -64,6 +70,5 @@ public class EnemyController : MonoBehaviour
 		enemy.transform.position = new Vector3(x, 0, z);
 		enemy.transform.Rotate(0, angle, 0);
 	}
-
 		
 }

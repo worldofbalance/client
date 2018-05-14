@@ -43,7 +43,6 @@ public class SpeciesBehavior : MonoBehaviour
 		Destroy(this.gameObject);
 	}
 
-
 	public void setDietType(string dietType){
 		this.dietType = dietType;
 	}

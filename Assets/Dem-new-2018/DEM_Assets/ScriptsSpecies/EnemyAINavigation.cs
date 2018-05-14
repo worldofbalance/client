@@ -11,6 +11,7 @@ public class EnemyAINavigation : MonoBehaviour {
 	public NavMeshAgent agent;
 	private float distance;
 	private GameObject treeOfLife;
+	private Vector3 treeOfLifeLocation;
 	private bool treeOfLifeHit;
 	// distance for an tree of life or prey to be in range for attack
 	public float attackDistance = 7.0f;
@@ -24,7 +25,8 @@ public class EnemyAINavigation : MonoBehaviour {
 		agent = GetComponent<NavMeshAgent>();
 
 		if (agent != null && treeOfLife != null) {
-			agent.destination = treeOfLife.transform.position;
+			treeOfLifeLocation = treeOfLife.transform.position;
+			agent.destination = treeOfLifeLocation;
 		}
 
 	}		
@@ -35,7 +37,7 @@ public class EnemyAINavigation : MonoBehaviour {
 
 		if (agent != null && !treeOfLifeHit && treeOfLife != null) {			
 			// distance from enemy to the tree of life
-			distance = Vector3.Distance (agent.transform.position, treeOfLife.transform.position);
+			distance = Vector3.Distance (agent.transform.position, treeOfLifeLocation);
 		
 			// check if enemy has reached the tree of life
 			if (distance <= attackDistance && !treeOfLifeHit) {
