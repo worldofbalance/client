@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class Species3DFactory : MonoBehaviour {
 
-	public string[] AnimalType = {"Omnivore", "Carnivore", "Herbivore", "Plant", "TreeOfLife"};
-	public enum SpeciesType {Elephant, Ants, Buffalo, Horse, Leopard, Tortoise, ServalCat, WildBoar};
+	public string[] DietType = {"Omnivore", "Carnivore", "Herbivore", "Plant", "TreeOfLife"};
+	public string[] SpeciesType = {"Elephant", "Ants", "Buffalo", "Horse", "Leopard", "Tortoise", "ServalCat", "WildBoar"};
+	private string diet;
 
 	// These are for linking to the prefabricated object, which is stored as a file in the game assets.
 	public GameObject Elephant, Ants, Buffalo, Horse, Leopard, Tortoise, ServalCat, WildBoar;
 	public GameObject plantPrefab;
-
-	// needed for setting location in prefab enemy AI
-	public Transform locationTreeOfLife;
 
 
 	public GameObject getPlant()
@@ -22,41 +20,38 @@ public class Species3DFactory : MonoBehaviour {
 	}
 
 
-	// returns a randomly chosen animal species type
-	private SpeciesType getRandomSpeciesType()
-	{
-		// need to cast the enums to an array of ints
-		System.Array speciesArray = System.Enum.GetValues (typeof(SpeciesType));
-		int numAnimals = speciesArray.Length;
-		// get a random entry from the array
-		Random.InitState((int)(System.DateTime.Now.Ticks));
-		SpeciesType species = (SpeciesType)( speciesArray.GetValue(Random.Range(0,numAnimals)) );
-		return species;
-	}
-
-
 	// Create a new instance of a species from the prefab file,
 	// and set its species type and list of prey.
 	public GameObject getRandomAnimal(bool isEnemy)
 	{
-		SpeciesType species = getRandomSpeciesType ();
+		Random.InitState((int)(System.DateTime.Now.Ticks));
+		int numSpecies = SpeciesType.Length;
+		string species = SpeciesType[Random.Range(0, numSpecies)];
 		ArrayList prey = new ArrayList ();
 		GameObject animal = setAnimalPrefab(species);
-		prey = setAnimalPrey (animal.tag);
+		prey = setAnimalPrey (diet);
+		SpeciesBehavior behavior;
 
 		if (isEnemy) {
-			animal.AddComponent<EnemyBehavior> ().setPreyList(prey);
+			animal.AddComponent<EnemyBehavior> ();
+			behavior = animal.GetComponent<EnemyBehavior> ();
 			animal.AddComponent<EnemyAINavigation> ();
+			animal.tag = "Enemy";
 		} else {
-			animal.AddComponent<AnimalBehavior> ().setPreyList (prey);
+			behavior = animal.AddComponent<PlayerAnimalBehavior> ();
+			animal.tag = "Defender";
 		}
+			
+		behavior.setSpecies (species);
+		behavior.setDietType (diet);
+		behavior.setPreyList (prey);
 
 		return animal;
 	}
 
 
 	// choices are Elephant, Ants, Buffalo, Horse, Leopard, Tortoise, ServalCat, WildBoar
-	private GameObject setAnimalPrefab(SpeciesType species)
+	private GameObject setAnimalPrefab(string species)
 	{
 		// default is a nice bright red omnivore so it can eat anything
 		GameObject animal = Instantiate (Ants) as GameObject;
@@ -65,28 +60,29 @@ public class Species3DFactory : MonoBehaviour {
 		// would require using a resourse folder or path that could change
 		switch (species) 
 		{
-		case SpeciesType.Elephant:
+		case "Elephant":
 			animal = Instantiate (Elephant) as GameObject;
+			diet = "Herbivore";
 			break;
-		case SpeciesType.Ants:
+		case "Ants":
 			animal = Instantiate (Ants) as GameObject;
 			break;
-		case SpeciesType.Buffalo:
+		case "Buffalo":
 			animal = Instantiate (Buffalo) as GameObject;
 			break;
-		case SpeciesType.Horse:
+		case "Horse":
 			animal = Instantiate (Horse) as GameObject;
 			break;
-		case SpeciesType.Leopard:
+		case "Leopard":
 			animal = Instantiate (Leopard) as GameObject;
 			break;
-		case SpeciesType.Tortoise:
+		case "Tortoise":
 			animal = Instantiate (Tortoise) as GameObject;
 			break;
-		case SpeciesType.ServalCat:
+		case "ServalCat":
 			animal = Instantiate (ServalCat) as GameObject;
 			break;
-		case SpeciesType.WildBoar:
+		case "WildBoar":
 			animal = Instantiate (WildBoar) as GameObject;
 			break;
 		}
@@ -108,11 +104,11 @@ public class Species3DFactory : MonoBehaviour {
 	* Trees and Shrubs
 	* 
 	* **/
-	public ArrayList setAnimalPrey(string animalType)
+	public ArrayList setAnimalPrey(string diet)
 	{
 		ArrayList prey = new ArrayList();
 
-		switch (animalType) 
+		switch (diet) 
 		{
 		case "Carnivore":
 			prey.Add ("Omnivore");

@@ -12,48 +12,44 @@ public class EnemyAINavigation : MonoBehaviour {
 	private float distance;
 	private GameObject treeOfLife;
 	private bool treeOfLifeHit;
+	// distance for an tree of life or prey to be in range for attack
+	public float attackDistance = 7.0f;
 
 
 	// Use this for initialization
 	void Start () {		
 		treeOfLife = GameObject.Find("TreeOfLife");
-		agent = GetComponent<NavMeshAgent>();
-		agent.destination = treeOfLife.transform.position;
 		treeOfLifeHit = false;
 		behavior = this.gameObject.GetComponent<EnemyBehavior>();
-	}
-		
+		agent = GetComponent<NavMeshAgent>();
+
+		if (agent != null && treeOfLife != null) {
+			agent.destination = treeOfLife.transform.position;
+		}
+
+	}		
 
 
 	// to be done in every frame
 	void Update() {
-		
-		// distance from enemy to the tree of life
-		if (treeOfLife != null) {
+
+		if (agent != null && !treeOfLifeHit && treeOfLife != null) {			
+			// distance from enemy to the tree of life
 			distance = Vector3.Distance (agent.transform.position, treeOfLife.transform.position);
-		}
-
-		// check if enemy has reached the tree of life
-		if (distance <= 7.0 && !treeOfLifeHit) 
-		{
-			if (agent != null) {
+		
+			// check if enemy has reached the tree of life
+			if (distance <= attackDistance && !treeOfLifeHit) {
 				agent.isStopped = true;
-			}
-
-			if (treeOfLife != null) {
 				treeOfLifeHit = true;
 				treeOfLife.GetComponent<TreeOfLifeBehavior> ().reactToHit ();
+				if (behavior != null) {
+					EnemyController.numberOfEnemies--;
+					behavior.ReactToHit ();
+				}
 			}
-
-			if (behavior != null) {
-				EnemyController.numberOfEnemies--;
-				behavior.ReactToHit ();
-			}
-		}
-
+		} 
+			
 	}
-
-
-
+		
 
 }
