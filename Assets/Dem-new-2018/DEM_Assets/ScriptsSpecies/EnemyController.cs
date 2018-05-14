@@ -3,12 +3,10 @@ using System.Collections;
 
 
 // attach this as a component of an empty, invisible, generic game object
-// changed so that 2 enemies can be in the scene at any time
 
 public class EnemyController : MonoBehaviour 
 {
-	// for linking to the prefabricated object, which is stored as a file in the game assets
-	public GameObject enemyPrefab;
+	// the enemy AI prefab
 	private GameObject enemy;
 	// the current number of enemies alive in the game
 	public static int numberOfEnemies;
@@ -22,7 +20,8 @@ public class EnemyController : MonoBehaviour
 	public Transform dimentionsGround;
 	private int groundWidth;
 	// for making the enemy species
-	private SpeciesFactory factory;
+	//private SpeciesFactory factory;
+	private Species3DFactory factory;
 
 
 	// Use this for initialization
@@ -30,7 +29,8 @@ public class EnemyController : MonoBehaviour
 		oldTime = Time.time;
 		groundWidth = (int)(dimentionsGround.localScale.x / 2) - 4;
 		numberOfEnemies = 0;
-		factory = GameObject.Find("MasterController").GetComponent<SpeciesFactory>();
+		//factory = GameObject.Find("MasterController").GetComponent<SpeciesFactory>();
+		factory = GameObject.Find("MasterController").GetComponent<Species3DFactory>();
 	}
 
 
