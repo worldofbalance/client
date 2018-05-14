@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public class EnemyAINavigation : MonoBehaviour {
 
-	private EnemyBehavior behavior;
+	private EnemyBehavior enemyBehavior;
 	public NavMeshAgent agent;
 	private float distance;
 	private GameObject treeOfLife;
@@ -21,7 +21,7 @@ public class EnemyAINavigation : MonoBehaviour {
 	void Start () {		
 		treeOfLife = GameObject.Find("TreeOfLife");
 		treeOfLifeHit = false;
-		behavior = this.gameObject.GetComponent<EnemyBehavior>();
+		enemyBehavior = this.gameObject.GetComponent<EnemyBehavior>();
 		agent = GetComponent<NavMeshAgent>();
 
 		if (agent != null && treeOfLife != null) {
@@ -38,16 +38,14 @@ public class EnemyAINavigation : MonoBehaviour {
 		if (agent != null && !treeOfLifeHit && treeOfLife != null) {			
 			// distance from enemy to the tree of life
 			distance = Vector3.Distance (agent.transform.position, treeOfLifeLocation);
-		
+
 			// check if enemy has reached the tree of life
 			if (distance <= attackDistance && !treeOfLifeHit) {
 				agent.isStopped = true;
 				treeOfLifeHit = true;
 				treeOfLife.GetComponent<TreeOfLifeBehavior> ().reactToHit ();
-				if (behavior != null) {
-					EnemyController.numberOfEnemies--;
-					behavior.ReactToHit ();
-				}
+				EnemyController.numberOfEnemies--;
+				enemyBehavior.ReactToHit ();
 			}
 		} 
 			

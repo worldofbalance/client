@@ -8,19 +8,17 @@ using UnityEngine.AI;
 public class PlayerAnimalBehavior : SpeciesBehavior 
 {
 	// distance for an enemy prey to be in range for attack
-	public float attackDistance = 15.0f;
+	public float attackDistance = 7.0f;
 	private int gameBordWidth = 200;
-	public NavMeshAgent agent;
-	private GameObject nearestEnemy;
-	private float distance;
-
+	public NavMeshAgent playerAgent, enemyAgent;
 	// the current target enemy to be navigated to for attack
-	GameObject targetEnemy = null;
+	private GameObject nearestEnemy = null;
+	private float distance;
 
 	// the initial state
 	void Start() {
-		agent = GetComponent<NavMeshAgent>();
-		agent.speed = agent.speed + 5;
+		playerAgent = GetComponent<NavMeshAgent>();
+		playerAgent.speed = playerAgent.speed * 1.5f;
 	}
 
 
@@ -29,19 +27,25 @@ public class PlayerAnimalBehavior : SpeciesBehavior
 	// to be done in every frame
 	void Update() {
 
-		if (agent != null && targetEnemy != null) {			
+		if (playerAgent != null && nearestEnemy != null) {
+			Debug.Log ("player and enemy NOT null\n");
 			// get distance to the enemy
-			distance = Vector3.Distance (agent.transform.position, targetEnemy.transform.position);
+			distance = Vector3.Distance (playerAgent.transform.position, nearestEnemy.transform.position);
 
 			// check if enemy has been reached
 			if (distance <= attackDistance) {
-				targetEnemy.GetComponent<NavMeshAgent> ().isStopped = true;
-				targetEnemy.GetComponent<SpeciesBehavior> ().ReactToHit ();
+				enemyAgent = GetComponent<NavMeshAgent> ();
+				enemyAgent.velocity = Vector3.zero;
+				enemyAgent.GetComponent<NavMeshAgent> ().isStopped = true;
+				playerAgent.velocity = Vector3.zero;
+				playerAgent.GetComponent<NavMeshAgent> ().isStopped = true;
+				nearestEnemy.GetComponent<SpeciesBehavior> ().ReactToHit ();
 			}
-		} 
-		else if(agent != null)
-		{
-			findNearestEnemy ();
+		} else if (playerAgent != null && nearestEnemy == null) {
+			Debug.Log ("player NOT null, enemy is NULL \n");
+			nearestEnemy = findNearestEnemy ();
+		} else {
+			Debug.Log ("OOPS player agent is NULL\n");
 		}
 
 
@@ -51,12 +55,15 @@ public class PlayerAnimalBehavior : SpeciesBehavior
 	// finds the nearest enemy and makes them the new navmesh agent target for this player animal object
 	// based partially on code from github.com/Brackeys/Tower-Defence-Tutorial
 	//     /tree/master/Tower%20Defence%20Unity%20Project/Assets/Scripts/Turret.cs
-	public void findNearestEnemy()
+	public GameObject findNearestEnemy()
 	{
 		GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
 		float minDistance = gameBordWidth/2;
 		float distance = 0;
 		string diet;
+		nearestEnemy = null;
+
+		Debug.Log ("initial min distance = " + minDistance + "\n");
 
 		foreach (GameObject enemy in enemies) 
 		{
@@ -74,10 +81,14 @@ public class PlayerAnimalBehavior : SpeciesBehavior
 			}
 		}
 
-		if (nearestEnemy != null && agent != null) 
+		Debug.Log ("min distance player to ai = " + minDistance + "\n");
+
+		if (nearestEnemy != null && playerAgent != null) 
 		{
-			agent.SetDestination (nearestEnemy.transform.position);
+			playerAgent.SetDestination (nearestEnemy.transform.position);
 		}
+
+		return nearestEnemy;
 			
 	}
 
