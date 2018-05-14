@@ -162,6 +162,7 @@ namespace CW
                 TypeTexture = (Texture2D)Resources.Load("Images/Battle/plant", typeof(Texture2D));
             }
 
+
             Transform child1 = transform.Find("Canvas/Pop/SImageType");
 
             Image j = child1.GetComponent<Image>();
