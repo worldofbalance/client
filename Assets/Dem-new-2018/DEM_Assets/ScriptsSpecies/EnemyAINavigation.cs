@@ -15,14 +15,17 @@ public class EnemyAINavigation : MonoBehaviour {
 	private GameObject treeOfLife;
 	private bool treeOfLifeHit;
 
-
-	// Use this for initialization
-	void Start () {
+	void Awake () {
 		agent = GetComponent<NavMeshAgent>();
 		agent.destination = locationTreeOfLife.position;
 		treeOfLifeHit = false;
 		behavior = this.gameObject.GetComponent<EnemyBehavior>();
 		treeOfLife = GameObject.Find("TreeOfLife");
+	}
+
+	// Use this for initialization
+	void Start () {
+		
 	}
 		
 

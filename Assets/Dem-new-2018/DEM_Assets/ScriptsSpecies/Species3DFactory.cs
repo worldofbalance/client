@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class Species3DFactory : MonoBehaviour {
 
-	// Omnivore = 0, Carnivore = 1, Herbivore = 2, these are the constants used in the database.
-	// Added Plant = 3 and TreeOfLife = 4, for easier programming of collision and attack behaviors.
-	public enum AnimalType {Omnivore, Carnivore, Herbivore, Plant, TreeOfLife};
+	public string[] AnimalType = {"Omnivore", "Carnivore", "Herbivore", "Plant", "TreeOfLife"};
 	public enum SpeciesType {Elephant, Ants, Buffalo, Horse, Leopard, Tortoise, ServalCat, WildBoar};
 
 	// These are for linking to the prefabricated object, which is stored as a file in the game assets.
 	public GameObject Elephant, Ants, Buffalo, Horse, Leopard, Tortoise, ServalCat, WildBoar;
 	public GameObject plantPrefab;
+
+	// needed for setting location in prefab enemy AI
+	public Transform locationTreeOfLife;
 
 
 	public GameObject getPlant()
@@ -43,17 +44,12 @@ public class Species3DFactory : MonoBehaviour {
 		prey = setAnimalPrey (animal.tag);
 
 		if (isEnemy) {
-			//EnemyBehavior enemy = new EnemyBehavior ();
-			//enemy.setSpeciesType (species);
-			//enemy.setPreyList (prey);
-			animal.AddComponent<EnemyBehavior> ();
+			animal.AddComponent<EnemyBehavior> ().setPreyList(prey);
+			animal.AddComponent<EnemyAINavigation> ();
 		} else {
-			//AnimalBehavior animalBehavior = new AnimalBehavior ();
-			//animalBehavior.setSpeciesType (species);
-			//animalBehavior.setPreyList (prey);
-			animal.AddComponent<AnimalBehavior> ();
+			animal.AddComponent<AnimalBehavior> ().setPreyList (prey);
 		}
-			
+
 		return animal;
 	}
 
@@ -111,14 +107,6 @@ public class Species3DFactory : MonoBehaviour {
 	* Trees and Shrubs
 	* 
 	* **/
-	public ArrayList setAnimalPrey(AnimalType animalType)
-	{
-		ArrayList prey = new ArrayList();
-		string preyType = System.Enum.GetName(typeof(AnimalType), animalType);
-		prey = setAnimalPrey(preyType);
-		return prey;
-	}
-
 	public ArrayList setAnimalPrey(string animalType)
 	{
 		ArrayList prey = new ArrayList();
@@ -126,18 +114,18 @@ public class Species3DFactory : MonoBehaviour {
 		switch (animalType) 
 		{
 		case "Carnivore":
-			prey.Add (AnimalType.Omnivore);
-			prey.Add (AnimalType.Carnivore); 
-			prey.Add (AnimalType.Herbivore);
+			prey.Add ("Omnivore");
+			prey.Add ("Carnivore"); 
+			prey.Add ("Herbivore");
 			break;
 		case "Omnivore": 
-			prey.Add (AnimalType.Omnivore);
-			prey.Add (AnimalType.Carnivore); 
-			prey.Add (AnimalType.Herbivore);
-			prey.Add (AnimalType.Plant);
+			prey.Add ("Omnivore");
+			prey.Add ("Carnivore"); 
+			prey.Add ("Herbivore");
+			prey.Add ("Plant");
 			break;
 		case "Herbivore":
-			prey.Add (AnimalType.Plant);
+			prey.Add ("Plant");
 			break;
 		}
 

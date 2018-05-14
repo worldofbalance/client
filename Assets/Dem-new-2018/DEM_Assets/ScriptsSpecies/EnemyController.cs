@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour
 	// The maximum number of enemies on the game board at the same time.
 	public static int maxNumberOfEnemies = 10;
 	// for the timing of automatic enemy spawinings
-	private float timeStep = 2.0f;
+	public float timeStep = 5.0f;
 	private float oldTime;
 	// The edges of the game board, this is used for species placement on the board.
 	// Minus 4 to accomidate the walls around the board.
@@ -40,12 +40,13 @@ public class EnemyController : MonoBehaviour
 	{
 		if ((numberOfEnemies < maxNumberOfEnemies) && ((Time.time - oldTime) > timeStep))
 		{
+			numberOfEnemies++;
 			// Create a new instance of an enemy based on a random animal species.
 			enemy = factory.getRandomAnimal (true);
 			placeEnemy (enemy);
-			numberOfEnemies++;
 			oldTime = Time.time;
 		}
+
 	}
 
 

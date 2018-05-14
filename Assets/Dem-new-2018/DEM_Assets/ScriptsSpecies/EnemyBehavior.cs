@@ -8,16 +8,6 @@ public class EnemyBehavior : SpeciesBehavior {
 	public float obstacleRange = 5.0f;
 
 
-	// Use this for initialization
-	new void Start() 
-	{
-		this.alive = true;
-		this.health = maxHealth;
-		preyList = new ArrayList();
-		preyList.Add (SpeciesFactory.SpeciesType.TreeOfLife);
-	}
-
-
 	// to be done in every frame
 	void Update() {
 		/**

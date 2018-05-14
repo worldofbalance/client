@@ -6,44 +6,29 @@ using System.Collections;
 
 public class SpeciesBehavior : MonoBehaviour 
 {
-	// The types are Omnivore, Carnivore, Herbivore, and Plant.
-	protected SpeciesFactory.SpeciesType speciesType;
-	protected ArrayList preyList;
 
+	protected ArrayList preyList;
 	protected bool alive;
 	protected int health;
 	protected const int maxHealth = 6;
 	protected const int injured = 3;
 	protected const int dead = 0;
 
+	void Awake() {
+		this.alive = true;
+		this.health = maxHealth;
+	}
 
 	// the initial state
 	void Start() {
-		this.alive = true;
-		this.health = maxHealth;
-		preyList = new ArrayList();
-	}
 		
-	public void setSpeciesType(SpeciesFactory.SpeciesType species){
-		speciesType = species;
-		// TODO add correct material based on species type ??
 	}
 
-	public SpeciesFactory.SpeciesType getSpeciesType() {
-		return speciesType;
-	}
 
 	public void setPreyList(ArrayList prey){
 		this.preyList = prey;
 	}
 
-	// for testing of code, uses a hard coded list,
-	// sets preyList to empty list for plants
-	public void setPreyList(SpeciesFactory.SpeciesType species)
-	{
-		SpeciesFactory factory = GameObject.Find("MasterController").GetComponent<SpeciesFactory>();
-		preyList = factory.setAnimalPrey (species);
-	}
 
 	public ArrayList getPreyList() {
 		return preyList;
