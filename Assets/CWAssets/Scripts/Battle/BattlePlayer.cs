@@ -23,6 +23,8 @@ namespace CW
         public string playerName;
         public bool handCentered = false;
         public bool playerFrozen=false;
+        public bool foodwebactive = false;
+
         public ProtocolManager getProtocolManager ()
         {
             return protocols;
@@ -52,7 +54,27 @@ namespace CW
             createTree ();
             createMana ();
         }
-        
+
+        //use this init to initialize player 2
+        public void init2(bool player2)
+        {
+            // get protocolManager from GameManager
+            protocols = GameManager.protocols;
+
+            deck = new ArrayList();
+            hand = new ArrayList();
+            GraveYard = new ArrayList();
+            cardsInPlay = new ArrayList();
+            treeID = new ArrayList();
+
+            //Set's player's coordinates of interest for p1 and p2
+            setPlayerNum(player2);
+
+            //Creates the player's tree and mana displayer
+            createTree2();
+            createMana();
+        }
+
         public GameObject instantiateCard ()
         {
             return (GameObject)Instantiate (Resources.Load ("Prefabs/Battle/Card"));
@@ -279,8 +301,18 @@ namespace CW
             script.init (this);
             treeID.Add (obj);
         }
-        
-        
+
+        //use this version of createTree to make the tree for player2
+        public void createTree2()
+        {
+            GameObject obj = (GameObject)Instantiate(Resources.Load("Prefabs/Battle/Tree"));
+            obj.AddComponent<Trees>();
+            Trees script = obj.GetComponent<Trees>();
+            script.init2(this);
+            treeID.Add(obj);
+        }
+
+
         //Creates a visual for the text that displays how much mana a player has
         private void createMana ()
         {
@@ -321,7 +353,6 @@ namespace CW
         }
         
         public void applyFoodBuff(AbstractCard target, int deltaAttack, int deltaHealth){
-            
             target.applyFood (target, deltaAttack, deltaHealth);
         }
         
@@ -330,16 +361,19 @@ namespace CW
         {
             int gold = 100; //100 gold if won
             isGameOver = true;
+            
             Debug.Log ("Battleplayer game_over");
             
             gameOver = (GameObject)Instantiate (Resources.Load ("Prefabs/Battle/GameOver"));
             if (!isWon) {
                 Debug.Log("lost the game");
                 gold = 25;//25 gold if lost
+                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
                 Texture2D loseTexture = (Texture2D)Resources.Load ("Prefabs/Battle/lose", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = loseTexture;
             } else {
                 Debug.Log("won the game");
+                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
                 Texture2D winTexture = (Texture2D)Resources.Load ("Prefabs/Battle/win", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = winTexture;
             }
@@ -482,10 +516,206 @@ namespace CW
             
             GameObject attackedObj = (GameObject)GameManager.player1.cardsInPlay [attackedIndex];
             AbstractCard attackedCard = attackedObj.GetComponent<AbstractCard> ();
+
+            /*
+            //2018 Spring semester WoB Ecosystem
+            //Lion (86) > Bufflao, Bush Pig
+            //Buffalo (7) > Grass and Herbs
+            //Bush Pig (83) > Decayling Material, Tree Mouse
+            //Tree Mouse (31) > Grass and Herbs, Decaying Materials, Cockroach
+            //Cockroach (19) > Decaying Materials
+            //Decaying Materials (89) 
+            //Grass and Herbs (96)
+            */
+
+
+            //Predator > Prey
+            //Lion > Bufflao
+            if (attackerCard.cardID == 86 && attackedCard.cardID == 7)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " > " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg += 3;
+                attackerCard.hp += 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Predator (" + attackerCard.name + ") hp : " + "Predator hp (" + attackerCard.hp + ") - Prey dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Predator (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") hp : " + "prey hp (" + attackedCard.hp + ") - Predator dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Prey (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+
+                //Lion > Bush Pig
+            }
+            else if (attackerCard.cardID == 86 && attackedCard.cardID == 83)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " > " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg += 3;
+                attackerCard.hp += 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Predator (" + attackerCard.name + ") hp : " + "Predator hp (" + attackerCard.hp + ") - Prey dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Predator (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") hp : " + "prey hp (" + attackedCard.hp + ") - Predator dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Prey (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+
+                //Bush Pig > Tree Mouse
+            }
+            else if (attackerCard.cardID == 83 && attackedCard.cardID == 31)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " > " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg += 3;
+                attackerCard.hp += 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Predator (" + attackerCard.name + ") hp : " + "Predator hp (" + attackerCard.hp + ") - Prey dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Predator (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") hp : " + "prey hp (" + attackedCard.hp + ") - Predator dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Prey (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+
+                //Tree Mouse > Cockroach
+            }
+            else if (attackerCard.cardID == 31 && attackedCard.cardID == 19)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " > " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg += 3;
+                attackerCard.hp += 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Predator (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Predator (" + attackerCard.name + ") hp : " + "Predator hp (" + attackerCard.hp + ") - Prey dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Predator (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Prey (" + attackedCard.name + ") hp : " + "prey hp (" + attackedCard.hp + ") - Predator dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Prey (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+            }
+
+            //Prey < Predator
+            //Bufflao < Lion
+            if (attackerCard.cardID == 7 && attackedCard.cardID == 86)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " < " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg -= 3;
+                attackerCard.hp -= 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Prey (" + attackerCard.name + ") hp : " + "prey hp (" + attackerCard.hp + ") - Predator dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Prey (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") hp : " + "Predator hp (" + attackedCard.hp + ") - Prey dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Predator (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+
+                //Bush Pig < Lion
+            }
+            else if (attackerCard.cardID == 83 && attackedCard.cardID == 86)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " < " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg -= 3;
+                attackerCard.hp -= 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Prey (" + attackerCard.name + ") hp : " + "prey hp (" + attackerCard.hp + ") - Predator dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Prey (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") hp : " + "Predator hp (" + attackedCard.hp + ") - Prey dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Predator (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+
+                //Tree Mouse < Bush Pig
+            }
+            else if (attackerCard.cardID == 31 && attackedCard.cardID == 83)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " < " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg -= 3;
+                attackerCard.hp -= 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Prey (" + attackerCard.name + ") hp : " + "prey hp (" + attackerCard.hp + ") - Predator dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Prey (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") hp : " + "Predator hp (" + attackedCard.hp + ") - Prey dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Predator (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+
+                //Cockroach < Tree Mouse 
+            }
+            else if (attackerCard.cardID == 19 && attackedCard.cardID == 31)
+            {
+                Debug.Log("FOOD WEB SYSTEM ACTIVATED");
+                Debug.Log("Species: " + attackerCard.name + " < " + attackedCard.name);
+                Debug.Log("Before Buffed");
+                Debug.Log("Old Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("Old Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                attackerCard.dmg -= 3;
+                attackerCard.hp -= 5;
+                Debug.Log("After Buffed");
+                Debug.Log("New Prey (" + attackerCard.name + ") - hp: " + attackerCard.hp + " dmg: " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") - hp: " + attackedCard.hp + " dmg: " + attackedCard.dmg);
+                Debug.Log("After Attack");
+                Debug.Log("New Prey (" + attackerCard.name + ") hp : " + "prey hp (" + attackerCard.hp + ") - Predator dmg (" + attackedCard.dmg + ") = "
+                    + (attackerCard.hp - attackedCard.dmg));
+                Debug.Log("New Prey (" + attackerCard.name + ") dmg : " + attackerCard.dmg);
+                Debug.Log("New Predator (" + attackedCard.name + ") hp : " + "Predator hp (" + attackedCard.hp + ") - Prey dmg (" + attackerCard.dmg + ") = "
+                    + (attackedCard.hp - attackerCard.dmg));
+                Debug.Log("New Predator (" + attackedCard.name + ") dmg : " + attackedCard.dmg);
+            }
+
             if (attackedCard.diet != AbstractCard.DIET.HERBIVORE) {
                 damageBack = true;
-                attackerCard.receiveAttack (attackedCard.dmg);
+                //comment receiveAttack because it called twice: line 713 (1) and in the attack function, it also got called. This mean the species will recieved the exact damage twice from non-Herbivore 
+                //And not sure if it's this line cause a bug that one side species is dead and other species is not dead 
+                //turn out that the cardsInPlay got messed up (need to check)
+                //And I suggest to implement the cardsInPlay to check which species is at which postion so the cardsInplay won't got messed up and cause the bug
+                //attackerCard.receiveAttack (attackedCard.dmg);
             }
+
             attackerCard.attack (attackerCard, attackedCard, damageBack);
         }
         
@@ -726,5 +956,21 @@ namespace CW
                 }
             }
         }
+
+        public void ProcessUpdateCredits(NetworkResponse response)
+        {
+            ResponseUpdateCredits args = response as ResponseUpdateCredits;
+            Debug.Log("ResponseUpdateCredits: action= " + args.action);
+
+            if (args.status == 0)
+            {
+                GameState.player.credits = args.newCredits;
+                Debug.Log("new credits: " + args.newCredits);
+            }
+            else
+            Debug.Log("failed to update credits");
+
+        }
+
     }
 }

@@ -82,8 +82,10 @@
 	public static readonly short PLAY_GAME = 193;
 	public static readonly short END_GAME = 194;
 
-	//Clash of Species
-	public static readonly short CLASH_ENTRY = 162;
+    public static readonly short UPDATE_CREDITS = 800;
+
+    //Clash of Species
+    public static readonly short CLASH_ENTRY = 162;
 	public static readonly short CLASH_SPECIES_LIST = 163;
 	public static readonly short CLASH_DEFENSE_SETUP = 164;
 	public static readonly short CLASH_PLAYER_LIST = 165;
@@ -122,6 +124,8 @@
 	public static readonly short RETURN_LOBBY = 213;
 	public static readonly short APPLY_FOOD = 214;
 	public static readonly short APPLY_WEATHER = 215;
+
+    
 
     // Sea Divided
     public static readonly short SD_GAME_LOGIN = 400;

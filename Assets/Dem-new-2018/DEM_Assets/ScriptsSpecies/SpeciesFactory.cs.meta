@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 2f592fa1c16ecd04186cc8b13ef2d2b0
+timeCreated: 1525843472
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - animalPrefab: {instanceID: 0}
+  - plantPrefab: {instanceID: 0}
+  - enemyAIPrefab: {instanceID: 0}
+  - mat_EnemyCarnivore: {instanceID: 0}
+  - mat_EnemyOmnivore: {instanceID: 0}
+  - mat_EnemyHerbivore: {instanceID: 0}
+  - mat_PlayerCarnivore: {instanceID: 0}
+  - mat_PlayerOmnivore: {instanceID: 0}
+  - mat_PlayerHerbivore: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
