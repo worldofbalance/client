@@ -18,7 +18,7 @@ public class PlayerAnimalBehavior : SpeciesBehavior
 	// the initial state
 	void Start() {
 		playerAgent = GetComponent<NavMeshAgent>();
-		playerAgent.speed = playerAgent.speed * 1.5f;
+		playerAgent.speed = playerAgent.speed * 2.0f;
 	}
 
 
@@ -35,9 +35,9 @@ public class PlayerAnimalBehavior : SpeciesBehavior
 			// check if enemy has been reached
 			if (distance <= attackDistance) {
 				enemyAgent = GetComponent<NavMeshAgent> ();
-				enemyAgent.velocity = Vector3.zero;
+				//enemyAgent.velocity = Vector3.zero;
 				enemyAgent.GetComponent<NavMeshAgent> ().isStopped = true;
-				playerAgent.velocity = Vector3.zero;
+				//playerAgent.velocity = Vector3.zero;
 				playerAgent.GetComponent<NavMeshAgent> ().isStopped = true;
 				nearestEnemy.GetComponent<SpeciesBehavior> ().ReactToHit ();
 			}
