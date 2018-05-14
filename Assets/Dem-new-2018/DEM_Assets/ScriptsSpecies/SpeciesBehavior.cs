@@ -14,14 +14,11 @@ public class SpeciesBehavior : MonoBehaviour
 	protected const int injured = 3;
 	protected const int dead = 0;
 
-	void Awake() {
-		this.alive = true;
-		this.health = maxHealth;
-	}
 
 	// the initial state
 	void Start() {
-		
+		this.alive = true;
+		this.health = maxHealth;
 	}
 
 

@@ -8,24 +8,22 @@ using UnityEngine.AI;
 public class EnemyAINavigation : MonoBehaviour {
 
 	// Set the transform to the tree of life prefab in Unity Inspector
-	public Transform locationTreeOfLife;
+	private Transform locationTreeOfLife;
 	private EnemyBehavior behavior;
 	private NavMeshAgent agent;
 	private float distance;
 	private GameObject treeOfLife;
 	private bool treeOfLifeHit;
 
-	void Awake () {
+
+	// Use this for initialization
+	void Start () {
+		locationTreeOfLife = GameObject.Find ("TreeOfLife").transform;
 		agent = GetComponent<NavMeshAgent>();
 		agent.destination = locationTreeOfLife.position;
 		treeOfLifeHit = false;
 		behavior = this.gameObject.GetComponent<EnemyBehavior>();
 		treeOfLife = GameObject.Find("TreeOfLife");
-	}
-
-	// Use this for initialization
-	void Start () {
-		
 	}
 		
 
@@ -36,7 +34,7 @@ public class EnemyAINavigation : MonoBehaviour {
 		distance = Vector3.Distance(agent.transform.position, locationTreeOfLife.position);
 
 		// check if enemy has reached the tree of life
-		if (distance <= 6.0 && !treeOfLifeHit) 
+		if (distance <= 10.0 && !treeOfLifeHit) 
 		{
 			agent.isStopped = true;
 
