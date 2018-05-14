@@ -29,6 +29,7 @@ public class Species3DFactory : MonoBehaviour {
 		System.Array speciesArray = System.Enum.GetValues (typeof(SpeciesType));
 		int numAnimals = speciesArray.Length;
 		// get a random entry from the array
+		Random.InitState((int)(System.DateTime.Now.Ticks));
 		SpeciesType species = (SpeciesType)( speciesArray.GetValue(Random.Range(0,numAnimals)) );
 		return species;
 	}
