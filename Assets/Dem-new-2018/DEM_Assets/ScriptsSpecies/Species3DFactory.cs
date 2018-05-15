@@ -128,8 +128,7 @@ public class Species3DFactory : MonoBehaviour{
 	private string getSpeciesDietType(string species)
 	{
 		diet = "Plant";
-		// must be a better way, need to look up finding prefab by name, but loading
-		// would require using a resourse folder or path that could change
+
 		switch (species) 
 		{
 		case "Elephant":
@@ -153,11 +152,12 @@ public class Species3DFactory : MonoBehaviour{
 
 
 	/***
-	* food web hard coded, needes to be replaced with a species specific database implimentation
+	* very simplified food web hard coded, needes to be replaced 
+	* with a species specific database implimentation
 	* 
-	* Omnivore -> Omnivore, Carnivore, Herbivore, Plant, TreeOfLife
-	* Carnivore -> Omnivore, Carnivore, Herbivore
-	* Herbivore -> Plant, TreeOfLife
+	* Omnivore -> eat all plants and all animals
+	* Carnivore -> eat all animals
+	* Herbivore -> eat all plants
 	* Plant -> empty list
 	* 
 	***/
@@ -167,18 +167,28 @@ public class Species3DFactory : MonoBehaviour{
 
 		switch (diet) 
 		{
-		case "Carnivore":
-			prey.Add ("Omnivore");
-			prey.Add ("Carnivore"); 
-			prey.Add ("Herbivore");
+		case "Carnivore": // eat all animals
+			prey.Add ("Elephant");
+			prey.Add ("Buffalo"); 
+			prey.Add ("Horse");
+			prey.Add ("Tortoise");
+			prey.Add ("Ants");
+			prey.Add ("WildBoar");
+			prey.Add ("Leopard");
+			prey.Add ("ServalCat");
 			break;
-		case "Omnivore": 
-			prey.Add ("Omnivore");
-			prey.Add ("Carnivore"); 
-			prey.Add ("Herbivore");
+		case "Omnivore": // eat all animals and plants
+			prey.Add ("Elephant");
+			prey.Add ("Buffalo"); 
+			prey.Add ("Horse");
+			prey.Add ("Tortoise");
+			prey.Add ("Ants");
+			prey.Add ("WildBoar");
+			prey.Add ("Leopard");
+			prey.Add ("ServalCat");
 			prey.Add ("Plant");
 			break;
-		case "Herbivore":
+		case "Herbivore": // eat all plants
 			prey.Add ("Plant");
 			break;
 		}

@@ -18,7 +18,7 @@ public class EnemyAINavigation : MonoBehaviour {
 	public float attackDistance = 7.0f;
 	int dice;
 	protected AttackBehavior attackBehavior;
-	string diet;
+	string enemyDiet;
 
 	// Use this for initialization
 	void Start () 
@@ -28,11 +28,11 @@ public class EnemyAINavigation : MonoBehaviour {
 		attackBehavior = new AttackBehavior ();
 		enemyBehavior = this.gameObject.GetComponent<EnemyBehavior>();
 		agent = GetComponent<NavMeshAgent>();
-		// generates 0 or 1
-		dice = Random.Range (0, 2);
-		diet = GetComponent<SpeciesBehavior> ().getDietType();
+		// generates 0 or 1 or 2
+		dice = Random.Range (0, 3);
+		enemyDiet = GetComponent<SpeciesBehavior> ().getDietType();
 
-		if (agent != null && treeOfLife != null && dice == 0) {
+		if (agent != null && treeOfLife != null && dice <= 1) {
 			targetLocation = treeOfLife.transform.position;
 			agent.destination = targetLocation;
 		} 
@@ -43,7 +43,7 @@ public class EnemyAINavigation : MonoBehaviour {
 	// to be done in every frame
 	void Update() {
 
-		if (agent != null && !hit && treeOfLife != null && dice == 0) {			
+		if (agent != null && !hit && treeOfLife != null && dice <= 1) {			
 			// distance from enemy to the tree of life
 			distance = Vector3.Distance (agent.transform.position, targetLocation);
 
@@ -57,13 +57,13 @@ public class EnemyAINavigation : MonoBehaviour {
 			}
 		} 
 
-		if (agent != null && dice == 1) {
+		if (agent != null && dice > 1) {
 			
 			if (agent != null && neighbor != null && !hit) 
 			{
 				// only attack and kill this target if it is the correct prey type for this animal
-
-				if (enemyBehavior.getPreyList().Contains(diet)) {
+				string targetSpecies = neighbor.GetComponent<SpeciesBehavior>().getSpecies();
+				if (enemyBehavior.getPreyList().Contains(targetSpecies)) {
 					// get distance to the enemy
 					distance = Vector3.Distance (agent.transform.position, neighbor.transform.position);
 					// check if enemy has been reached
@@ -89,10 +89,11 @@ public class EnemyAINavigation : MonoBehaviour {
 				//Debug.Log ("Need to get new player target\n");
 				agent.isStopped = false;
 				hit = false;
-				// find nearest neighbor lets defence animals eat any enemy or plant that is diet appropriate
-				neighbor = attackBehavior.findNearestNeighbor (diet, gameObject.transform.position);
-				// find nearest enemy only lets defence animals eat any and all enemies
-				// nearestEnemy = attackBehavior.findNearestEnemy(gameObject.transform.position);
+
+				// find the nearest defender or plant
+				// neighbor = attackBehavior.findNearestNeighbor (enemyDiet, gameObject.transform.position);
+				neighbor = attackBehavior.findNearestDefender(gameObject.transform.position);
+
 				if (neighbor != null) {
 					agent.SetDestination (neighbor.transform.position);
 				}

@@ -40,10 +40,10 @@ public class SpeciesBehavior : MonoBehaviour
 
 	public virtual IEnumerator Die() {
 		// The object reacts to being hit by falling over,
-		this.transform.Rotate(0, 0, -90);
+		this.transform.Rotate(0, 0, -180);
 		// and then laying dead for 1.5 seconds, while the function yields control,
 		// so that the game keeps on playing.
-		yield return new WaitForSeconds(1.5f);
+		yield return new WaitForSeconds(2.0f);
 		// After 1.5 seconds, the dead object is destroyed, so it leaves the game.
 		Destroy(this.gameObject);
 	}
