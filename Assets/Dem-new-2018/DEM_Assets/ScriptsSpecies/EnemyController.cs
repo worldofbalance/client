@@ -28,7 +28,7 @@ public class EnemyController : MonoBehaviour
 	void Start(){	
 		oldTime = Time.time;
 		groundWidth = (int)(dimentionsGround.localScale.x / 2) - 4;
-		factory = GameObject.Find("MasterController").GetComponent<Species3DFactory>();
+		factory = gameObject.GetComponent<Species3DFactory> ();
 	}
 
 
