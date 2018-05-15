@@ -8,47 +8,100 @@ using UnityEngine.AI;
 public class EnemyAINavigation : MonoBehaviour {
 
 	private EnemyBehavior enemyBehavior;
-	public NavMeshAgent agent;
+	public NavMeshAgent agent, target;
+	// the current targets to be navigated to for attack
+	private GameObject neighbor, treeOfLife;
 	private float distance;
-	private GameObject treeOfLife;
-	private Vector3 treeOfLifeLocation;
-	private bool treeOfLifeHit;
+	private Vector3 targetLocation;
+	private bool hit;
 	// distance for an tree of life or prey to be in range for attack
 	public float attackDistance = 7.0f;
-
+	int dice;
+	protected AttackBehavior attackBehavior;
+	string diet;
 
 	// Use this for initialization
-	void Start () {		
+	void Start () 
+	{		
 		treeOfLife = GameObject.Find("TreeOfLife");
-		treeOfLifeHit = false;
+		hit = false;
+		attackBehavior = new AttackBehavior ();
 		enemyBehavior = this.gameObject.GetComponent<EnemyBehavior>();
 		agent = GetComponent<NavMeshAgent>();
+		// generates 0 or 1
+		dice = Random.Range (0, 2);
+		diet = GetComponent<SpeciesBehavior> ().getDietType();
 
-		if (agent != null && treeOfLife != null) {
-			treeOfLifeLocation = treeOfLife.transform.position;
-			agent.destination = treeOfLifeLocation;
-		}
-
+		if (agent != null && treeOfLife != null && dice == 0) {
+			targetLocation = treeOfLife.transform.position;
+			agent.destination = targetLocation;
+		} 
 	}		
+
 
 
 	// to be done in every frame
 	void Update() {
 
-		if (agent != null && !treeOfLifeHit && treeOfLife != null) {			
+		if (agent != null && !hit && treeOfLife != null && dice == 0) {			
 			// distance from enemy to the tree of life
-			distance = Vector3.Distance (agent.transform.position, treeOfLifeLocation);
+			distance = Vector3.Distance (agent.transform.position, targetLocation);
 
 			// check if enemy has reached the tree of life
-			if (distance <= attackDistance && !treeOfLifeHit) {
+			if (distance <= attackDistance && !hit) {
 				agent.isStopped = true;
-				treeOfLifeHit = true;
+				hit = true;
 				treeOfLife.GetComponent<TreeOfLifeBehavior> ().reactToHit ();
 				EnemyController.numberOfEnemies--;
 				enemyBehavior.ReactToHit ();
 			}
 		} 
+
+		if (agent != null && dice == 1) {
 			
+			if (agent != null && neighbor != null && !hit) 
+			{
+				// only attack and kill this target if it is the correct prey type for this animal
+
+				if (enemyBehavior.getPreyList().Contains(diet)) {
+					// get distance to the enemy
+					distance = Vector3.Distance (agent.transform.position, neighbor.transform.position);
+					// check if enemy has been reached
+					if (distance <= attackBehavior.attackDistance) {
+						//Debug.Log ("attaking the player\n");
+						target = neighbor.GetComponent<NavMeshAgent> ();
+						if (target != null) {
+							target.isStopped = true;
+						}
+
+						agent.isStopped = true;
+						hit = true;
+						neighbor.GetComponent<SpeciesBehavior> ().ReactToHit ();
+					}
+				} else {
+					// set enemy to null so a new one that is in prey can maybe be found next time
+					neighbor = null;
+				}
+			} 
+			else if (agent != null && neighbor == null) 
+			{
+				// if no nearest enemy, find a new enemy target
+				//Debug.Log ("Need to get new player target\n");
+				agent.isStopped = false;
+				hit = false;
+				// find nearest neighbor lets defence animals eat any enemy or plant that is diet appropriate
+				neighbor = attackBehavior.findNearestNeighbor (diet, gameObject.transform.position);
+				// find nearest enemy only lets defence animals eat any and all enemies
+				// nearestEnemy = attackBehavior.findNearestEnemy(gameObject.transform.position);
+				if (neighbor != null) {
+					agent.SetDestination (neighbor.transform.position);
+				}
+
+			} else {
+				//Debug.Log ("OOPS enemy agent is NULL\n");
+			}
+		}
+
 	}
 		
 

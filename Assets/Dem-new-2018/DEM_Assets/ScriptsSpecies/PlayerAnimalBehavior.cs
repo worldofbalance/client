@@ -23,19 +23,19 @@ public class PlayerAnimalBehavior : SpeciesBehavior
 	// to be done in every frame
 	// If the nearest enemy is prey attack, otherwise defend by hopefully hearding it away insted
 	void Update() {
-		
+
 		string diet;
 
 		if (playerAgent != null && nearestEnemy != null && !hit) 
 		{
 			// only attack and kill this enemy if it is the correct prey type for this animal
-			//diet = nearestEnemy.GetComponent<SpeciesBehavior> ().getDietType();
-			//if (preyList.Contains (diet)) {
+			diet = nearestEnemy.GetComponent<SpeciesBehavior> ().getDietType();
+			if (preyList.Contains (diet)) {
 				// get distance to the enemy
 				distance = Vector3.Distance (playerAgent.transform.position, nearestEnemy.transform.position);
 				// check if enemy has been reached
-				if (distance <= attackBehavior.attackDistance) 
-				{
+				if (distance <= attackBehavior.attackDistance) {
+					//Debug.Log ("attaking the enemy\n");
 					enemyAgent = nearestEnemy.GetComponent<NavMeshAgent> ();
 					if (enemyAgent != null) {
 						enemyAgent.isStopped = true;
@@ -46,23 +46,28 @@ public class PlayerAnimalBehavior : SpeciesBehavior
 					nearestEnemy.GetComponent<SpeciesBehavior> ().ReactToHit ();
 
 				}
-			//}
+			} else {
+				// set enemy to null so a new one that is in prey can maybe be found next time
+				nearestEnemy = null;
+			}
 		} 
 		else if (playerAgent != null && nearestEnemy == null) 
 		{
+			// if no nearest enemy, find a new enemy target
+			//Debug.Log ("Need to get new enemy target\n");
 			playerAgent.isStopped = false;
 			hit = false;
-			// if no nearest enemy, find a new enemy target
-			//nearestEnemy = attackBehavior.findNearestNeighbor (dietType, gameObject.transform.position);
-			nearestEnemy = attackBehavior.findNearestEnemy(gameObject.transform.position);
+			// find nearest neighbor lets defence animals eat any enemy or plant that is diet appropriate
+			nearestEnemy = attackBehavior.findNearestNeighbor (dietType, gameObject.transform.position);
+			// find nearest enemy only lets defence animals eat any and all enemies
+			// nearestEnemy = attackBehavior.findNearestEnemy(gameObject.transform.position);
 			if (nearestEnemy != null) {
 				playerAgent.SetDestination (nearestEnemy.transform.position);
 			}
 
 		} else {
-			Debug.Log ("OOPS player agent is NULL\n");
+			//Debug.Log ("OOPS player agent is NULL\n");
 		}
-
 
 	} 
 		
