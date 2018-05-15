@@ -30,9 +30,17 @@ public class Constants
     public static readonly string THEME_PATH = "Themes/";
 
     public static string ACTIVE_THEME = "Default";
-	
-    public static readonly Font FONT_01 = Resources.Load<Font>("Fonts/" + "Chalkboard");
+
+	//void Awake(){
+	//	Font FONT_01 = Resources.Load<Font>("Fonts/" + "Chalkboard");
+	//	Texture2D BG_TEXTURE_01 = Resources.Load<Texture2D>(Constants.THEME_PATH + Constants.ACTIVE_THEME + "/gui_bg");
+	//}
+	// moved loads to Awake() fuction to remove compile/build error 
+	// Unity does not permit loads from out of function or static initializers
+	public static readonly Font FONT_01 = Resources.Load<Font>("Fonts/" + "Chalkboard");
     public static readonly Texture2D BG_TEXTURE_01 = Resources.Load<Texture2D>(Constants.THEME_PATH + Constants.ACTIVE_THEME + "/gui_bg");
+	//public static readonly Font FONT_01;
+	//public static readonly Texture2D BG_TEXTURE_01;
 
 	// Converge game - foodweb (Database.cs) constants
     public static readonly int ID_NOT_SET = -1;
