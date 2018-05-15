@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class AttackBehavior {
 
 	// distance for prey to be in range for attack
-	public float attackDistance = 7.0f;
+	public float attackDistance = 6.0f;
 	public int gameBordWidth = 200;
 
 

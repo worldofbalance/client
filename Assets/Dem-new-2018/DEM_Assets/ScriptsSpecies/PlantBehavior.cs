@@ -8,6 +8,7 @@ public class PlantBehavior : SpeciesBehavior {
 
 	void Start() {
 		dietType = "Plant";
+		species = "Plant";
 	}
 
 	// to be done in every frame
