@@ -27,7 +27,7 @@ public class Species3DFactory : MonoBehaviour{
 	{
 		string species = speciesType;
 		ArrayList prey = new ArrayList ();
-		GameObject animal = setAnimalPrefab(species);
+		GameObject animal = setAnimalPrefab(species) as GameObject;
 		diet = getSpeciesDietType (species);
 		prey = setAnimalPrey (diet);
 		SpeciesBehavior behavior;
@@ -85,47 +85,50 @@ public class Species3DFactory : MonoBehaviour{
 		
 
 	// choices are Elephant, Ants, Buffalo, Horse, Leopard, Tortoise, ServalCat, WildBoar
-	private GameObject setAnimalPrefab(string species)
+	public GameObject setAnimalPrefab(string species)
 	{
+		Debug.Log("species = " + species);
 		// default is a nice bright red omnivore so it can eat anything
-		GameObject animal = Instantiate<GameObject>(Ants);
+		// GameObject animal = Instantiate<GameObject>(Ants);
+		//GameObject animal = null;
 
 		// must be a better way, need to look up finding prefab by name, but loading
 		// would require using a resourse folder or path that could change
 		switch (species) 
 		{
 		case "Elephant":
-			animal = Instantiate (Elephant) as GameObject;
+			return Instantiate (Elephant) as GameObject;
 			break;
 		case "Ants":
-			animal = Instantiate (Ants) as GameObject;
+			return Instantiate (Ants) as GameObject;
 			break;
 		case "Buffalo":
-			animal = Instantiate (Buffalo) as GameObject;
+			return Instantiate (Buffalo) as GameObject;
 			break;
 		case "Horse":
-			animal = Instantiate (Horse) as GameObject;
+			return Instantiate (Horse) as GameObject;
 			break;
 		case "Leopard":
-			animal = Instantiate (Leopard) as GameObject;
+			return Instantiate (Leopard) as GameObject;
 			break;
 		case "Tortoise":
-			animal = Instantiate (Tortoise) as GameObject;
+			return Instantiate (Tortoise) as GameObject;
 			break;
 		case "ServalCat":
-			animal = Instantiate (ServalCat) as GameObject;
+			return Instantiate (ServalCat) as GameObject;
 			break;
 		case "WildBoar":
-			animal = Instantiate (WildBoar) as GameObject;
+			return Instantiate (WildBoar) as GameObject;
 			break;
 		}
 
-		return animal;
+		//return animal;
+		return Instantiate (Ants) as GameObject;
 	}
 
 
 	// choices are Omnivore, Carnivore, Herbivore, Plant
-	private string getSpeciesDietType(string species)
+	public string getSpeciesDietType(string species)
 	{
 		diet = "Plant";
 
