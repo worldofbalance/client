@@ -87,13 +87,6 @@ public class Species3DFactory : MonoBehaviour{
 	// choices are Elephant, Ants, Buffalo, Horse, Leopard, Tortoise, ServalCat, WildBoar
 	public GameObject setAnimalPrefab(string species)
 	{
-		Debug.Log("species = " + species);
-		// default is a nice bright red omnivore so it can eat anything
-		// GameObject animal = Instantiate<GameObject>(Ants);
-		//GameObject animal = null;
-
-		// must be a better way, need to look up finding prefab by name, but loading
-		// would require using a resourse folder or path that could change
 		switch (species) 
 		{
 		case "Elephant":
@@ -130,27 +123,29 @@ public class Species3DFactory : MonoBehaviour{
 	// choices are Omnivore, Carnivore, Herbivore, Plant
 	public string getSpeciesDietType(string species)
 	{
-		diet = "Plant";
-
 		switch (species) 
 		{
 		case "Elephant":
 		case "Buffalo":
 		case "Horse":
 		case "Tortoise":
-			diet = "Herbivore";
+			return "Herbivore";
 			break;
 		case "Ants":
 		case "WildBoar":
-			diet = "Omnivore";
+		case "Wild Boar":
+		case "Wild":
+			return "Omnivore";
 			break;
 		case "Leopard":
 		case "ServalCat":
-			diet = "Carnivore";
+		case "Serval Cat":
+		case "Serval":
+			return "Carnivore";
 			break;
 		}
 
-		return diet;
+		return "Plant";
 	}
 
 
@@ -177,8 +172,12 @@ public class Species3DFactory : MonoBehaviour{
 			prey.Add ("Tortoise");
 			prey.Add ("Ants");
 			prey.Add ("WildBoar");
+			prey.Add ("Wild Boar");
+			prey.Add ("Wild");
 			prey.Add ("Leopard");
 			prey.Add ("ServalCat");
+			prey.Add ("Serval Cat");
+			prey.Add ("Serval");
 			break;
 		case "Omnivore": // eat all animals and plants
 			prey.Add ("Elephant");
@@ -187,8 +186,12 @@ public class Species3DFactory : MonoBehaviour{
 			prey.Add ("Tortoise");
 			prey.Add ("Ants");
 			prey.Add ("WildBoar");
+			prey.Add ("Wild Boar");
+			prey.Add ("Wild");
 			prey.Add ("Leopard");
 			prey.Add ("ServalCat");
+			prey.Add ("Serval Cat");
+			prey.Add ("Serval");
 			prey.Add ("Plant");
 			break;
 		case "Herbivore": // eat all plants

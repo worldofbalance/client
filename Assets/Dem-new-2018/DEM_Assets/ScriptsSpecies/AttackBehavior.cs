@@ -14,7 +14,7 @@ public class AttackBehavior {
 	// of acceptable food made by the calling function when desired
 	public GameObject findNearestNeighbor(string diet, Vector3 attackerPosition)
 	{
-		float minDistance = gameBordWidth;
+		float minDistance = gameBordWidth *10;
 		float distance = 0;
 		GameObject nearest = null;
 		GameObject[] neighbors = null;
@@ -88,7 +88,7 @@ public class AttackBehavior {
 	// with no regard for diet of the attacker
 	public GameObject findNearestTarget(GameObject[] targets, Vector3 attackerPosition)
 	{
-		float minDistance = gameBordWidth;
+		float minDistance = gameBordWidth * 10;
 		float distance = 0;
 		GameObject nearest = null;
 

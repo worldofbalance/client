@@ -28,15 +28,24 @@ public class ItemDrag : MonoBehaviour{
 		myRay = Camera.main.ScreenPointToRay (Input.mousePosition);
 		if (Physics.Raycast (myRay, out hit)) {
 			if (Input.GetMouseButtonUp (0)) {
-				//GameObject speciesToMake = Instantiate (objectToInstantiate, hit.point, Quaternion.identity) as GameObject;
-				//string speciesType = speciesToMake.ToString ();
-				string speciesType = objectToInstantiate.ToString();
+				
+				string speciesString = objectToInstantiate.ToString();
+				string[] temp = speciesString.Split (null);
+				string speciesType = temp [0];
 
 				if (objectToInstantiate.tag != "Plant") {
 					
 					ArrayList prey = new ArrayList ();
 					string diet = factory.getSpeciesDietType(speciesType);
+					Debug.Log ("speciesType = " + speciesType + " diet = " + diet + "\n");
 					prey = factory.setAnimalPrey(diet);
+
+					string preyString = "";
+					foreach (string s in prey) {
+						preyString += s + ", ";
+					}
+					Debug.Log ("preyString = " + preyString + "\n");
+
 					GameObject clone = Instantiate (objectToInstantiate, hit.point, Quaternion.identity) as GameObject;
 					SpeciesBehavior behavior = clone.AddComponent<PlayerAnimalBehavior> ();
 					behavior.setDietType (diet);
@@ -45,7 +54,6 @@ public class ItemDrag : MonoBehaviour{
 				} else {
 					Instantiate (objectToInstantiate, hit.point, Quaternion.identity);
 				}
-
 
 				gameObject.transform.position = position;
 				PlayerStats.Money--;
