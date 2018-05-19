@@ -10,9 +10,9 @@ public class Constants {
 
 	// Constants
 	public static readonly string CLIENT_VERSION = "1.00";
-    //public static readonly string REMOTE_HOST =  "localhost";//"thecity.sfsu.edu"; // "localhost"; //"localhost";  "smurf.sfsu.edu";
-	//public static readonly string REMOTE_HOST =  "worldofbalance.westus.cloudapp.azure.com";
-    public static readonly string REMOTE_HOST =  "smurf.sfsu.edu";
+        //public static readonly string REMOTE_HOST =  "localhost";//"thecity.sfsu.edu"; // "localhost"; //"localhost";  "smurf.sfsu.edu";
+        //public static readonly string REMOTE_HOST =  "worldofbalance.westus.cloudapp.azure.com";
+        public static readonly string REMOTE_HOST = "localhost";//"smurf.sfsu.edu";
 	public static readonly int REMOTE_PORT = 9260;
 	//public static readonly int REMOTE_PORT = 20038;     // for localhost
 	public static readonly float HEARTBEAT_RATE = 1f;
@@ -57,6 +57,10 @@ public class Constants {
 	public static readonly short STATUS_FAILURE = 1;
 	// used for MatchStatus and MatchAction 
 	public static readonly short STATUS_NO_MATCH = 2;
+
+    //used for UpdateCreditsProtocol
+    public static readonly int CW_WIN_CREDITS = 100;
+    public static readonly int CW_LOSE_CREDITS = 25;
 
 
 	public static int OPPONENT_ID = -1;

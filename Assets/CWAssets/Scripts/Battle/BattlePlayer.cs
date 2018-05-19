@@ -371,7 +371,7 @@ namespace CW
         //Instantiate's the GameOver button 
         public void createGameover ()
         {
-            int gold = 100; //100 gold if won
+            
             isGameOver = true;
             
             Debug.Log ("Battleplayer game_over");
@@ -379,13 +379,14 @@ namespace CW
             gameOver = (GameObject)Instantiate (Resources.Load ("Prefabs/Battle/GameOver"));
             if (!isWon) {
                 Debug.Log("lost the game");
-                gold = 25;//25 gold if lost
-                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
+                //gaining CW_LOSE_CREDITS amount of credits
+                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, Constants.CW_LOSE_CREDITS), ProcessUpdateCredits);
                 Texture2D loseTexture = (Texture2D)Resources.Load ("Prefabs/Battle/lose", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = loseTexture;
             } else {
                 Debug.Log("won the game");
-                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
+                //gaining CW_WIN_CREDITS amount of credits
+                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, Constants.CW_WIN_CREDITS), ProcessUpdateCredits);
                 Texture2D winTexture = (Texture2D)Resources.Load ("Prefabs/Battle/win", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = winTexture;
             }
