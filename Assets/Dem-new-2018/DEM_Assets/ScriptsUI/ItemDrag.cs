@@ -25,10 +25,19 @@ public class ItemDrag : MonoBehaviour{
 		if (Physics.Raycast (myRay, out hit)) {
 			if (Input.GetMouseButtonUp (0)) {
 				Instantiate (objectToInstantiate, hit.point, Quaternion.identity);
-
-				//objectToInstantiate.AddComponent<
-				//objectToInstantiate.AddComponent<PlayerAnimalBehavior> ();
-				//objectToInstantiate.tag = "Defender";
+				if (objectToInstantiate.tag != "Plant") {
+					/*string species = "Elephant";
+					ArrayList prey = new ArrayList ();
+					SpeciesBehavior behavior;
+					objectToInstantiate.AddComponent<EnemyBehavior> ();
+					behavior = objectToInstantiate.GetComponent<EnemyBehavior> ();
+					objectToInstantiate.AddComponent<EnemyAINavigation> ();
+					objectToInstantiate.tag = "Enemy";
+					prey.Add ("TreeOfLife");
+					prey = Factory.setAnimalPrey("Omnivore");
+					behavior.setDietType("Omnivore");
+					behavior.setPreyList (prey);*/
+				}
 
 				gameObject.transform.position = position;
 				PlayerStats.Money--;
