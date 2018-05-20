@@ -14,7 +14,7 @@ public class TreeOfLifeBehavior : MonoBehaviour
 	// health status
 	private bool alive;
 	public static int treeHealth;
-	public const int maxHealth = 40;
+	public const int maxHealth = 6;
 	private const int injured = 3;
 	private const int dead = 0;
 

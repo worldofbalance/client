@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerStats : MonoBehaviour {
 
 	public static int Money;
-	public int startMoney = 50;
+	public int startMoney = 7;
 
 	public static int Lives;
 

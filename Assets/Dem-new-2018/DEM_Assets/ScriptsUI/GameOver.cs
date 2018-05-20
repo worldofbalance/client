@@ -17,4 +17,5 @@ public class GameOver : MonoBehaviour {
 		sceneFader.FadeTo(menuSceneName);
 	}
 
+
 }

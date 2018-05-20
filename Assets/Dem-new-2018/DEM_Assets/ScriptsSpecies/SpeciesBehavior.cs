@@ -44,8 +44,13 @@ public class SpeciesBehavior : MonoBehaviour
 		// and then laying dead for 1.5 seconds, while the function yields control,
 		// so that the game keeps on playing.
 		yield return new WaitForSeconds(2.0f);
+		//attempt at making death particles
+		//GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
+		//Destroy(effect, 5f);
 		// After 1.5 seconds, the dead object is destroyed, so it leaves the game.
 		Destroy(this.gameObject);
+
+		PlayerStats.Money++;
 	}
 
 

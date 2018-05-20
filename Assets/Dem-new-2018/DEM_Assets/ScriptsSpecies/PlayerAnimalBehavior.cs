@@ -47,7 +47,6 @@ public class PlayerAnimalBehavior : SpeciesBehavior
 						hit = true;
 						EnemyController.numberOfEnemies--;
 						nearestEnemy.GetComponent<SpeciesBehavior> ().ReactToHit ();
-
 					}
 				} 
 			} 

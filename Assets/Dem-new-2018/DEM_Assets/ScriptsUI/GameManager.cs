@@ -37,5 +37,4 @@ public class GameManager : MonoBehaviour {
 		GameIsOver = true;
 		completeLevelUI.SetActive(true);
 	}
-
 }

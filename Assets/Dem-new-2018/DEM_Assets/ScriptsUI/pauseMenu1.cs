@@ -58,14 +58,38 @@ public class pauseMenu1 : MonoBehaviour
             paused = false;
         }
 
-        if (GUILayout.Button("Quit"))
+        if (GUILayout.Button("Move to Main Menu"))
         {
 			paused = false;
-			cbc.Surrender ();
-//						Application.LoadLevel ("ClashMain");
+			//cbc.Surrender ();
+			Application.LoadLevel ("MainMenu");
 //			cbc.ReportBattleOutcome(ClashEndBattleProtocol.BattleResult.LOSS);
             //SceneManager.LoadScene("ClashMain");
         }
+		if (GUILayout.Button("Return to Lobby"))
+		{
+			//let's award players 30 credits for playing - Jeremy
+			Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, 30), ProcessUpdateCredits);
+			Debug.Log("old credits: " + GameState.player.credits);
+			Debug.Log("player awarded 30 credits.");
+			//Add in lobby credits here or gameover
+			Application.LoadLevel ("Game");
+		}
+
     }
+
+	public void ProcessUpdateCredits(NetworkResponse response)
+	{
+		ResponseUpdateCredits args = response as ResponseUpdateCredits;
+		Debug.Log("ResponseUpdateCredits: action= " + args.action);
+
+		if (args.status == 0)
+		{
+			GameState.player.credits = args.newCredits;
+			Debug.Log("new credits: " + args.newCredits);
+		}
+		else
+			Debug.Log("failed to update credits");
+	}
 
 }
