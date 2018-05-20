@@ -50,6 +50,7 @@ public class ItemDrag : MonoBehaviour{
 					SpeciesBehavior behavior = clone.AddComponent<PlayerAnimalBehavior> ();
 					behavior.setDietType (diet);
 					behavior.setPreyList (prey);
+					behavior.setSpecies (speciesType);
 
 				} else {
 					Instantiate (objectToInstantiate, hit.point, Quaternion.identity);
