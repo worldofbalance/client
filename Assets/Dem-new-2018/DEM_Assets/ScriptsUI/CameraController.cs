@@ -1,5 +1,5 @@
 using UnityEngine;
-
+//credit to: https://github.com/Brackeys/Tower-Defense-Tutorial
 public class CameraController : MonoBehaviour {
 
 	public float panSpeed = 30f;
