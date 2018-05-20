@@ -1285,7 +1285,7 @@ public class ConvergeGame : MonoBehaviour
 		//loop through species in ecosystem and add to gamestate species list
 		List <string> ecosystemSpecies = new List<string> (currAttempt.csv_object.csvList.Keys);
 		foreach (string name in ecosystemSpecies) {
-			//find name in species table
+            //find name in species table
 			SpeciesData species = SpeciesTable.GetSpecies (name);
 			if (species == null) {
 				Debug.LogError ("Failed to create Species '" + name + "'");
@@ -1301,7 +1301,8 @@ public class ConvergeGame : MonoBehaviour
 			foodWeb = Database.NewDatabase (
 				GameObject.Find ("Global Object"), 
 		        Constants.MODE_CONVERGE_GAME,
-				manager
+                //Constants.MODE_FOODWEB,
+                manager
 			);
 		} else {
 			foodWeb.manager = manager;
