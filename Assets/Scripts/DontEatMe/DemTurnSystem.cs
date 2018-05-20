@@ -216,8 +216,28 @@ public class DemTurnSystem : MonoBehaviour {
   public void GameOver(){
     //turnLock = true;
     Debug.Log ("game Over");
+
+    //let's award players 30 credits for playing - Jeremy
+    Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, 30), ProcessUpdateCredits);
+    Debug.Log("old credits: " + GameState.player.credits);
+    Debug.Log("player awarded 30 credits.");
+
     buildMenu.EndGame ();
   }
+
+    public void ProcessUpdateCredits(NetworkResponse response)
+    {
+        ResponseUpdateCredits args = response as ResponseUpdateCredits;
+        Debug.Log("ResponseUpdateCredits: action= " + args.action);
+
+        if (args.status == 0)
+        {
+            GameState.player.credits = args.newCredits;
+            Debug.Log("new credits: " + args.newCredits);
+        }
+        else
+            Debug.Log("failed to update credits");
+    }
 
 
 }

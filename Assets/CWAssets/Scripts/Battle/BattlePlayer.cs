@@ -23,13 +23,18 @@ namespace CW
         public string playerName;
         public bool handCentered = false;
         public bool playerFrozen=false;
+
+
         public ProtocolManager getProtocolManager ()
         {
             return protocols;
         }
 
         float showWeatherEffect=CW.Constants.ANIMATE_RATE;
-        
+
+        public Transform weathereffect;
+
+
         //Initializes the player variables
         public void init (bool player1)
         {
@@ -49,7 +54,27 @@ namespace CW
             createTree ();
             createMana ();
         }
-        
+
+        //use this init to initialize player 2
+        public void init2(bool player2)
+        {
+            // get protocolManager from GameManager
+            protocols = GameManager.protocols;
+
+            deck = new ArrayList();
+            hand = new ArrayList();
+            GraveYard = new ArrayList();
+            cardsInPlay = new ArrayList();
+            treeID = new ArrayList();
+
+            //Set's player's coordinates of interest for p1 and p2
+            setPlayerNum(player2);
+
+            //Creates the player's tree and mana displayer
+            createTree2();
+            createMana();
+        }
+
         public GameObject instantiateCard ()
         {
             return (GameObject)Instantiate (Resources.Load ("Prefabs/Battle/Card"));
@@ -69,7 +94,8 @@ namespace CW
                 handPos = new Vector3 (550, 10, -375);//orig(150, 10, -375)
                 FieldPos = new Vector3 (-450, 10, -150);
                 TreePos = new Vector3 (0, 10, -375);//org(-800,10, -300)
-            
+                
+                
                 //Player 1 takes first turn every time
                 currentMana = 1;
                 maxMana = 1;
@@ -112,9 +138,19 @@ namespace CW
                     isFiring=true;
                     //by Pedro
                     if (currentPlayer && audioSource!=null) {
+                        //audioSource.loop = false;
                         audioSource.clip = Resources.Load ("Sounds/burning_fire") as AudioClip;
                         //audioSource.PlayDelayed (1);
                         audioSource.Play ();
+                        
+                         //stop blizzard
+                        weathereffect = GameObject.Find("WeatherEffect").transform.Find("blizzard");
+                        weathereffect.gameObject.SetActive(false);
+
+                        //stop rain
+                        weathereffect = GameObject.Find("WeatherEffect").transform.Find("rain");
+                        weathereffect.gameObject.SetActive(false);
+
                         showWeatherEffect = CW.Constants.ANIMATE_RATE;
                     }
                 }    
@@ -130,12 +166,23 @@ namespace CW
             case 90:
                 if(currentPlayer && audioSource!=null)
                 {
+                    //audioSource.loop = false;
                     playerFrozen=true;// used to show frozen text
                     isFreezing=true;
                     //by Pedro
-                    audioSource.clip = Resources.Load ("Sounds/ice_cracking") as AudioClip;
+                    audioSource.clip = Resources.Load ("Sounds/freeze") as AudioClip;
                     //audioSource.PlayDelayed (1);
                     audioSource.Play ();
+                    //audioSource.loop = true;
+                    
+                    //stop rain
+                    weathereffect = GameObject.Find("WeatherEffect").transform.Find("rain");
+                    weathereffect.gameObject.SetActive(false);
+                    
+                    //start blizzard
+                    weathereffect = GameObject.Find("WeatherEffect").transform.Find("blizzard");
+                    weathereffect.gameObject.SetActive(true);
+
                     showWeatherEffect=CW.Constants.ANIMATE_RATE;
                 }
 
@@ -151,9 +198,20 @@ namespace CW
                 if (currentPlayer && audioSource!=null) {
                     isRaining = true;
                     //by Pedro
-                    audioSource.clip = Resources.Load ("Sounds/rain_thunder") as AudioClip;
+                    //audioSource.loop = false;
+                    audioSource.clip = Resources.Load ("Sounds/rain") as AudioClip;
                     //audioSource.PlayDelayed (1);
                     audioSource.Play ();
+                    //audioSource.loop = true;
+                    
+                    //stop blizzard
+                    weathereffect = GameObject.Find("WeatherEffect").transform.Find("blizzard");
+                    weathereffect.gameObject.SetActive(false);
+
+                    //start rain
+                    weathereffect = GameObject.Find("WeatherEffect").transform.Find("rain");
+                    weathereffect.gameObject.SetActive(true);
+
                     showWeatherEffect = CW.Constants.ANIMATE_RATE;
                     givePlayerFoodCard (2);
                 }
@@ -243,8 +301,18 @@ namespace CW
             script.init (this);
             treeID.Add (obj);
         }
-        
-        
+
+        //use this version of createTree to make the tree for player2
+        public void createTree2()
+        {
+            GameObject obj = (GameObject)Instantiate(Resources.Load("Prefabs/Battle/Tree"));
+            obj.AddComponent<Trees>();
+            Trees script = obj.GetComponent<Trees>();
+            script.init2(this);
+            treeID.Add(obj);
+        }
+
+
         //Creates a visual for the text that displays how much mana a player has
         private void createMana ()
         {
@@ -294,16 +362,19 @@ namespace CW
         {
             int gold = 100; //100 gold if won
             isGameOver = true;
+            
             Debug.Log ("Battleplayer game_over");
             
             gameOver = (GameObject)Instantiate (Resources.Load ("Prefabs/Battle/GameOver"));
             if (!isWon) {
                 Debug.Log("lost the game");
                 gold = 25;//25 gold if lost
+                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
                 Texture2D loseTexture = (Texture2D)Resources.Load ("Prefabs/Battle/lose", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = loseTexture;
             } else {
                 Debug.Log("won the game");
+                Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, gold), ProcessUpdateCredits);
                 Texture2D winTexture = (Texture2D)Resources.Load ("Prefabs/Battle/win", typeof(Texture2D));
                 gameOver.GetComponent<Renderer>().material.mainTexture = winTexture;
             }
@@ -690,5 +761,21 @@ namespace CW
                 }
             }
         }
+
+        public void ProcessUpdateCredits(NetworkResponse response)
+        {
+            ResponseUpdateCredits args = response as ResponseUpdateCredits;
+            Debug.Log("ResponseUpdateCredits: action= " + args.action);
+
+            if (args.status == 0)
+            {
+                GameState.player.credits = args.newCredits;
+                Debug.Log("new credits: " + args.newCredits);
+            }
+            else
+            Debug.Log("failed to update credits");
+
+        }
+
     }
 }

@@ -23,6 +23,9 @@ public class NetworkProtocolTable {
 		Add(NetworkCode.SPECIES_CREATE, "SpeciesCreate");
 		Add(NetworkCode.ECOSYSTEM, "Ecosystem");
 		Add(NetworkCode.SHOP_ACTION, "ShopAction");
+
+        Add(NetworkCode.UPDATE_CREDITS, "UpdateCredits");
+
         //tile purchase
         Add(NetworkCode.TILE_PRICE, "TilePrice");
         Add(NetworkCode.TILE_PURCHASE, "TilePurchase");
