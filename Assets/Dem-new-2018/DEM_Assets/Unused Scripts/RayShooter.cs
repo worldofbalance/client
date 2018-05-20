@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// This is not used now, but it is left in for reference for future students.
 // This is from the text book "Unity in Action: Multiplatform Game Development in C#" by Joseph Hocking.
+// This is not used now, but it is left in for reference for future students.
 // Make the RayShooter script a component of the camera object (the camera not the player),
 // by draging the script from Project Assets screen onto the camera in the Hierarchy screen.
 // This illustrates the concept of ray casting.

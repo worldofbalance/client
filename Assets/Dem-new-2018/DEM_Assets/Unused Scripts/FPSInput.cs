@@ -1,4 +1,4 @@
-﻿/*using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 // This is from the text book "Unity in Action: Multiplatform Game Development in C#" by Joseph Hocking.
@@ -58,4 +58,3 @@ public class FPSInput : MonoBehaviour {
 		_charController.Move(movement);
 	}
 }
-*/
