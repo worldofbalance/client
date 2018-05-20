@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
-
+//File credited to https://github.com/Brackeys/Tower-Defense-Tutorial
 public class SceneFader : MonoBehaviour {
 
 	public Image img;
