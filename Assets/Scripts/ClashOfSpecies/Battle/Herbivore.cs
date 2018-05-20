@@ -6,6 +6,8 @@ using UnityEngine.AI;
 public class Herbivore : ClashBattleUnit {
 
 	//Awake, Start, and Update are identical to ClashBattleUnit (Omnivore)
+	//Only FindTarget and Attack are overridden and changed from ClashBattleUnit
+	//to accomodate the difference in priorities this type has
 
     void Awake (){
         agent = GetComponent<NavMeshAgent> ();
@@ -35,7 +37,7 @@ public class Herbivore : ClashBattleUnit {
 			//Find a target
 			targetTimer += Time.deltaTime;
 			if (targetTimer >= Random.Range(2.0f, 3.5f) && !isDead) {
-				findTarget ();
+				FindTarget ();
 				if (target) {
 					if (!target.isDead) {
 						agent.SetDestination (target.transform.position);
@@ -56,7 +58,7 @@ public class Herbivore : ClashBattleUnit {
 	//End of Update
 
 	// Sort by invading/defending -> sort by species type -> get closest target for each type -> set target
-    protected override void findTarget () {
+    protected override void FindTarget () {
 		float minDistance = Mathf.Infinity;
 		float dist = 0;
 		float carnivoreDist = Mathf.Infinity;
@@ -68,17 +70,19 @@ public class Herbivore : ClashBattleUnit {
 		
 		animalList.AddRange(omnivoreList); //combines the omnivoreList and herbivoreList in to animalList
 		animalList.AddRange(herbivoreList);
+
 		// Priority Targeting: favorite plants > very close animals > obstacles > herbivore/omnivore > carnivore
 //		if (favoritePreyList.Count > 0) {
-//			dist = findClosestTarget (favoritePreyList); //sets tempTarget
+//			dist = FindClosestTarget (favoritePreyList); //sets tempTarget
 //			if (dist <= 45.0f || (gameObject.tag == "Ally" && dist < 80.0f)) {
 //				target = tempTarget;
 //				anim.SetTrigger ("Walking");
 //				return;
 //			}
 //		}
+		//Animal fights back if enemy gets too close
 		if (animalList.Count > 0) {
-			dist = findClosestTarget (animalList); //sets tempTarget
+			dist = FindClosestTarget (animalList); //sets tempTarget
 			if (dist <= 8.0f) {
 				target = tempTarget;
 				anim.SetTrigger ("Walking");
@@ -86,7 +90,7 @@ public class Herbivore : ClashBattleUnit {
 			}
 		}
 		if (obstacleList.Count > 0) {
-			dist = findClosestTarget (obstacleList);
+			dist = FindClosestTarget (obstacleList);
 			if (dist < 80.0f) {
 				target = tempTarget;
 				anim.SetTrigger ("Walking");
@@ -94,7 +98,7 @@ public class Herbivore : ClashBattleUnit {
 			}
 		}
 		if (animalList.Count > 0) {
-			dist = findClosestTarget (animalList); //sets tempTarget
+			dist = FindClosestTarget (animalList); //sets tempTarget
 			if (dist <= 45.0f || (gameObject.tag == "Ally" && dist < 80.0f)) {
 				target = tempTarget;
 				anim.SetTrigger ("Walking");
@@ -102,7 +106,7 @@ public class Herbivore : ClashBattleUnit {
 			}
 		}
 		if (carnivoreList.Count > 0) {
-			dist = findClosestTarget (animalList); //sets tempTarget
+			dist = FindClosestTarget (animalList); //sets tempTarget
 			if (dist <= 45.0f || (gameObject.tag == "Ally" && dist < 80.0f)) {
 				target = tempTarget;
 				anim.SetTrigger ("Walking");
@@ -110,7 +114,7 @@ public class Herbivore : ClashBattleUnit {
 			}
 		}
 	}
-	//End of findTarget
+	//End of FindTarget
 
 	protected override void Attack () {
 		timer = 0f;

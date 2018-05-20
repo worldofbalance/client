@@ -23,7 +23,7 @@ public class ClashBattleController : MonoBehaviour
     public Dictionary<string, int> enemySpecies = new Dictionary<string, int> ();
     public Dictionary<string, int> allySpecies = new Dictionary<string, int> ();
 	public List<Text> allyTypeSpecies; // References to the UI elements in the hierachy
-	public List<Text> allyNameSpecies;
+	public List<Text> allyNameSpecies; // e.g. ClashBattle.unity scene, Canvas > AllyActiveSpecies > container
 	public List<Text> allyCountSpecies;
 	public List<Text> enemyTypeSpecies;
 	public List<Text> enemyNameSpecies;
@@ -41,7 +41,6 @@ public class ClashBattleController : MonoBehaviour
 
 	//tile building
 	//cube
-
 	public float tileSize = 5.0f;
 	public Transform tileTrans;
 	public MeshRenderer tileRend;
@@ -56,7 +55,7 @@ public class ClashBattleController : MonoBehaviour
     private ToggleGroup toggleGroup;
 	private int walkableAreaMask;
 
-	//For mobile/touchscreen
+	//For mobile/touchscreen 
     private float timeTouchPhaseEnded;
     private Vector3 oldTouchPos;
 	private COSAbstractInputController cosInController;
@@ -96,6 +95,7 @@ public class ClashBattleController : MonoBehaviour
 					trigger.radius = Constants.UnitColliderRadius;
 					speciesObject.tag = "Enemy";
 
+					//Adding A.I. script to spawned animal GameObjects
 					if (species.type == ClashSpecies.SpeciesType.CARNIVORE)
 						speciesObject.AddComponent<Carnivore> ();
 					else if (species.type == ClashSpecies.SpeciesType.HERBIVORE)
@@ -203,19 +203,21 @@ public class ClashBattleController : MonoBehaviour
 				if (allyObject == null)
 					return;
 
+				//adding components to spawned units
 				var trigger = allyObject.AddComponent<SphereCollider> ();
 				trigger.radius = Constants.UnitColliderRadius;
 				var unit = allyObject.AddComponent<ClashBattleUnit> ();
 				alliesList.Add (unit);
 				unit.species = selected;
                 
-				// Creating keys for spawned allies
+				// Creating keys for spawned allies (attackers)
 				var key = unit.name.Split ('(') [0];
 				if (!allySpecies.ContainsKey (key))
 					allySpecies [key] = 1;
 				else
 					allySpecies [key] += 1;
 
+				// Creating and attaching the health bars above units
 				var bar = Instantiate (healthBar, unit.transform.position, Quaternion.identity) as GameObject;
 				bar.transform.SetParent (unit.transform);
 				bar.transform.localPosition = new Vector3 (0.0f, 8.0f, 0.0f);
@@ -261,7 +263,7 @@ public class ClashBattleController : MonoBehaviour
         int min = intTime / 60;
 
         if (timeLeft < 0 && !finished) {
-            // If there are more defenders left than attackers, defender wins
+            // If there are more defenders left than attackers after 2 min, defender wins
            if (enemiesList.Count() > alliesList.Count())
                ReportBattleOutcome(ClashEndBattleProtocol.BattleResult.LOSS);
            else // otherwise attacker wins 

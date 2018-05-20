@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class ClashBattleUnit : MonoBehaviour
 {
 	//ClashBattleUnit is OMNIVORE behavior
-	//Carnivore, Herbivore, and Obstacle are subclasses of ClashBattleUnit
+	//Carnivore.cs, Herbivore.cs, and Obstacle.cs are subclasses of ClashBattleUnit
 
 	//The ClashSpecies class holds species id, name, description, cost, hp, attack,
 	//attack speed, move speed, and type - these values are from the database and
@@ -18,7 +18,7 @@ public class ClashBattleUnit : MonoBehaviour
 	public string speciesName;
     public int currentHealth;
     public int damage = 0;
-	//not used, just for display in inspector. the type is stored in the species variable
+	//type not used, just for display in inspector. the type is stored in the species variable
 	public string type;
     protected float timeBetweenAttacks = 1.0f;
 	protected float stoppingDistance = 5.5f;
@@ -33,13 +33,14 @@ public class ClashBattleUnit : MonoBehaviour
 	protected NavMeshAgent agent;
 	protected ClashBattleUnit target = null;
 	protected ClashBattleUnit tempTarget = null;
-	protected List<ClashBattleUnit> favoritePreyList = new List<ClashBattleUnit>();
+//	protected List<ClashBattleUnit> favoritePreyList = new List<ClashBattleUnit>();
 	protected List<ClashBattleUnit> omnivoreList = new List<ClashBattleUnit>();
 	protected List<ClashBattleUnit> carnivoreList = new List<ClashBattleUnit>();
 	protected List<ClashBattleUnit> herbivoreList = new List<ClashBattleUnit>();
 	protected List<ClashBattleUnit> animalList = new List<ClashBattleUnit>(); 
 	protected List<ClashBattleUnit> obstacleList = new List<ClashBattleUnit>();
 
+	//Getting components
     void Awake ()
 	{
         agent = GetComponent<NavMeshAgent> ();
@@ -47,6 +48,7 @@ public class ClashBattleUnit : MonoBehaviour
         controller = GameObject.Find ("Battle Menu").GetComponent<ClashBattleController> ();
     }
 
+	//Intializing variables
     void Start ()
 	{
 		//Set variables according to species data
@@ -66,8 +68,9 @@ public class ClashBattleUnit : MonoBehaviour
 		if (controller.isStarted && !controller.finished) {
 			//Find a target
 			targetTimer += Time.deltaTime;
+			//targeting is staggered so there is less performance issues
 			if (targetTimer >= Random.Range(2.0f, 3.5f) && !isDead) {
-				findTarget ();
+				FindTarget ();
 				if (target) {
 					if (!target.isDead) {
 						agent.SetDestination (target.transform.position);
@@ -87,24 +90,23 @@ public class ClashBattleUnit : MonoBehaviour
     } 
 	//End of Update
 
-	// Outline
 	// Sort by invaders/defenders -> sort by species type -> get closest target for each type -> set target
-	protected virtual void findTarget ()
+	protected virtual void FindTarget ()
 	{
 		float minDistance = Mathf.Infinity;
 		float dist = 0;
 		
 		SortSpecies ();
 
-		//No prioritization for any particular type, so amalgamate them in to one list
+		//Herbivore has no prioritization for any particular type, so amalgamate them in to one list
 		animalList.AddRange(carnivoreList);
 		animalList.AddRange(omnivoreList);
 		animalList.AddRange(herbivoreList);
 		
 		//Priority Targeting: favoritePrey > animals > obstacles
-		//Omnivore has no preference towards one species type
+		//Food web targeting not implemented
 //		if (favoritePreyList.Count > 0) {
-//			dist = findClosestTarget (favoritePreyList); //sets tempTarget
+//			dist = FindClosestTarget (favoritePreyList); //sets tempTarget
 //			if (dist <= 45.0f || (gameObject.tag == "Ally" && dist < 80.0f)) {
 //				target = tempTarget;
 //				anim.SetTrigger ("Walking");
@@ -112,7 +114,8 @@ public class ClashBattleUnit : MonoBehaviour
 //			}
 //		}
 		if (animalList.Count > 0) {
-			dist = findClosestTarget (animalList); //sets tempTarget
+			dist = FindClosestTarget (animalList); //sets tempTarget
+			//  for defenders     for attackers
 			if (dist <= 45.0f || (gameObject.tag == "Ally" && dist < 80.0f)) {
 				target = tempTarget;
 				anim.SetTrigger ("Walking");
@@ -120,13 +123,13 @@ public class ClashBattleUnit : MonoBehaviour
 			}
 		}
 		if (obstacleList.Count > 0) {
-			dist = findClosestTarget (obstacleList); //sets tempTarget
+			dist = FindClosestTarget (obstacleList); //sets tempTarget
 			target = tempTarget;
 			anim.SetTrigger ("Walking");
 			return;
 		}
 	}
-	//End of findTarget
+	//End of FindTarget
 
 	protected void SortSpecies () {
 		ClashBattleUnit sortTarget = null;
@@ -150,8 +153,8 @@ public class ClashBattleUnit : MonoBehaviour
 			sortTarget = enemySpecies.GetComponent<ClashBattleUnit> ();
 			if (!sortTarget.isDead) {
 //				foreach (ClashBattleUnit prey in favoritePreyList){
-	//				if (sortTarget.speciesName == prey)
-	//					favoritePreyList.Add (sortTarget);
+//					if (sortTarget.speciesName == prey)
+//						favoritePreyList.Add (sortTarget);
 //				}
 				if (sortTarget.species.type == ClashSpecies.SpeciesType.OMNIVORE)
 					omnivoreList.Add (sortTarget);
@@ -164,8 +167,9 @@ public class ClashBattleUnit : MonoBehaviour
 			}
 		}
 	}
-
-	protected float calculatePathDistance(NavMeshPath path) {
+	
+	//An alternative to using NavMeshAgent.remainingDistance, which does not work properly
+	protected float CalculatePathDistance(NavMeshPath path) {
 	    float distance = .0f;
 	    for (var i = 0; i < path.corners.Length - 1; i++) {
 	        distance += Vector3.Distance(path.corners[i], path.corners[i + 1]);
@@ -173,18 +177,19 @@ public class ClashBattleUnit : MonoBehaviour
 	    return distance;
 	}
 
-	protected float findClosestTarget (List<ClashBattleUnit> targetList) {
+	protected float FindClosestTarget (List<ClashBattleUnit> targetList) {
 		// Finds the closest target within the list, using remaining navigable distance
 		NavMeshPath path = new NavMeshPath ();
 		float pathDistance = 0;
 		float closestDistance = Mathf.Infinity;
 		
 		foreach (ClashBattleUnit searchTarget in targetList) {
+			//obstacles/plants use NavMeshObstacle component, so can't use path calculation
 			if (searchTarget.species.type == ClashSpecies.SpeciesType.PLANT) {
 				pathDistance = Vector3.Distance(transform.position, searchTarget.transform.position);
 			} else {
 				agent.CalculatePath (searchTarget.transform.position, path);
-				pathDistance = calculatePathDistance (path);
+				pathDistance = CalculatePathDistance (path);
 			}
 			if (pathDistance < closestDistance) {
 				closestDistance = pathDistance;
@@ -210,6 +215,7 @@ public class ClashBattleUnit : MonoBehaviour
 					transform.LookAt (target.transform);
 					if (anim != null)
 						anim.SetTrigger ("Attacking");
+					//Deal additional damage to favorite prey from food web
 //					foreach (ClashBattleUnit prey in favoritePreyList){
 //						if (target.speciesName == prey)
 //							target.TakeDamage (damage + 100, this);
