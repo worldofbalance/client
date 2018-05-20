@@ -10,7 +10,7 @@ public class SpeciesClickController : MonoBehaviour
     public ClashBattleController clashBattleControllerScript;
 
     private Animator anim;
-    private NavMeshAgent navMeshAgent;
+    private UnityEngine.AI.NavMeshAgent navMeshAgent;
     private Transform targetedEnemy;
     private GameObject allySelected;
     private Ray shootRay;
@@ -48,7 +48,7 @@ public class SpeciesClickController : MonoBehaviour
 //                    var colliders = Physics.OverlapSphere(hit.transform.position, 1 /*Radius*/);
 //                    colliders[0].gameObject;
                     allySelected = hit.collider.gameObject;
-                    navMeshAgent = allySelected.GetComponent<NavMeshAgent>();
+                    navMeshAgent = allySelected.GetComponent<UnityEngine.AI.NavMeshAgent>();
                     anim = allySelected.GetComponent<Animator>();
 //                    oldColor = allySelected.GetComponent<Renderer>().material.color;
 //                    allySelected.GetComponent<Renderer>().material.color = Color.blue;

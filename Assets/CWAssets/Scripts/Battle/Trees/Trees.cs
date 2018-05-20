@@ -11,10 +11,10 @@ public class Trees : MonoBehaviour {
     private bool removeAfterDelay;
     private float delayTimer = 0, DELAY_CONSTANT = 3;
     private bool surrendering = false;
-    
-    Texture2D tree1Texture = (Texture2D) Resources.Load ("Images/Battle/tree1", typeof(Texture2D));
-    Texture2D tree2Texture = (Texture2D) Resources.Load ("Images/Battle/tree2", typeof(Texture2D));
-    Texture2D tree3Texture = (Texture2D) Resources.Load ("Images/Battle/tree3", typeof(Texture2D));
+
+    Texture2D tree1Texture;
+    Texture2D tree2Texture;
+    Texture2D tree3Texture;
         //initializing all canvases and buttons
     GameObject optionsButton;
     GameObject surrenderButton;
@@ -33,6 +33,9 @@ public class Trees : MonoBehaviour {
     }
 
     public void init(BattlePlayer player){
+        tree1Texture = (Texture2D) Resources.Load ("Images/Battle/tree1", typeof(Texture2D));
+        tree2Texture = (Texture2D) Resources.Load ("Images/Battle/tree2", typeof(Texture2D));
+        tree3Texture = (Texture2D) Resources.Load ("Images/Battle/tree3", typeof(Texture2D));
         this.player = player;
         maxHP =hp= 30; 
 
@@ -78,18 +81,75 @@ public class Trees : MonoBehaviour {
 
         Debug.Log("adding listeners");
     }
-    
-    
-    
-    //OnMouseOver does not accept mouse clicks if mouse is not moving when the input from user
-    //was received. I don't think it's necessary for the tree to get larger when the player clicks the tree
-//  void OnMouseDown () 
-//  {
-//      if(handler != null)
-//          handler.clicked ();
-//
-//  }
-    void OnMouseOver ()
+
+    //use this version of init to initialize player 2, so that we dont add redundant listeners on certain buttons(ie. surrender) -Jeremy
+    public void init2(BattlePlayer player)
+    {
+        tree1Texture = (Texture2D)Resources.Load("Images/Battle/tree1", typeof(Texture2D));
+        tree2Texture = (Texture2D)Resources.Load("Images/Battle/tree2", typeof(Texture2D));
+        tree3Texture = (Texture2D)Resources.Load("Images/Battle/tree3", typeof(Texture2D));
+        this.player = player;
+        maxHP = hp = 30;
+
+        if (player.player1)
+        { //Your name is pink
+            //transform.Find ("NameText").GetComponent<TextMesh> ().text = this.player.playerName;
+            transform.Find("NameText").GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        }
+        else
+        { //Enemy name is redateria
+            //transform.Find ("NameText").GetComponent<TextMesh> ().text = this.player.playerName;
+            transform.Find("NameText").GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+        }
+        //Set dmg text
+        transform.Find("DamageText").GetComponent<TextMesh>().text = "";
+        //Set alpha level for fading
+        //transform.Find ("DamageText").GetComponent<TextMesh> ().color.a = 0;
+        handler = new LivingTreeClick(this, player);
+        transform.position = new Vector3(player.TreePos.x, player.TreePos.y, player.TreePos.z);
+
+        /*GameObject optionsButton = GameObject.Find ("/OptionsButtonCanvas/OptionsButton");
+        GameObject surrenderButton = GameObject.Find ("/OptionsCanvas/OptionsPanel/QuitButtons/SurrenderButton");
+        optionsButton.GetComponent<Button> ().onClick.AddListener (() => {toggleSurrender();});
+        surrenderButton.GetComponent<Button>().onClick.AddListener (() => {surrenderConfirm();});*/
+
+        optionsButton = GameObject.Find("/OptionsButtonCanvas/OptionsButton");
+        surrenderButton = GameObject.Find("/OptionsCanvas/OptionsPanel/QuitButtons/SurrenderButton");
+        yesButton = GameObject.Find("/ConfirmCanvas/ConfirmPanel/YesButton");
+        noButton = GameObject.Find("/ConfirmCanvas/ConfirmPanel/NoButton");
+        optionCanvas = GameObject.Find("OptionsCanvas");
+        confirmCanvas = GameObject.Find("ConfirmCanvas");
+        closeButton = GameObject.Find("OptionsCanvas/OptionsPanel/CloseOptions");
+        helpCanvas = GameObject.Find("HelpCanvas");
+        helpButton = GameObject.Find("/OptionsCanvas/OptionsPanel/QuitButtons/HelpButton");
+        helpCloseButton = GameObject.Find("HelpCanvas/BG/Button");
+
+        //adding listeners for buttons
+        /*
+        optionsButton.GetComponent<Button>().onClick.AddListener(() => { toggleSurrender(); });
+        closeButton.GetComponent<Button>().onClick.AddListener(() => { toggleSurrender(); });
+        surrenderButton.GetComponent<Button>().onClick.AddListener(() => { surrenderConfirm(); });
+        yesButton.GetComponent<Button>().onClick.AddListener(() => { surrenderOn(); });
+        noButton.GetComponent<Button>().onClick.AddListener(() => { surrenderConfirm(); });
+        */
+        helpButton.GetComponent<Button>().onClick.AddListener(() => { toggleHelp(); });
+        helpCloseButton.GetComponent<Button>().onClick.AddListener(() => { toggleHelp(); });
+
+
+        Debug.Log("adding listeners");
+    }
+
+
+
+        //OnMouseOver does not accept mouse clicks if mouse is not moving when the input from user
+        //was received. I don't think it's necessary for the tree to get larger when the player clicks the tree
+        //  void OnMouseDown () 
+        //  {
+        //      if(handler != null)
+        //          handler.clicked ();
+        //
+        //  }
+        void OnMouseOver ()
     {
             if (!EventSystem.current.IsPointerOverGameObject())
         {

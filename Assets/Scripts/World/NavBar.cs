@@ -9,7 +9,7 @@ public class NavBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
 	// Use this for initialization
 	void Start () {
-		container = transform.FindChild ("container").GetComponent<RectTransform> ();
+		container = transform.Find ("container").GetComponent<RectTransform> ();
 		isOpen = false;
 
 	}
