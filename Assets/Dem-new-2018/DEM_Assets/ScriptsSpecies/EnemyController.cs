@@ -12,9 +12,9 @@ public class EnemyController : MonoBehaviour
 	// the current number of enemies alive in the game
 	public static int numberOfEnemies = 0;
 	// The maximum number of enemies on the game board at the same time.
-	public static int maxNumberOfEnemies = 12;
+	public static int maxNumberOfEnemies = 50;
 	// for the timing of automatic enemy spawinings
-	public float timeStep = 4.0f;
+	public float timeStep = 2.0f;
 	private float oldTime;
 	// The edges of the game board, this is used for species placement on the board.
 	// Minus 4 to accomidate the walls around the board.
@@ -28,7 +28,7 @@ public class EnemyController : MonoBehaviour
 	void Start(){	
 		oldTime = Time.time;
 		groundWidth = (int)(dimentionsGround.localScale.x / 2) - 4;
-		factory = GameObject.Find("MasterController").GetComponent<Species3DFactory>();
+		factory = gameObject.GetComponent<Species3DFactory> ();
 	}
 
 
@@ -44,8 +44,8 @@ public class EnemyController : MonoBehaviour
 			placeEnemy (enemy);
 
 			// for testing only
-			testPlayer = factory.getRandomAnimal(false);
-			placeEnemy (testPlayer);
+			// testPlayer = factory.getRandomAnimal(false);
+			// placeEnemy (testPlayer);
 
 			oldTime = Time.time;
 		}

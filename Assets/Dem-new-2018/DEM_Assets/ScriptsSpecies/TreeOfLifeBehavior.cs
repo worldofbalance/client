@@ -14,10 +14,9 @@ public class TreeOfLifeBehavior : MonoBehaviour
 	// health status
 	private bool alive;
 	public static int treeHealth;
-	private const int maxHealth = 6;
+	public const int maxHealth = 6;
 	private const int injured = 3;
 	private const int dead = 0;
-
 
 	// the initial state
 	void Start() {
@@ -26,16 +25,13 @@ public class TreeOfLifeBehavior : MonoBehaviour
 		render = GetComponent<Renderer> ();
 	}
 
-
 	// Update is called once per frame
 	// Changes the look of the Tree of Life based on its health state.
 	void Update () {
 
 	}
 
-
 	public void reactToHit() {
-
 		treeHealth--;
 
 		if (treeHealth <= dead) {
@@ -53,7 +49,6 @@ public class TreeOfLifeBehavior : MonoBehaviour
 		}
 	}
 		
-
 	public IEnumerator Die() {
 		// The object reacts to being hit by falling over,
 		this.transform.Rotate(-75, 0, 0);
@@ -63,8 +58,7 @@ public class TreeOfLifeBehavior : MonoBehaviour
 		// After 1.5 seconds, the dead object is destroyed, so it leaves the game.
 		Destroy(this.gameObject);
 	}
-
-
+		
 	public void setAlive(bool alive) {
 		this.alive = alive;
 	}
@@ -72,7 +66,4 @@ public class TreeOfLifeBehavior : MonoBehaviour
 	public bool getAlive(){
 		return this.alive;
 	}
-
-
-
 }

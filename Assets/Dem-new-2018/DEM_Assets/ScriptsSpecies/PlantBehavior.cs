@@ -6,6 +6,11 @@ using UnityEngine;
 // Mostly a placeholder to creat the a plant type.
 public class PlantBehavior : SpeciesBehavior {
 
+	void Start() {
+		dietType = "Plant";
+		species = "Plant";
+	}
+
 	// to be done in every frame
 	void Update() {
 		

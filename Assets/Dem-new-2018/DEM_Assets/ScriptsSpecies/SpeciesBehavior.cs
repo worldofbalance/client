@@ -8,7 +8,7 @@ public class SpeciesBehavior : MonoBehaviour
 {
 	// the specific type of animal or plant
 	protected string species;
-	//diet is "Omnivore", "Carnivore", "Herbivore", "Plant", "TreeOfLife"
+	//diet is "Omnivore", "Carnivore", "Herbivore", or "Plant"
 	protected string dietType;
 	protected ArrayList preyList;
 	protected bool alive;
@@ -16,12 +16,17 @@ public class SpeciesBehavior : MonoBehaviour
 	protected const int maxHealth = 6;
 	protected const int injured = 3;
 	protected const int dead = 0;
+	// for action on the game board
+	protected AttackBehavior attackBehavior;
 
 
-	// the initial state
+	// the initial state, each inheriting behavior type has its own Start() 
+	// for additional plant or animal specific stuff, which would be called after the Awake() function
 	void Awake() {
 		this.alive = true;
 		this.health = maxHealth;
+		preyList = new ArrayList ();
+		attackBehavior = new AttackBehavior ();
 	}
 
 
@@ -35,13 +40,24 @@ public class SpeciesBehavior : MonoBehaviour
 
 	public virtual IEnumerator Die() {
 		// The object reacts to being hit by falling over,
-		this.transform.Rotate(0, 0, -90);
+		this.transform.Rotate(0, 0, -75);
 		// and then laying dead for 1.5 seconds, while the function yields control,
 		// so that the game keeps on playing.
-		yield return new WaitForSeconds(1.0f);
+		yield return new WaitForSeconds(2.0f);
+		//attempt at making death particles
+		//GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
+		//Destroy(effect, 5f);
 		// After 1.5 seconds, the dead object is destroyed, so it leaves the game.
 		Destroy(this.gameObject);
+
+		PlayerStats.Money++;
 	}
+
+
+
+
+
+	/*** getters and setters ****/
 
 	public void setDietType(string dietType){
 		this.dietType = dietType;
