@@ -42,6 +42,7 @@ public class Login : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+        // calls AutoLogin (see comments below)
         StartCoroutine("AutoLogin");
 
     }
@@ -162,6 +163,7 @@ public class Login : MonoBehaviour
         }
     }
 
+    // for faster testing and development, enter account details, uncomment the autologin  coroutine under Start()
     public IEnumerator AutoLogin ()
     {
         while (true) {

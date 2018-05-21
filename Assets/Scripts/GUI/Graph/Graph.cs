@@ -35,7 +35,7 @@ public class Graph : MonoBehaviour {
 	private float left;
 	private float top;
 	private float width = 855;    // 2017-3-31  was 805
-	private float height = 430;   // 2017-3-15  was 420
+	private float height = 500;   // 2017-3-15  was 420
 	public bool isActive = false;
 	private bool isReady = false;
 	private bool isLegendActive = true;
@@ -58,8 +58,8 @@ public class Graph : MonoBehaviour {
 	private Rect legendScrollRect;
 	private Vector2 legendScrollPos = Vector2.zero;
 	private bool isLegendContentHidden = false;
-	private float thickness = 2f;
-	private Vector2 hStart;
+    private float thickness = 2f; // graph axis line thickness
+    private Vector2 hStart;
 	private Vector2 hEnd;
 	private int xNumMarkers = 12;
 	private int yNumMarkers = 5;
@@ -124,9 +124,10 @@ public class Graph : MonoBehaviour {
 
 		yAxisLength = Vector2.Distance(vStart, vEnd) * 0.95f;
 		yUnitLength = yAxisLength / yNumMarkers;
-
+        
+        // line graph points
 		lineMarkerTex = Resources.Load<Texture2D>("chart_dot");
-
+        // graph window background
 		bgTexture = Resources.Load<Texture2D>(Constants.THEME_PATH + Constants.ACTIVE_THEME + "/gui_bg");
 		font = Resources.Load<Font>("Fonts/" + "Chalkboard");
 		MakeDayCounts ();
@@ -183,7 +184,7 @@ public class Graph : MonoBehaviour {
 	}
 		
 	void OnGUI() {
-        // temporary reference to current scene
+        // local reference to current scene
         Scene currentScene = SceneManager.GetActiveScene();
 
         // displays Graph button if current scene is Ecosystem
@@ -193,7 +194,7 @@ public class Graph : MonoBehaviour {
             }
         }
 
-        // old display "Graph" button
+        // old "Graph" button
         if (buttonActive && currentScene.name != "Ecosystem") {
 			if (GUI.Button(new Rect(200, Screen.height - 95f, 80, 30), "Graph")) {
 				ToggleGraph();
@@ -302,7 +303,7 @@ public class Graph : MonoBehaviour {
 	}
 
 	private void DrawGrid() {
-		Color color = Color.white;
+		Color color = Color.grey;
 
 		GUI.BeginGroup(graphRect, GUI.skin.box);
 			GUIStyle style = new GUIStyle(GUI.skin.label);
@@ -316,7 +317,7 @@ public class Graph : MonoBehaviour {
 			for (int i = 0; i < xNumMarkers; i++) {
 				float xPos = hStart.x + xUnitLength * (i + 1), yPos = hStart.y - 5;
 				// Unit Line
-				Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPos, yPos + 10), color, thickness, false);
+				Drawing.DrawLine(new Vector2(xPos, yPos + 5), new Vector2(xPos, yPos + 15), color, thickness, false);
 				// Unit Label
 				style.alignment = TextAnchor.UpperCenter;
 				if ((xMin + i * zoom) < xAxisLabels.Count) {
@@ -339,9 +340,9 @@ public class Graph : MonoBehaviour {
 			Drawing.DrawLine(vStart, vEnd, color, thickness, false);
 			// Y-Axis Markers
 			for (int i = 0; i <= yNumMarkers; i++) {
-				float xPos = vStart.x - 5, yPos = vStart.y - yUnitLength * i;
+				float xPos = vStart.x, yPos = vStart.y - yUnitLength * i;
 				// Unit Line
-				Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPos + 10, yPos), color, thickness, false);
+				Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(graphRect.width - 100, yPos), color, thickness, false);
 				// Unit Label
 				style.alignment = TextAnchor.UpperRight;
 				GUI.Label(new Rect(xPos - 85, yPos - 11, 80, 30), (i * yRange / 5).ToString(), style);
@@ -360,7 +361,7 @@ public class Graph : MonoBehaviour {
 				Drawing.DrawLine(vStartES, vEndES, color, thickness, false);
 				// Y-Axis Markers
 				for (int i = 0; i <= yNumMarkers; i++) {
-					float xPos = vStartES.x - 5, yPos = vStartES.y - yUnitLength * i;
+					float xPos = vStartES.x - 10, yPos = vStartES.y - yUnitLength * i;
 					// Unit Line
 					Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPos + 10, yPos), color, thickness, false);
 					// Unit Label
@@ -399,6 +400,7 @@ public class Graph : MonoBehaviour {
 			series.width = Mathf.Lerp(0, graphRect.width, series.deltaTime += Time.deltaTime * 0.5f);
 		}
 		int yRangeSave = 0;
+        // environment score flag
 		if (esFlag) {
 			yRangeSave = yRange;
 			yRange = yRangeES;
@@ -410,7 +412,7 @@ public class Graph : MonoBehaviour {
 			if (values [xMin] >= 0) {
 				// Draw First Point
 				string text = ("<color=#" + series.colorHex + ">" + series.label + "</color>" + '\n' + values[xMin].ToString("F2"));
-				DrawMarker(series.label, new Rect(hStart.x + xUnitLength - 7, hStart.y - (values[xMin] / yRange * yAxisLength) - 7, 14, 14), color, text);
+				//DrawMarker(series.label, new Rect(hStart.x + xUnitLength - 7, hStart.y - (values[xMin] / yRange * yAxisLength) - 7, 14, 14), color, text);
 			}
 
 			int lastIdx = 0;
@@ -422,7 +424,7 @@ public class Graph : MonoBehaviour {
 				float xPos = hStart.x + xUnitLength * i, yPos = hStart.y - (values[xMin + (i - 1) * zoom] / yRange * yAxisLength);
 				string text = ("<color=#" + series.colorHex + ">" + series.label + "</color>" + '\n' + values[xMin + (i - 1) * zoom].ToString("F2"));
 				lastIdx = i;
-				DrawMarker(series.label, new Rect(xPos - 7, yPos - 7, 14, 14), color, text);
+				//DrawMarker(series.label, new Rect(xPos - 7, yPos - 7, 14, 14), color, text);
 				int j = i;
 				while (((xMin + j * zoom) < series.values.Count) && (j < xNumMarkers) && (values[xMin + j * zoom] < 0)) {
 					j++;
@@ -434,11 +436,11 @@ public class Graph : MonoBehaviour {
 					// Current Point
 					float xPosNext = hStart.x + xUnitLength * (j + 1), yPosNext = hStart.y - (values[xMin + j * zoom] / yRange * yAxisLength);
 					// Connect the Points by Drawing Line
-					Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPosNext, yPosNext), color, 1.5f, true);
+					Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPosNext, yPosNext), color, 2.5f, true);
 					// Draw End Point
 					text = ("<color=#" + series.colorHex + ">" + series.label + "</color>" + '\n' + values[xMin + j].ToString("F2"));
 					lastIdx = j + 1;
-					DrawMarker(series.label, new Rect(xPosNext - 7, yPosNext - 7, 14, 14), color, text);
+					//DrawMarker(series.label, new Rect(xPosNext - 7, yPosNext - 7, 14, 14), color, text);
 				}
 			}
 
@@ -458,10 +460,10 @@ public class Graph : MonoBehaviour {
 					if (lastIdx > 0) {
 						float xPos = hStart.x + xUnitLength * lastIdx, 
 						yPos = hStart.y - (values[xMin + (lastIdx - 1) * zoom] / yRange * yAxisLength);
-						Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPosNext, yPosNext), color, 1.5f, true);
+						Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPosNext, yPosNext), color, 2.5f, true);
 					}
 					string text = ("<color=#" + series.colorHex + ">" + series.label + "</color>" + '\n' + values[lastVIdx].ToString("F2"));
-					DrawMarker(series.label, new Rect(xPosNext - 7, yPosNext - 7, 14, 14), color, text);
+					//DrawMarker(series.label, new Rect(xPosNext - 7, yPosNext - 7, 14, 14), color, text);
 					yPosNext = hStart.y - 5;
 					GUIStyle style = new GUIStyle(GUI.skin.label);
 					style.normal.textColor = Color.white;
@@ -498,6 +500,7 @@ public class Graph : MonoBehaviour {
 		GUI.EndGroup();
 	}
 
+    // draws hex shape on each data point of graph
 	private void DrawMarker(string label, Rect rect, Color color, string text) {
 		Color temp = GUI.color;
 
@@ -514,11 +517,12 @@ public class Graph : MonoBehaviour {
 		}
 
 		GUI.color = color;
-		GUI.DrawTexture(rect, lineMarkerTex);
+		//GUI.DrawTexture(rect, lineMarkerTex);
 
 		GUI.color = temp;
 	}
 
+    // draws bottom slider
 	private void DrawMonthSlider() {
 		int offset = (zoom > 1) ? 1 : 0;
 		monthSliderMax = Mathf.Max (0, 1 + offset + xAxisLabels.Count / zoom - xNumMarkers);
@@ -534,6 +538,7 @@ public class Graph : MonoBehaviour {
 		}
 	}
 	
+    // called under ShowLastMonth which is never called
 	public void ShowMonth(int month) {
 		if (xAxisLabels.Count > xNumMarkers) {
 			monthSliderStart = monthSliderValue;
@@ -542,6 +547,7 @@ public class Graph : MonoBehaviour {
 		}
 	}
 	
+    // never called
 	public void ShowLastMonth() {
 		if (xAxisLabels.Count > xNumMarkers) {
 			ShowMonth(xAxisLabels.Count - xNumMarkers + 1);
@@ -666,7 +672,8 @@ public class Graph : MonoBehaviour {
 		// Update X-Axis Labels
 		xAxisLabels.Clear();
 		for (int i = minDay; i <= maxDay; i++) {
-			xAxisLabels.Add("" + i);      // .ToString("00"));
+            int day = i - minDay + 1; // show days since first player login, not actual days on database
+			xAxisLabels.Add("" + day);      // .ToString("00"));
 		}
 		
 		// Update Values
@@ -870,10 +877,10 @@ public class Graph : MonoBehaviour {
 	public void processDayInfo(NetworkResponse response)
 	{
 		ResponseSpeciesAction args = response as ResponseSpeciesAction;
-		cDay = args.cDay;
+		cDay = args.cDay; // current day
 		fDay = args.fDay;
 		lDay = args.lDay;
-		maxDay = cDay;
+		maxDay = cDay; // max day displayed on graph
 		Debug.Log ("Graph: c,f,l,aDay = " + cDay + " " + fDay + " " + lDay + " " + aDay);
 		// Debug.Log("Graph: Send SpeciesActionProtocol, action = 2");
 
