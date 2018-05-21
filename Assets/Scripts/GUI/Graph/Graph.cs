@@ -35,7 +35,7 @@ public class Graph : MonoBehaviour {
 	private float left;
 	private float top;
 	private float width = 855;    // 2017-3-31  was 805
-	private float height = 500;   // 2017-3-15  was 420
+	private float height = 440;   // 2017-3-15  was 420
 	public bool isActive = false;
 	private bool isReady = false;
 	private bool isLegendActive = true;
@@ -412,7 +412,7 @@ public class Graph : MonoBehaviour {
 			if (values [xMin] >= 0) {
 				// Draw First Point
 				string text = ("<color=#" + series.colorHex + ">" + series.label + "</color>" + '\n' + values[xMin].ToString("F2"));
-				//DrawMarker(series.label, new Rect(hStart.x + xUnitLength - 7, hStart.y - (values[xMin] / yRange * yAxisLength) - 7, 14, 14), color, text);
+				DrawMarker(series.label, new Rect(hStart.x + xUnitLength - 7, hStart.y - (values[xMin] / yRange * yAxisLength) - 7, 14, 14), color, text);
 			}
 
 			int lastIdx = 0;
@@ -424,7 +424,7 @@ public class Graph : MonoBehaviour {
 				float xPos = hStart.x + xUnitLength * i, yPos = hStart.y - (values[xMin + (i - 1) * zoom] / yRange * yAxisLength);
 				string text = ("<color=#" + series.colorHex + ">" + series.label + "</color>" + '\n' + values[xMin + (i - 1) * zoom].ToString("F2"));
 				lastIdx = i;
-				//DrawMarker(series.label, new Rect(xPos - 7, yPos - 7, 14, 14), color, text);
+				DrawMarker(series.label, new Rect(xPos - 7, yPos - 7, 14, 14), color, text);
 				int j = i;
 				while (((xMin + j * zoom) < series.values.Count) && (j < xNumMarkers) && (values[xMin + j * zoom] < 0)) {
 					j++;
@@ -440,7 +440,7 @@ public class Graph : MonoBehaviour {
 					// Draw End Point
 					text = ("<color=#" + series.colorHex + ">" + series.label + "</color>" + '\n' + values[xMin + j].ToString("F2"));
 					lastIdx = j + 1;
-					//DrawMarker(series.label, new Rect(xPosNext - 7, yPosNext - 7, 14, 14), color, text);
+					DrawMarker(series.label, new Rect(xPosNext - 7, yPosNext - 7, 14, 14), color, text);
 				}
 			}
 
@@ -463,7 +463,7 @@ public class Graph : MonoBehaviour {
 						Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPosNext, yPosNext), color, 2.5f, true);
 					}
 					string text = ("<color=#" + series.colorHex + ">" + series.label + "</color>" + '\n' + values[lastVIdx].ToString("F2"));
-					//DrawMarker(series.label, new Rect(xPosNext - 7, yPosNext - 7, 14, 14), color, text);
+					DrawMarker(series.label, new Rect(xPosNext - 7, yPosNext - 7, 14, 14), color, text);
 					yPosNext = hStart.y - 5;
 					GUIStyle style = new GUIStyle(GUI.skin.label);
 					style.normal.textColor = Color.white;
@@ -502,6 +502,7 @@ public class Graph : MonoBehaviour {
 
     // draws hex shape on each data point of graph
 	private void DrawMarker(string label, Rect rect, Color color, string text) {
+        // previously, color passed so hex plot points matched line color
 		Color temp = GUI.color;
 
 		if (rect.Contains(Event.current.mousePosition)) {
@@ -516,7 +517,9 @@ public class Graph : MonoBehaviour {
 			}
 		}
 
-		GUI.color = color;
+        // set color to clear or transparent to remove plot points
+        // hex points retained to preserve the mouseover function of plot lines
+		GUI.color = Color.clear;
 		//GUI.DrawTexture(rect, lineMarkerTex);
 
 		GUI.color = temp;
@@ -539,20 +542,20 @@ public class Graph : MonoBehaviour {
 	}
 	
     // called under ShowLastMonth which is never called
-	public void ShowMonth(int month) {
-		if (xAxisLabels.Count > xNumMarkers) {
-			monthSliderStart = monthSliderValue;
-			monthSliderDT = 0;
-			scrollToMonth = Mathf.Clamp(month, 1, xAxisLabels.Count - xNumMarkers + 1) - 1;
-		}
-	}
+	//public void ShowMonth(int month) {
+	//	if (xAxisLabels.Count > xNumMarkers) {
+	//		monthSliderStart = monthSliderValue;
+	//		monthSliderDT = 0;
+	//		scrollToMonth = Mathf.Clamp(month, 1, xAxisLabels.Count - xNumMarkers + 1) - 1;
+	//	}
+	//}
 	
-    // never called
-	public void ShowLastMonth() {
-		if (xAxisLabels.Count > xNumMarkers) {
-			ShowMonth(xAxisLabels.Count - xNumMarkers + 1);
-		}
-	}
+    // never called, function uncertain (legacy code)
+	//public void ShowLastMonth() {
+	//	if (xAxisLabels.Count > xNumMarkers) {
+	//		ShowMonth(xAxisLabels.Count - xNumMarkers + 1);
+	//	}
+	//}
 
 	private void DrawLegend() {
 		GUIStyle style = new GUIStyle(GUI.skin.label);
@@ -608,6 +611,7 @@ public class Graph : MonoBehaviour {
 
 						GUI.color = temp;
 
+                        // button that removes species series on click
 						if (GUI.Button(new Rect(0, 0, itemRect.width, itemRect.height), "", GUIStyle.none)) {
 							SetSeriesActive(label, excludeList.Contains(label));
 							UpdateData ();
@@ -763,12 +767,13 @@ public class Graph : MonoBehaviour {
 		isReady = true;
 	}
 	
-	public IEnumerator UpdateDataRoutine(float time) {
-		while (true) {
-			// UpdateData();
-			yield return new WaitForSeconds(time);
-		}
-	}
+    // never called (legacy code?)
+	//public IEnumerator UpdateDataRoutine(float time) {
+	//	while (true) {
+	//		// UpdateData();
+	//		yield return new WaitForSeconds(time);
+	//	}
+	//}
 		
 	void MakeDayCounts() {
 		int month;
@@ -823,7 +828,8 @@ public class Graph : MonoBehaviour {
 			{
 				inLine = sr.ReadLine();
 				aDay = Int32.Parse(inLine);
-				maxDay = aDay; // most recent 
+				maxDay = aDay; // most recent in cache
+                xMax = maxDay;
 
 				while (!sr.EndOfStream) {
 					inLine = sr.ReadLine();
@@ -881,6 +887,7 @@ public class Graph : MonoBehaviour {
 		fDay = args.fDay;
 		lDay = args.lDay;
 		maxDay = cDay; // max day displayed on graph
+        xMax = maxDay;
 		Debug.Log ("Graph: c,f,l,aDay = " + cDay + " " + fDay + " " + lDay + " " + aDay);
 		// Debug.Log("Graph: Send SpeciesActionProtocol, action = 2");
 
