@@ -196,7 +196,10 @@ public class Database : MonoBehaviour
 			Switch (mode);
 			viewList = ecoList;
 			break;
-
+        case Constants.MODE_FOODWEB:
+            Switch (mode);
+            viewList = ecoList;
+			break;
 		case Constants.MODE_SHOP:  //Constants.MODE_SHOP:  1
 		case Constants.MODE_OWNED:
 			viewList = shopList;
@@ -258,7 +261,8 @@ public class Database : MonoBehaviour
 
 				if (GUI.Button (btnRect, "Details") || showDetails.Equals (card.name)) {
 					if (!FindObjectOfType<View> ()) {
-						View view = View.NewView (gameObject, mode, manager);
+
+                        View view = View.NewView (gameObject, mode, manager);
 
 						view.SetCard (new Card (card.name, card.image, card.species, new Rect (0, 0, 160, 200), card.color));
 						showDetails = "";
@@ -377,13 +381,26 @@ public class Database : MonoBehaviour
 			}				
 			ecoList.Clear ();
 			contents.Sort (SortByTrophicLevels);
-			Prepare (contents, ecoList);
+                Prepare (contents, ecoList);
 			break;
 
 
 		case Constants.MODE_SHOP:  //Constants.MODE_SHOP:  1
 		case Constants.MODE_OWNED:
 			break;
+        case Constants.MODE_FOODWEB:
+                List<string> contents1 = new List<string>();
+                contents1.Add("Lion");
+                contents1.Add("Bush Pig");
+                contents1.Add("Grass and Herbs");
+                contents1.Add("Buffalo");
+                contents1.Add("Decaying Material");
+                contents1.Add("Tree Mouse");
+                contents1.Add("Cockroach");
+                ecoList.Clear();
+                contents1.Sort(SortByTrophicLevels);
+                Prepare(contents1, ecoList);
+                break;
 		}
 	}
 	

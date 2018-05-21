@@ -483,9 +483,17 @@ public class DemTile : MonoBehaviour
 		//add statistic to tree destroy, and prey eaten
 		if (this.resident.GetComponent<BuildInfo> ().isPlant ()) {
 			buildMenu.statistic.setTreeDestroy (1);
-		} else if (this.resident.GetComponent<BuildInfo> ().isPrey ()) {
+            //player gains 1 credits for each plant eaten
+            Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, 1), ProcessUpdateCredits);
+            Debug.Log("old credits: " + GameState.player.credits);
+            Debug.Log("player awarded 1 credits.");
+        } else if (this.resident.GetComponent<BuildInfo> ().isPrey ()) {
 			buildMenu.statistic.setPreyEaten (1);
-		}
+            //player gains 15 credits for each prey eaten
+            Game.networkManager.Send(UpdateCreditsProtocol.Prepare((short)0, 15), ProcessUpdateCredits);
+            Debug.Log("old credits: " + GameState.player.credits);
+            Debug.Log("player awarded 15 credits.");
+        }
     
     Destroy (resident);
     this.resident = null;
@@ -503,5 +511,19 @@ public class DemTile : MonoBehaviour
   public Vector3 GetCenter(){
     return center;
   }
+
+    public void ProcessUpdateCredits(NetworkResponse response)
+    {
+        ResponseUpdateCredits args = response as ResponseUpdateCredits;
+        Debug.Log("ResponseUpdateCredits: action= " + args.action);
+
+        if (args.status == 0)
+        {
+            GameState.player.credits = args.newCredits;
+            Debug.Log("new credits: " + args.newCredits);
+        }
+        else
+            Debug.Log("failed to update credits");
+    }
 
 }
