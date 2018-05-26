@@ -122,7 +122,7 @@ public class MenuScript : MonoBehaviour {
     }
 
     public void OpenDontEatMe() {
-        Game.SwitchScene ("DontEatMe");
+		Game.SwitchScene ("MainMenu");
     }
     public void OpenMultiplayerGames() {
         CloseAllMenus();

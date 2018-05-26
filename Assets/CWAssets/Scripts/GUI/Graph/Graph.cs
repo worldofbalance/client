@@ -119,6 +119,9 @@ public class Graph : MonoBehaviour {
 	}
 	
 	void MakeWindow(int id) {
+
+        Debug.Log("this is MakeWindow calling with id: " + id);
+
 		Functions.DrawBackground(new Rect(0, 0, width, height), bgTexture);
 		
 		GUIStyle style = new GUIStyle(GUI.skin.label);

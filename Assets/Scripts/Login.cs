@@ -42,8 +42,7 @@ public class Login : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        // calls AutoLogin (see comments below)
-        StartCoroutine("AutoLogin");
+        //StartCoroutine("AutoLogin");
 
     }
 	
@@ -156,19 +155,18 @@ public class Login : MonoBehaviour
                 LoginProtocol.Prepare (user_id, password), ProcessLogin
             );
 
-            RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance ();
-            cManager.Send (RR_RequestLogin (user_id, password));
+           //RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance ();
+           //cManager.Send (RR_RequestLogin (user_id, password));
 
             SD.SDMain.networkManager.Send (SD.SDLoginProtocol.Prepare (user_id, password), SD_ResponseLogin);
         }
     }
 
-    // for faster testing and development, enter account details, uncomment the autologin  coroutine under Start()
     public IEnumerator AutoLogin ()
     {
         while (true) {
-            user_id = "cherise";
-            password = "muimui";
+            user_id = "jeremy";
+            password = "okay";
             Submit ();
 			
             yield return new WaitForSeconds (1.0f);

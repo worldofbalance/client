@@ -71,7 +71,9 @@ public class ClashAttackShop : MonoBehaviour
                             Destroy(selected.gameObject);
                         });
                 });
-
+			item.foodWebButton.onClick.AddListener (() => {
+				showFoodWeb(species.name);
+			});
             var description = species.description;
             var stats = species.Stats();
             item.previewButton.onClick.AddListener(() =>
@@ -186,4 +188,16 @@ public class ClashAttackShop : MonoBehaviour
         errorMessage.text = "";
         errorCanvas.SetActive(false);
     }
+
+	private void showFoodWeb(string name) {
+		Database foodweb = null;
+		ConvergeManager convergeManager = new ConvergeManager ();
+		if (foodweb == null) {
+			foodweb = Database.NewDatabase (GameObject.Find ("Global Object"), Constants.MODE_SHOP, convergeManager);
+		} else {
+			foodweb.manager = convergeManager;
+		}
+		foodweb.SetActive (true, name);
+	}
+
 }

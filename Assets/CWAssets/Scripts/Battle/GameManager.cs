@@ -51,7 +51,7 @@ namespace CW
 				// TODO: Need different logic here to make player 2
 				// not have cards dealt face up, etx.
 				player2 = (BattlePlayer)gameObject.AddComponent <BattlePlayer>();
-				player2.init (false);
+				player2.init2 (false);
 				player2.playerName = "Player 2";
 			}
 			// Send MatchStatus protocol

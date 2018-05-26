@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.AI;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
@@ -15,7 +14,7 @@ public class COSMobileInputControler:COSAbstractInputController
     public COSMobileInputControler()
         : base()
     {
-        walkableAreaMask = (int)Math.Pow(2, NavMesh.GetAreaFromName("Walkable"));
+        walkableAreaMask = (int)Math.Pow(2, UnityEngine.AI.NavMesh.GetAreaFromName("Walkable"));
     }
 
     //    COSTouchState eTouchRes;
@@ -100,8 +99,8 @@ public class COSMobileInputControler:COSAbstractInputController
                 if (Physics.Raycast(ray, out hit, 1000))
                 {
                     //                    if (hit.collider.CompareTag("Terrain"))
-                    NavMeshHit nmhPosition;
-                    if (NavMesh.SamplePosition(hit.point, out nmhPosition, 10, NavMesh.AllAreas))
+                    UnityEngine.AI.NavMeshHit nmhPosition;
+                    if (UnityEngine.AI.NavMesh.SamplePosition(hit.point, out nmhPosition, 10, UnityEngine.AI.NavMesh.AllAreas))
                     {
                         if (touches[0].phase == TouchPhase.Began)
                         {
