@@ -33,7 +33,7 @@ namespace SD {
         private float maxStamina;
         public int health;
         private float maxHealth;
-        private float staminaRecoveryRate = 0.115f;
+        private float staminaRecoveryRate = 10f;
         private float staminaRecoveryDelay;
         private float staminaBeginRecoverTime = 0.0f;
 
@@ -354,7 +354,7 @@ namespace SD {
         void RecoverStamina(){
             if(Time.fixedTime > staminaBeginRecoverTime)
             {
-                stamina = stamina + staminaRecoveryRate;
+                stamina = stamina + staminaRecoveryRate * Time.fixedDeltaTime;
                 if (stamina >= maxStamina)
                     stamina = maxStamina;
             }

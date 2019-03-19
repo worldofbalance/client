@@ -82,7 +82,7 @@ namespace SD
                     // Finally, update the game controller with new positional data.
                     mousePosition.z = transform.position.z - Camera.main.transform.position.z;
                     mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-                    transform.position = Vector3.MoveTowards(transform.position, mousePosition, currentSpeed * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, mousePosition, currentSpeed * Time.fixedDeltaTime);
 
                     // Clamp the player's position to within the playable area.
                     rb.position = new Vector3(Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
@@ -99,7 +99,7 @@ namespace SD
 
                 if (Input.GetKey(KeyCode.Space) && currentStamina > 0.0f && canBoost)
                 {
-                    float newStaminaAmount = currentStamina - staminaDrainRate * Time.deltaTime;
+                    float newStaminaAmount = currentStamina - staminaDrainRate * Time.fixedDeltaTime;
                     if (newStaminaAmount <= 0.0)
                     {
                         canBoost = false;
