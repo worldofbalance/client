@@ -15,7 +15,7 @@ public class Constants
 
     // public static readonly string REMOTE_HOST = "localhost";
     // public static readonly string REMOTE_HOST = "thecity.sfsu.edu";
-	public static readonly string REMOTE_HOST = "localhost"; // AWS Spr 2019
+	public static readonly string REMOTE_HOST = "seadivided.ddns.net"; // AWS Spr 2019
 	// public static readonly string REMOTE_HOST = "54.153.66.118";   // AWS from Ben, 2-2017
     // IP address may be 130.212.3.51
 
