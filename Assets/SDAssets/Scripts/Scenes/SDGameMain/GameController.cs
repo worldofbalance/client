@@ -117,7 +117,7 @@ namespace SD {
                 rbOpponent = (Rigidbody)Instantiate (opponent, opponentInitialPosition, opponentInitialRotation);
                 rbOpponent.gameObject.SetActive (true);
                 opponentPlayer = new PlayTimePlayer ();
-                opponentPlayer.speedUpFactor = playerClone.GetComponent<PlayerController>().speedBoostFactor;
+                opponentPlayer.speedUpFactor = playerClone.GetComponent<PlayerController>().staminaSpeedBoostFactor;
                 opponentPlayer.yRotation = opponentInitialRotation.eulerAngles.y;
                 isGameTimeTicking = false; // Wait for time sync if in multiplayer mode
                 gameController.countdownPanelCanvas.SetActive (true);
@@ -200,10 +200,10 @@ namespace SD {
             Vector3 spawnPosition;
             if (npcFishes [i].xPosition != 0 && npcFishes [i].yPosition != 0) {
                 spawnPosition = new Vector3 (npcFishes [i].xPosition, npcFishes [i].yPosition, npcFishes[i].xRotationAngle);
-                Debug.Log ("Spawning NPCFish " + i + " from request result");
+                //Debug.Log ("Spawning NPCFish " + i + " from request result");
             } else {
                 spawnPosition = new Vector3 (Random.Range(boundary.xMin, boundary.xMax), Random.Range(boundary.yMin, boundary.yMax), 0);
-                Debug.Log ("Spawning NPCFish " + i + " from local random numbers");
+                //Debug.Log ("Spawning NPCFish " + i + " from local random numbers");
             }
             Quaternion spawnRotation = Quaternion.Euler(0, 90,0);
             npcFishObjects [i] = Instantiate (preyArray[preyIndex], spawnPosition, spawnRotation) as GameObject;
@@ -309,9 +309,10 @@ namespace SD {
                 }
             }
         }
-    // Increases the current score value, and pass the info to scoreText
-    // by calling UpdateScore().
-    public void AddScore(int newScoreValue) {
+
+        // Increases the current score value, and pass the info to scoreText
+        // by calling UpdateScore().
+        public void AddScore(int newScoreValue) {
             score += newScoreValue;
             UpdateScoreText ();
             // Send the score to the opponent.
@@ -354,7 +355,7 @@ namespace SD {
         void RecoverStamina(){
             if(Time.fixedTime > staminaBeginRecoverTime)
             {
-                stamina = stamina + staminaRecoveryRate * Time.fixedDeltaTime;
+                stamina = stamina + staminaRecoveryRate * Time.deltaTime;
                 if (stamina >= maxStamina)
                     stamina = maxStamina;
             }
