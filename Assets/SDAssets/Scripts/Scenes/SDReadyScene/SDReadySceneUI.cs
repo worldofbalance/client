@@ -8,7 +8,7 @@ namespace SD {
         private Button btnPlaySdv;
         private Text txtWaitingForOpponent;
         private static SDReadySceneUI sdReadySceneUI;
-        public GameObject howToPlayPanal;
+        public GameObject howToPlayPanal, logo, menu;
 
         void OnAwake() {
             sdReadySceneUI = this;
@@ -30,10 +30,14 @@ namespace SD {
 
         public void BtnHowToPlayClick() {
             howToPlayPanal.SetActive (true);
+            logo.SetActive(false);
+            menu.SetActive(false);
         }
 
         public void BtnHowToPlayCloseClick() {
             howToPlayPanal.SetActive (false);
+            logo.SetActive(true);
+            menu.SetActive(true);
         }
 
         public static SDReadySceneUI getInstance() {

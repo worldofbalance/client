@@ -79,9 +79,9 @@ namespace SD
                 {
                     canBoost = true;
                 }
-
+                
                 // Give the player a speed boost via max speed increase if they hold space and have the stamina for it.
-                if (Input.GetKey(KeyCode.Space) && currentStamina > 0.0f && canBoost)
+                if (Input.GetKey(KeyCode.Space) && canBoost && currentStamina > 0.0f)
                 {
                     float newStaminaAmount = currentStamina - staminaDrainRate * Time.deltaTime;
 

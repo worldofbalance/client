@@ -60,9 +60,9 @@ namespace SD {
             }
             if (sdGameController.getIsGameTimeTicking ()) {
                 time -= 1f * Time.deltaTime;
-                timeText.text = "Time: " + ((int)time).ToString ();
+                timeText.text = "Time:\n" + ((int)time).ToString ();
                 if (time <= 0) {
-                    timeText.text = "Time's Up!";
+                    //timeText.text = "Time's Up!";
                     panelTimesUp.SetActive (true);
                     sdGameController.setIsGameTimeTicking (false);
                     StartCoroutine (EndCurrentRound ());
