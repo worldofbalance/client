@@ -67,7 +67,8 @@ namespace SD {
                 isPlayerReady = true;
             } else {
                 Debug.LogWarning ("Starting game without server component.");
-                SceneManager.LoadScene ("SDGameMain");
+                //SceneManager.LoadScene ("SDGameMain");
+                SceneManager.LoadScene ("SelectionScreen");
             }
         }
 
