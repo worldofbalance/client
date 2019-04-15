@@ -167,7 +167,7 @@ namespace SD
         {
             if (isMoving)
             {
-                Debug.Log("cms: " + currentSpeedLimit + " vel: " + rb.velocity.magnitude);
+                //Debug.Log("cms: " + currentSpeedLimit + " vel: " + rb.velocity.magnitude);
                 // Then add force in the new direction if applicable, or set max speed otherwise.
                 if (rb.velocity.magnitude < currentSpeedLimit)
                     rb.AddForce(transform.rotation * Vector3.right * forwardAcceleration, ForceMode.Force);
