@@ -24,8 +24,9 @@ namespace SD {
         }
 
         public void BtnPlaySDVClick() {
-            SDReadySceneManager.getInstance().StartGame ();
-            btnPlaySdv.interactable = false;
+            SceneManager.LoadScene("SelectionScreen");
+            //SDReadySceneManager.getInstance().StartGame ();
+            //btnPlaySdv.interactable = false;
         }
 
         public void BtnHowToPlayClick() {
