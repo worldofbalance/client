@@ -41,10 +41,16 @@ namespace SD
         private Rigidbody rb;
         private GameObject playerModel;
         private Vector3 playerToMouseVector;
+
+        private Quaternion targetQuatRotation;
+        private float playerToMouseAngle;
+        private float currentToMaxSpeedRatio;
         private Vector3 mousePosition;
-        private bool facingRight = true;
+        private bool facingRight;
 
         private GameController gameController;
+
+        private bool isMoving;
 
         private float currentStamina;
         private bool canBoost = true;
@@ -65,6 +71,8 @@ namespace SD
             gameController.SetStaminaDelay(timeBetweenStaminaRecovery);
 
             playerModel = transform.Find("Model").gameObject;
+            facingRight = true;
+            isMoving = false;
         }
 
         private void Update()
@@ -79,7 +87,7 @@ namespace SD
                 {
                     canBoost = true;
                 }
-                
+
                 // Give the player a speed boost via max speed increase if they hold space and have the stamina for it.
                 if (Input.GetKey(KeyCode.Space) && canBoost && currentStamina > 0.0f)
                 {
@@ -109,40 +117,62 @@ namespace SD
                 // Handle player model rotations.
                 HandleRotations();
 
+                // Calculate the rotation in angles between the player and the mouse pointer.
+                // We will use this data both to continue in-progress rotations and to initiate new rotations.
+                mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
+                mousePosition.z = 0;
+                // Now normalize the vector.
+                playerToMouseVector = (mousePosition - new Vector3(transform.position.x, transform.position.y, 0));
+
                 // Mouse input section.
                 if (Input.GetMouseButton(0))
                 {
-                    // Calculate the rotation in angles between the player and the mouse pointer.
-                    mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
-                    mousePosition.z = 0;
-                    // Now normalize the vector.
-                    playerToMouseVector = (mousePosition - new Vector3(transform.position.x, transform.position.y, 0)).normalized;
-                    float playerToMouseAngle = Mathf.Atan2(playerToMouseVector.y, playerToMouseVector.x) * Mathf.Rad2Deg;
-                    // Use to clamp the rotation rate.
-                    float currentToMaxSpeedRatio = Mathf.Clamp(rb.velocity.magnitude / currentSpeedLimit, minimumSpeedToTurningRatio, Mathf.Infinity);
-                    
-                    // Rotate if angle between mouse vector and player direction vector is significant.
-                    if (Math.Abs(playerToMouseAngle) > .001)
-                    {
-                        // Clamp the maximum angle to limit slerp amount.
-                        Mathf.Clamp(playerToMouseAngle, -Math.Abs(Mathf.Rad2Deg * maxRotationRadiansPerSecond), Math.Abs(Mathf.Rad2Deg * maxRotationRadiansPerSecond));
-                        // Convert the target rotation angle to a quaternion.
-                        Quaternion targetQuatRotation = Quaternion.Euler(new Vector3(0f, 0f, playerToMouseAngle * currentToMaxSpeedRatio));
-                        // Now apply the rotation slerp.
-                        rb.rotation = Quaternion.Slerp(rb.rotation, targetQuatRotation, Time.deltaTime * maxRotationSpeed);
-                    }
-                    
-                    // Then add force in the new direction if applicable, or set max speed otherwise.
-                    if (rb.velocity.magnitude < currentSpeedLimit)
-                        rb.AddForce(transform.rotation * Vector3.right * forwardAcceleration, ForceMode.Force);
-                    else if(rb.velocity.magnitude >= currentSpeedLimit)
-                        rb.velocity = transform.rotation * Vector3.right * currentSpeedLimit;
-                    
-                    // Clamp the player's position to within the playable area.
-                    rb.position = new Vector3(Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
-                                              Mathf.Clamp(rb.position.y, boundary.yMin, boundary.yMax),
-                                              0.0f);
+                    // Clamp the rotation rate.
+                    currentToMaxSpeedRatio = Mathf.Clamp(rb.velocity.magnitude / currentSpeedLimit, minimumSpeedToTurningRatio, Mathf.Infinity);
+
+                    // Calculate and clamp the playerToMouseAngle angle to limit slerp amount.
+                    playerToMouseAngle = Mathf.Atan2(playerToMouseVector.y, playerToMouseVector.x) * Mathf.Rad2Deg;
+                    //Debug.Log("ptma: " + playerToMouseAngle + " zang: " + rb.rotation.eulerAngles.z);
+                    float maxAngle = Math.Abs(Mathf.Rad2Deg * maxRotationRadiansPerSecond);
+                    Mathf.Clamp(playerToMouseAngle, -maxAngle, maxAngle);
+
+                    // Convert the target rotation angle to a quaternion.
+                    targetQuatRotation = Quaternion.Euler(new Vector3(0f, 0f, playerToMouseAngle));
+                    //Debug.Log("isMoving: " + playerToMouseAngle + " max angle: " + maxAngle + " ctmsr: " + currentToMaxSpeedRatio);
+
+                    // Finally, set the flag for physics update in FixedUpdate.
+                    isMoving = true;
                 }
+                else
+                {
+                    isMoving = false;
+                    //Debug.Log("!isMoving");
+                }
+
+                // Rotate if angle between mouse vector and player direction vector is significant.
+                if (Math.Abs(playerToMouseAngle) > .001)
+                {
+                    // Now apply the rotation slerp.
+                    rb.rotation = Quaternion.Slerp(rb.rotation, targetQuatRotation, maxRotationSpeed * Time.deltaTime);
+                }
+
+                // Clamp the player's position to within the playable area.
+                rb.position = new Vector3(Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
+                                          Mathf.Clamp(rb.position.y, boundary.yMin, boundary.yMax),
+                                          0.0f);
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            if (isMoving)
+            {
+                //Debug.Log("cms: " + currentSpeedLimit + " vel: " + rb.velocity.magnitude);
+                // Then add force in the new direction if applicable, or set max speed otherwise.
+                if (rb.velocity.magnitude < currentSpeedLimit)
+                    rb.AddForce(transform.rotation * Vector3.right * forwardAcceleration, ForceMode.Force);
+                else if (rb.velocity.magnitude >= currentSpeedLimit)
+                    rb.velocity = transform.rotation * Vector3.right * currentSpeedLimit;
             }
         }
 
@@ -162,31 +192,18 @@ namespace SD
             // Continued slerping if transition is not complete or facing direction has changed.
             if (!facingRight && (Mathf.Abs(transform.eulerAngles.x - 180f) > 0.01 || Mathf.Abs(transform.eulerAngles.y - 90f) > 0.01))
             {
-                Quaternion targetQuatRotation = Quaternion.Euler(new Vector3(-180f, -90f, 0f));
                 playerModel.transform.localRotation = Quaternion.Slerp(
                     playerModel.transform.localRotation,
-                    targetQuatRotation,
+                    Quaternion.Euler(new Vector3(-180f, -90f, 0f)),
                     Time.deltaTime * maxRotationSpeed * 2);
             }
-            else if(facingRight && (Mathf.Abs(transform.eulerAngles.x) > 0.01 || Mathf.Abs(transform.eulerAngles.y + 90f) > 0.01))
+            else if (facingRight && (Mathf.Abs(transform.eulerAngles.x) > 0.01 || Mathf.Abs(transform.eulerAngles.y + 90f) > 0.01))
             {
-                Quaternion targetQuatRotation = Quaternion.Euler(new Vector3(0f, 90f, 0f));
                 playerModel.transform.localRotation = Quaternion.Slerp(
                     playerModel.transform.localRotation,
-                    targetQuatRotation,
+                    Quaternion.Euler(new Vector3(0f, 90f, 0f)),
                     Time.deltaTime * maxRotationSpeed * 2);
             }
-        }
-
-        // Returns true if the player is moving.
-        // Otherwise returns false.
-        bool isMoving()
-        {
-            if (rb.velocity.x != 0 || rb.velocity.y != 0)
-            {
-                return true;
-            }
-            return false;
         }
     }
 }
