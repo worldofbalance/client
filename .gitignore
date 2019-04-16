@@ -30,7 +30,6 @@ ExportedObj/
 unity-game-client.userprefs
 unity-game-client.sln
 
-
 Assembly-CSharp.csproj
 ProjectSettings/GraphicsSettings.asset
 ProjectSettings/ProjectSettings.asset
@@ -94,4 +93,3 @@ graph_270 - Copy.txt
 graph_270.txt
 graph_280 - Copy.txt
 graph_280.txt
-*.meta
