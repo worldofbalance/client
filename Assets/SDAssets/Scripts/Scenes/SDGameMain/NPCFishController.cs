@@ -30,7 +30,7 @@ namespace SD
             
             //target=new Vector2(UnityEngine.Random.Range(boundary.xMin, boundary.xMax), UnityEngine.Random.Range(boundary.yMin, boundary.yMax));
         }
-        void Update()
+        void FixedUpdate()
         {
             MoveToTarget();
         }
@@ -39,7 +39,7 @@ namespace SD
         public void MoveToTarget()
         {
             // Move to wherever it is told to.
-            transform.position = Vector2.MoveTowards(transform.position, npcFish.target, 20 * Time.deltaTime);
+            transform.position = Vector2.Lerp(transform.position, npcFish.target, Time.fixedDeltaTime);
 
             if (npcFish.isAttacking) {
                 Vector3 relativePos = new Vector3 (GameController.getInstance().getTargetPlayer().xPosition, GameController.getInstance ().getTargetPlayer ().yPosition, 0);

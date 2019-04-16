@@ -52,9 +52,16 @@ namespace SD
 
         private bool isMoving;
 
+        // Stamina and speed boost.
         private float currentStamina;
-        private bool canBoost = true;
+        private bool canBoost;
+        private bool isBoosting;
+        private bool justStartedBoosting;
         private float currentSpeedLimit;
+        
+        // Audio
+        private AudioSource intialBoostAudioSource;
+        private AudioSource continuedBoostAudioSource;
 
         private static SD.GameManager sdGameManager;
         // Detects the player object, and reads the 'GameController' Object
@@ -62,7 +69,6 @@ namespace SD
         {
             rb = GetComponent<Rigidbody>();
             currentSpeedLimit = baseMaxSpeed;
-            rb.maxAngularVelocity = maxRotationRadiansPerSecond;
 
             sdGameManager = SD.GameManager.getInstance();
             gameController = GameController.getInstance();
@@ -70,9 +76,16 @@ namespace SD
             gameController.SetMaxStamina(maxStamina);
             gameController.SetStaminaDelay(timeBetweenStaminaRecovery);
 
+            var aSources = GetComponents<AudioSource>();
+            intialBoostAudioSource = aSources[0];
+            continuedBoostAudioSource = aSources[1];
+
             playerModel = transform.Find("Model").gameObject;
             facingRight = true;
             isMoving = false;
+            canBoost = true;
+            isBoosting = false;
+            justStartedBoosting = false;
         }
 
         private void Update()
@@ -106,49 +119,19 @@ namespace SD
                             currentSpeedLimit = absoluteMaxSpeedLimit;
                         }
                         gameController.SetStamina(newStaminaAmount);
+
+                        // Flag for boost sound effect.
+                        if (!isBoosting)
+                            justStartedBoosting = true;
+
+                        isBoosting = true;
                     }
                 }
                 else
                 {
                     currentSpeedLimit = baseMaxSpeed;
-                }
-
-                // Handle player model rotations.
-                HandleRotations();
-
-                // Mouse input section.
-                if (Input.GetMouseButton(0))
-                {
-                    // Calculate the rotation in angles between the player and the mouse pointer.
-                    mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
-                    mousePosition.z = 0;
-                    // Now normalize the vector.
-                    playerToMouseVector = (mousePosition - new Vector3(transform.position.x, transform.position.y, 0)).normalized;
-                    float playerToMouseAngle = Mathf.Atan2(playerToMouseVector.y, playerToMouseVector.x) * Mathf.Rad2Deg;
-                    // Use to clamp the rotation rate.
-                    float currentToMaxSpeedRatio = Mathf.Clamp(rb.velocity.magnitude / currentSpeedLimit, minimumSpeedToTurningRatio, Mathf.Infinity);
-                    
-                    // Rotate if angle between mouse vector and player direction vector is significant.
-                    if (Math.Abs(playerToMouseAngle) > .001)
-                    {
-                        // Clamp the maximum angle to limit slerp amount.
-                        Mathf.Clamp(playerToMouseAngle, -Math.Abs(Mathf.Rad2Deg * maxRotationRadiansPerSecond), Math.Abs(Mathf.Rad2Deg * maxRotationRadiansPerSecond));
-                        // Convert the target rotation angle to a quaternion.
-                        Quaternion targetQuatRotation = Quaternion.Euler(new Vector3(0f, 0f, playerToMouseAngle * currentToMaxSpeedRatio));
-                        // Now apply the rotation slerp.
-                        rb.rotation = Quaternion.Slerp(rb.rotation, targetQuatRotation, Time.deltaTime * maxRotationSpeed);
-                    }
-                    
-                    // Then add force in the new direction if applicable, or set max speed otherwise.
-                    if (rb.velocity.magnitude < currentSpeedLimit)
-                        rb.AddForce(transform.rotation * Vector3.right * forwardAcceleration, ForceMode.Force);
-                    else if(rb.velocity.magnitude >= currentSpeedLimit)
-                        rb.velocity = transform.rotation * Vector3.right * currentSpeedLimit;
-                    
-                    // Clamp the player's position to within the playable area.
-                    rb.position = new Vector3(Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
-                                              Mathf.Clamp(rb.position.y, boundary.yMin, boundary.yMax),
-                                              0.0f);
+                    isBoosting = false;
+                    justStartedBoosting = false;
                 }
 
                 // Handle player model rotations.
@@ -165,12 +148,12 @@ namespace SD
                 if (Input.GetMouseButton(0))
                 {
                     // Clamp the rotation rate.
-                    currentToMaxSpeedRatio = Mathf.Clamp(rb.velocity.magnitude / currentSpeedLimit, minimumSpeedToTurningRatio, Mathf.Infinity);
+                    currentToMaxSpeedRatio = Mathf.Clamp(rb.velocity.magnitude / currentSpeedLimit, minimumSpeedToTurningRatio, maxRotationRadiansPerSecond);
 
                     // Calculate and clamp the playerToMouseAngle angle to limit slerp amount.
                     playerToMouseAngle = Mathf.Atan2(playerToMouseVector.y, playerToMouseVector.x) * Mathf.Rad2Deg;
                     //Debug.Log("ptma: " + playerToMouseAngle + " zang: " + rb.rotation.eulerAngles.z);
-                    float maxAngle = Math.Abs(Mathf.Rad2Deg * maxRotationRadiansPerSecond);
+                    float maxAngle = Math.Abs(Mathf.Rad2Deg * maxRotationRadiansPerSecond * currentToMaxSpeedRatio);
                     Mathf.Clamp(playerToMouseAngle, -maxAngle, maxAngle);
 
                     // Convert the target rotation angle to a quaternion.
@@ -210,6 +193,18 @@ namespace SD
                     rb.AddForce(transform.rotation * Vector3.right * forwardAcceleration, ForceMode.Force);
                 else if (rb.velocity.magnitude >= currentSpeedLimit)
                     rb.velocity = transform.rotation * Vector3.right * currentSpeedLimit;
+            }
+
+            if (justStartedBoosting)
+            {
+                Debug.Log("boost sound.");
+                intialBoostAudioSource.PlayOneShot(intialBoostAudioSource.clip);
+                continuedBoostAudioSource.PlayDelayed(0.75f);
+                justStartedBoosting = false;
+            }
+            if (!isBoosting)
+            {
+                continuedBoostAudioSource.Stop();
             }
         }
 
