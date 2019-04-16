@@ -49,6 +49,7 @@ namespace SD
         private bool facingRight;
 
         private GameController gameController;
+        private static SD.GameManager sdGameManager;
 
         private bool isMoving;
 
@@ -63,7 +64,14 @@ namespace SD
         private AudioSource intialBoostAudioSource;
         private AudioSource continuedBoostAudioSource;
 
-        private static SD.GameManager sdGameManager;
+        // Animations
+        public string slowSpeedSwimStateName;
+        public string normalSpeedSwimStateName;
+        public string fastSpeedSwimStateName;
+        public string eatingStateName;
+        public string dyingStateName;
+        private Animator fishAnimator;
+
         // Detects the player object, and reads the 'GameController' Object
         void Start()
         {
@@ -76,6 +84,7 @@ namespace SD
             gameController.SetMaxStamina(maxStamina);
             gameController.SetStaminaDelay(timeBetweenStaminaRecovery);
 
+            fishAnimator = GetComponentInChildren<Animator>();
             var aSources = GetComponents<AudioSource>();
             intialBoostAudioSource = aSources[0];
             continuedBoostAudioSource = aSources[1];
@@ -180,6 +189,7 @@ namespace SD
                 rb.position = new Vector3(Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax),
                                           Mathf.Clamp(rb.position.y, boundary.yMin, boundary.yMax),
                                           0.0f);
+
             }
         }
 
@@ -195,6 +205,7 @@ namespace SD
                     rb.velocity = transform.rotation * Vector3.right * currentSpeedLimit;
             }
 
+            // Handle boost sound effects.
             if (justStartedBoosting)
             {
                 Debug.Log("boost sound.");
@@ -205,6 +216,20 @@ namespace SD
             if (!isBoosting)
             {
                 continuedBoostAudioSource.Stop();
+            }
+
+            // Handle animation transitions.
+            if (rb.velocity.magnitude > baseMaxSpeed * 1.25f)
+            {
+                fishAnimator.Play(fastSpeedSwimStateName);
+            }
+            else if (rb.velocity.magnitude > currentSpeedLimit * .25f)
+            {
+                fishAnimator.Play(normalSpeedSwimStateName);
+            }
+            else
+            {
+                fishAnimator.Play(slowSpeedSwimStateName);
             }
         }
 
