@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterSelection : MonoBehaviour {
+public class SDIndexSelection : MonoBehaviour {
 
     //list of charcter models
     private List<GameObject> characters;
@@ -24,11 +24,6 @@ public class CharacterSelection : MonoBehaviour {
         }
         //sets active to true for the character at a specific index; model will appear
         characters[selectionIndex].SetActive(true);
-    }
-
-    public void FixedUpdate()
-    {
-
     }
 
     //function handles with selecting and swapping the models

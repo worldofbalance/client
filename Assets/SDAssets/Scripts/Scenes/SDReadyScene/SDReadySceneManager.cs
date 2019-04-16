@@ -21,7 +21,7 @@ namespace SD {
                     }
                     catch(Exception e) {
                     }
-                    SceneManager.LoadScene ("SDGameMain");
+                    SceneManager.LoadScene ("SDCharacterSelection");
                 }
             }
         }
@@ -38,7 +38,7 @@ namespace SD {
                     }
                     catch (Exception e) {
                     }
-                    SceneManager.LoadScene ("SDGameMain");
+                    SceneManager.LoadScene ("SDCharacterSelection");
                 }
             }
         }
@@ -68,7 +68,7 @@ namespace SD {
             } else {
                 Debug.LogWarning ("Starting game without server component.");
                 //SceneManager.LoadScene ("SDGameMain");
-                SceneManager.LoadScene ("SelectionScreen");
+                SceneManager.LoadScene ("SDCharacterSelection");
             }
         }
 
