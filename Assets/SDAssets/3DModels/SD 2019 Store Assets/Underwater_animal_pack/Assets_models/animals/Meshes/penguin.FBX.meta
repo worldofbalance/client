@@ -1,13 +1,87 @@
 fileFormatVersion: 2
 guid: 94002dc3a6c7652479511f08ac766f2b
 ModelImporter:
-  serializedVersion: 19
+  serializedVersion: 22
   fileIDToRecycleName:
+    100000: Bone01
+    100002: Bone02
+    100004: Bone03
+    100006: Bone04
+    100008: Bone05
+    100010: Bone06
+    100012: Bone07
+    100014: Bone08
+    100016: Bone09
+    100018: Bone10
+    100020: Bone11
+    100022: Bone12
+    100024: Bone13
+    100026: Bone14
+    100028: Bone15
+    100030: Bone16
+    100032: Bone17
+    100034: Bone18
+    100036: Bone19
+    100038: Bone20
+    100040: Bone21
+    100042: Bone22
+    100044: Bone23
+    100046: Bone24
+    100048: Bone25
+    100050: Bone26
+    100052: Bone27
+    100054: Bone28
+    100056: Bone29
+    100058: default
+    100060: //RootNode
+    400000: Bone01
+    400002: Bone02
+    400004: Bone03
+    400006: Bone04
+    400008: Bone05
+    400010: Bone06
+    400012: Bone07
+    400014: Bone08
+    400016: Bone09
+    400018: Bone10
+    400020: Bone11
+    400022: Bone12
+    400024: Bone13
+    400026: Bone14
+    400028: Bone15
+    400030: Bone16
+    400032: Bone17
+    400034: Bone18
+    400036: Bone19
+    400038: Bone20
+    400040: Bone21
+    400042: Bone22
+    400044: Bone23
+    400046: Bone24
+    400048: Bone25
+    400050: Bone26
+    400052: Bone27
+    400054: Bone28
+    400056: Bone29
+    400058: default
+    400060: //RootNode
     4300000: default
+    7400000: swim
+    7400002: eat
+    7400004: fastswim
+    11100000: //RootNode
+    13700000: default
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: default
+    second: {fileID: 2100000, guid: e05dcdcb8ea38334796988bcc3ec4e13, type: 2}
   materials:
     importMaterials: 1
     materialName: 3
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -20,12 +94,14 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
       name: swim
@@ -117,13 +193,18 @@ ModelImporter:
     globalScale: 0.01
     meshCompression: 0
     addColliders: 0
+    importVisibility: 0
     importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 1
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -133,6 +214,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 4
+    normalCalculationMode: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
