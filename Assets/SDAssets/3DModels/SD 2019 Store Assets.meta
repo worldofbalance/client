@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/SDAssets/3DModels/SD 2019 Store Assets.meta
 guid: a0aa3f588e2aa37439fccbde26c2cf64
+=======
+guid: a818f098dc6ad0b4aac74154b958b504
+>>>>>>> development:Assets/SDAssets/CharacterSelection/Fonts.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

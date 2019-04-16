@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/SDAssets/3DModels/SD 2019 Store Assets/Animating_Fish/Materials.meta
 guid: ddf7185052a2dda49b4f96af40684bd7
+=======
+guid: c20ec91545b0c69479c7e2df143dc64c
+>>>>>>> development:Assets/SDAssets/CharacterSelection/SpritesAssets/Materials.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
