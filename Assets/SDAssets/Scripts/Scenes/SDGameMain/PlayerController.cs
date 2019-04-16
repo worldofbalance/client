@@ -219,15 +219,16 @@ namespace SD
             }
 
             // Handle animation transitions.
-            if (rb.velocity.magnitude > baseMaxSpeed * 1.25f)
+            // Check to make sure the animations exist before calling them.
+            if (rb.velocity.magnitude > baseMaxSpeed * 1.25f && fastSpeedSwimStateName.Length > 0)
             {
                 fishAnimator.Play(fastSpeedSwimStateName);
             }
-            else if (rb.velocity.magnitude > currentSpeedLimit * .25f)
+            else if (rb.velocity.magnitude > currentSpeedLimit * .25f && normalSpeedSwimStateName.Length > 0)
             {
                 fishAnimator.Play(normalSpeedSwimStateName);
             }
-            else
+            else if (slowSpeedSwimStateName.Length > 0)
             {
                 fishAnimator.Play(slowSpeedSwimStateName);
             }
