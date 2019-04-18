@@ -1,9 +1,7 @@
 fileFormatVersion: 2
 guid: 5c3d1499f018f9e4e92fbb145b51a737
-timeCreated: 1483617518
-licenseType: Store
 ModelImporter:
-  serializedVersion: 19
+  serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     100002: stonefish_maya85:body
@@ -37,7 +35,7 @@ ModelImporter:
     3300002: stonefish_maya85:fins
     4300000: stonefish_maya85:body
     4300002: stonefish_maya85:fins
-    7400000: Take 001
+    7400000: StoneFishEat
     7400002: Take 001 //// stonefish_maya85:body1
     7400004: Take 001 //// stonefish_maya85:spine1
     7400006: Take 001 //// stonefish_maya85:spine2
@@ -48,6 +46,7 @@ ModelImporter:
     7400016: Take 001 //// stonefish_maya85:topJaw
     7400018: Take 001 //// stonefish_maya85:rFin
     7400020: Take 001 //// stonefish_maya85:lFin
+    7400022: swim
     9500000: //RootNode
     11100000: //RootNode
     11100002: stonefish_maya85:body
@@ -64,36 +63,52 @@ ModelImporter:
     11100024: stonefish_maya85:topJaw
     13700000: stonefish_maya85:body
     13700002: stonefish_maya85:fins
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stonefish_Fins_mtl
+    second: {fileID: 2100000, guid: 89b9ed5422d46b14da2b22c9e7b9bc7a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stonefish_mtl
+    second: {fileID: 2100000, guid: 336abd7769baea94f9d05f202daafc81, type: 2}
   materials:
     importMaterials: 1
     materialName: 1
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleRotations: 1
+    resampleCurves: 1
     optimizeGameObjects: 1
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 3
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
-    animationWrapMode: 0
+    animationWrapMode: 2
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Take 001
+      name: StoneFishEat
       takeName: Take 001
       firstFrame: 1
       lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
-      cycleOffset: 0
+      cycleOffset: 1
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
@@ -139,19 +154,78 @@ ModelImporter:
       maskType: 0
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0.9
+    - serializedVersion: 16
+      name: swim
+      takeName: Take 001
+      firstFrame: 5
+      lastFrame: 52
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: stonefish_maya85:body
+        weight: 1
+      - path: stonefish_maya85:fins
+        weight: 1
+      - path: stonefish_maya85:body1
+        weight: 1
+      - path: stonefish_maya85:body1/stonefish_maya85:spine1
+        weight: 1
+      - path: stonefish_maya85:body1/stonefish_maya85:spine1/stonefish_maya85:spine2
+        weight: 1
+      - path: stonefish_maya85:body1/stonefish_maya85:spine1/stonefish_maya85:spine2/stonefish_maya85:spine3
+        weight: 1
+      - path: stonefish_maya85:body1/stonefish_maya85:spine1/stonefish_maya85:spine2/stonefish_maya85:spine3/stonefish_maya85:tail
+        weight: 1
+      - path: stonefish_maya85:body1/stonefish_maya85:head
+        weight: 1
+      - path: stonefish_maya85:body1/stonefish_maya85:head/stonefish_maya85:jaw
+        weight: 1
+      - path: stonefish_maya85:body1/stonefish_maya85:head/stonefish_maya85:topJaw
+        weight: 1
+      - path: stonefish_maya85:body1/stonefish_maya85:rFin
+        weight: 1
+      - path: stonefish_maya85:body1/stonefish_maya85:lFin
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0.9
     isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    importVisibility: 0
     importBlendShapes: 1
-    swapUVChannels: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -161,9 +235,11 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
+    normalCalculationMode: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
+    serializedVersion: 2
     human: []
     skeleton: []
     armTwist: 0.5
@@ -174,9 +250,12 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 1
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
