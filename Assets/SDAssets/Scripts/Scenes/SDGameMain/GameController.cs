@@ -74,6 +74,11 @@ namespace SD {
         private PlayTimePlayer targetPlayer;
         public GameObject deathPanelCanvas;
 
+        //determines if power-ups are active
+        private bool pointBoostOn = false;
+        private bool speedBoostOn = false;
+        private bool evasionBoostOn = false;
+
         Rigidbody playerClone;
 
         void Awake () {
@@ -523,6 +528,36 @@ namespace SD {
 
         public bool getIsOpponentInBase() {
             return isOpponentInBase;
+        }
+
+        public void setPointBoost(bool active)
+        {
+            pointBoostOn = active;
+        }
+
+        public void setSpeedBoost(bool active)
+        {
+            speedBoostOn = active;
+        }
+
+        public void setEvasionBoost(bool active)
+        {
+            evasionBoostOn = active;
+        }
+
+        public bool getPointBoostStatus()
+        {
+            return pointBoostOn;
+        }
+
+        public bool getSpeedBoostStatus()
+        {
+            return pointBoostOn;
+        }
+
+        public bool getEvasionBoostStatus()
+        {
+            return pointBoostOn;
         }
     } 
 

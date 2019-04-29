@@ -1,23 +1,19 @@
-﻿//Authored by Marlo Sandoval
-//Description: Code for the speed boost power-up. Boosts the player's speed and adds unscored points to the player's score.
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SD
 {
-    public class SpeedBoostPowerUp : MonoBehaviour
+    public class EvasionPowerUp : MonoBehaviour
     {
 
         private GameController gameController;
         private PlayerController playerController;
 
-        //damage dealt after interacting a jellyfish
+        //health added when getting the power-up
         private const int damage = 10;
-        private static float originalSpeed;
-        private static float originalMaxSpeed;
 
+        // Use this for initialization
         void Start()
         {
             gameController = GameController.getInstance();
@@ -46,29 +42,20 @@ namespace SD
         IEnumerator activateEffect(Collider player)
         {
             playerController = player.GetComponent<SD.PlayerController>();
-            originalSpeed = playerController.baseMaxSpeed;
-            originalMaxSpeed = playerController.absoluteMaxSpeedLimit;
-
-            //changes the speed of the player
-            gameController.setSpeedBoost(true);
-            playerController.baseMaxSpeed = originalSpeed * 2.5f;
-            playerController.absoluteMaxSpeedLimit = playerController.absoluteMaxSpeedLimit * 2f;
-            if (playerController.baseMaxSpeed > playerController.absoluteMaxSpeedLimit)
-            {
-                playerController.baseMaxSpeed = playerController.absoluteMaxSpeedLimit;
-            }
 
             //makes the power-up disappear
             GetComponent<SkinnedMeshRenderer>().enabled = false;
             GetComponent<Collider>().enabled = false;
 
-            //effects are active for 5 seconds
-            yield return new WaitForSeconds(50f);
+            gameController.setEvasionBoost(true);
+            Debug.Log(gameController.getEvasionBoostStatus());
+
+            //effects are active for 15 seconds
+            yield return new WaitForSeconds(15f);
 
             //undoes the effects
-            playerController.baseMaxSpeed = originalSpeed;
-            playerController.absoluteMaxSpeedLimit = originalMaxSpeed;
-            gameController.setSpeedBoost(false);
+            gameController.setEvasionBoost(false);
+            Debug.Log(gameController.getEvasionBoostStatus());
             Destroy(gameObject);
         }
     }

@@ -27,7 +27,15 @@ namespace SD {
         
         // Update is called once per frame
         void Update () {
-        
+            //takes effect when the player picks up a point boost power-up
+            if (gameController.getPointBoostStatus() == true)
+            {
+                newScoreValue = 50;
+            }
+            else
+            {
+                newScoreValue = 10;
+            }
         }
 
         // Destroys the attached object upon a collison with the player
@@ -41,9 +49,12 @@ namespace SD {
                 }
                 AudioSource.PlayClipAtPoint (audioClip, mainCamera.transform.position);
                 gameController.destroyPrey (npcFishId);
-                if(npcFishSpeciesId==5){gameController.AddUnscoredPoint (newScoreValue*2);
+                if (npcFishSpeciesId == 5)
+                {
+                    gameController.AddUnscoredPoint(newScoreValue * 2);
                     //attempting to increase points based on food chain relationship
-				}else gameController.AddUnscoredPoint (newScoreValue);
+                }
+                else { gameController.AddUnscoredPoint(newScoreValue); }
             }
         }
     }

@@ -59,11 +59,19 @@ namespace SD {
                     gameController.stamina += staminaRevoverRate;
 
 
-                // After couplse seconds that is defined by timeToScore, 
+                // After couple seconds that is defined by timeToScore, 
                 // add unscored points to the actual score
                 time -= 1f * Time.deltaTime;
                 if (time <= 0) {
-                    gameController.Score ();
+                    //takes effect when the player picks up a point boost power-up
+                    if (gameController.getPointBoostStatus() == true)
+                    {
+                        gameController.AddScore(gameController.GetUnscored() * 2);
+                    }
+                    else
+                    {
+                        gameController.Score();
+                    }
                     gameController.ResetUnscored ();
                     //gameController.stamina = 100;
                     gameController.hideBaseScorePanel ();

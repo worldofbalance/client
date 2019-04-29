@@ -58,7 +58,7 @@ namespace SD
         private bool canBoost;
         private bool isBoosting;
         private bool justStartedBoosting;
-        private float currentSpeedLimit;
+        public float currentSpeedLimit;
         
         // Audio
         private AudioSource intialBoostAudioSource;
@@ -109,6 +109,7 @@ namespace SD
                 {
                     canBoost = true;
                 }
+
                 // Give the player a speed boost via max speed increase if they hold space and have the stamina for it.
                 if (Input.GetKey(KeyCode.Space) && canBoost && currentStamina > 0.0f)
                 {
