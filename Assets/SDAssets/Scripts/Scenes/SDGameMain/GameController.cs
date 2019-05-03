@@ -31,7 +31,7 @@ namespace SD {
         private int opponentScore;
         public float stamina;       // Player's stamina
         private float maxStamina;
-        public int health;
+        public int health;          // Player's health
         private float maxHealth;
         private float staminaRecoveryRate = 10f;
         private float staminaRecoveryDelay;
@@ -44,9 +44,9 @@ namespace SD {
         public Rigidbody opponentBase;
         private Vector3 playerInitialPosition = new Vector3(-100,0,0);
         private Quaternion playerInitialRotation = Quaternion.Euler(0,0,0);
-        //private Quaternion playerInitialRotation = Quaternion.Euler(0, 90, 0);
+        //private Quaternion playerInitialRotation = Quaternion.Euler(0, 90, 0); // Default old values.
         private Vector3 opponentInitialPosition = new Vector3 (100, 0, 0);
-        //private Quaternion opponentInitialRotation = Quaternion.Euler (0, -90, 0);
+        //private Quaternion opponentInitialRotation = Quaternion.Euler (0, -90, 0); // Default old values.
         private Quaternion opponentInitialRotation = Quaternion.Euler(0, 0, 0);
         private Vector3 playerBaseInitialPosition = new Vector3(-260,0,0);
         private Quaternion playerBaseInitialRotation = Quaternion.Euler(0,0,0);
@@ -74,10 +74,13 @@ namespace SD {
         private PlayTimePlayer targetPlayer;
         public GameObject deathPanelCanvas;
 
-        //determines if power-ups are active
+        // BUFFS, BONUSES, AND POWERUPS.
+        // Determines if power-ups are active.
         private bool pointBoostOn = false;
         private bool speedBoostOn = false;
         private bool evasionBoostOn = false;
+
+        private int pointBonus = 0;
 
         Rigidbody playerClone;
 
@@ -330,7 +333,7 @@ namespace SD {
         }
 
         public void AddUnscoredPoint(int newScoreValue) {
-            unscoredPoint += newScoreValue;
+            unscoredPoint += newScoreValue + pointBonus;
             UpdateUnscoredPointText ();
         }
 
@@ -530,17 +533,17 @@ namespace SD {
             return isOpponentInBase;
         }
 
-        public void setPointBoost(bool active)
+        public void SetIsPointBuffActive(bool active)
         {
             pointBoostOn = active;
         }
 
-        public void setSpeedBoost(bool active)
+        public void SetIsSpeedBuffActive(bool active)
         {
             speedBoostOn = active;
         }
 
-        public void setEvasionBoost(bool active)
+        public void SetIsEvasionBuffActive(bool active)
         {
             evasionBoostOn = active;
         }
@@ -558,6 +561,11 @@ namespace SD {
         public bool getEvasionBoostStatus()
         {
             return pointBoostOn;
+        }
+
+        public void SetPointBonusAmount(int bonus)
+        {
+            pointBonus = bonus;
         }
     } 
 

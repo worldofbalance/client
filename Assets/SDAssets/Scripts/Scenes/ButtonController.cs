@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class ButtonController : MonoBehaviour
 	void Start ()
     {
         soundManagerObject = GameObject.Find("Button Sound Manager");
+        Console.WriteLine("Ate speedBuffFish.");
     }
 	
     public void PlayMouseoverSound()

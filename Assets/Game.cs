@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
@@ -84,7 +85,8 @@ public class Game : MonoBehaviour
     public static void LoadScene(string name)
     {
         Debug.Log("Loading scene: " + name);
-        Application.LoadLevel(name);
+        SceneManager.LoadScene(name);
+        //Application.LoadLevel(name);
 
         GameObject gObject = GameObject.Find("Global Object");
 

@@ -192,6 +192,8 @@ namespace SD
                                           0.0f);
 
             }
+
+            //Debug.Log(currentSpeedLimit);
         }
 
         private void FixedUpdate()
@@ -209,7 +211,6 @@ namespace SD
             // Handle boost sound effects.
             if (justStartedBoosting)
             {
-                Debug.Log("boost sound.");
                 intialBoostAudioSource.PlayOneShot(intialBoostAudioSource.clip);
                 continuedBoostAudioSource.PlayDelayed(0.75f);
                 justStartedBoosting = false;
@@ -248,7 +249,7 @@ namespace SD
                 facingRight = true;
             }
 
-            // Continued slerping if transition is not complete or facing direction has changed.
+            // Continue slerping if transition is not complete or facing direction has changed.
             if (!facingRight && (Mathf.Abs(transform.eulerAngles.x - 180f) > 0.01 || Mathf.Abs(transform.eulerAngles.y - 90f) > 0.01))
             {
                 playerModel.transform.localRotation = Quaternion.Slerp(
@@ -264,6 +265,37 @@ namespace SD
                     Time.deltaTime * maxRotationSpeed * 2);
             }
         }
+
+        #region Getters and Setters
+
+        /// <summary>
+        /// Returns the base max speed of the player.
+        /// </summary>
+        /// <returns></returns>
+        public float GetBaseSpeed()
+        {
+            return baseMaxSpeed;
+        }
+
+        /// <summary>
+        /// Sets the base max speed of the player.
+        /// </summary>
+        /// <param name="newSpeedLimit"></param>
+        public void SetCurrentSpeed(float newSpeedLimit)
+        {
+            baseMaxSpeed = newSpeedLimit;
+        }
+
+        /// <summary>
+        /// Returns the absolute fastest this unit can go, regardless of bonuses.
+        /// </summary>
+        /// <returns></returns>
+        public float GetAbsoluteMaxSpeedLimit()
+        {
+            return this.absoluteMaxSpeedLimit;
+        }
+
+        #endregion
     }
 }
 

@@ -47,14 +47,14 @@ namespace SD
             GetComponent<SkinnedMeshRenderer>().enabled = false;
             GetComponent<Collider>().enabled = false;
 
-            gameController.setEvasionBoost(true);
+            gameController.SetIsEvasionBuffActive(true);
             Debug.Log(gameController.getEvasionBoostStatus());
 
             //effects are active for 15 seconds
             yield return new WaitForSeconds(15f);
 
             //undoes the effects
-            gameController.setEvasionBoost(false);
+            gameController.SetIsEvasionBuffActive(false);
             Debug.Log(gameController.getEvasionBoostStatus());
             Destroy(gameObject);
         }
