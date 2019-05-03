@@ -5,7 +5,7 @@ using UnityEngine;
 
 /// <summary>
 /// This is the controller for the point boost buff.
-/// Player receives an extra unscored point per fish consumed
+/// Player receives an extra unscored point for ever buff stack per fish consumed
 /// while under the effect of this buff.
 /// </summary>
 namespace SD

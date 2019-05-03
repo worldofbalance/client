@@ -3,7 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/// <summary>
+/// This is the (mostly) self-contained backend and base class for the buff system.
+/// It contains its own buff tracking mechanism and updating.
+/// After intial setup, requires only requesting data from the child classes.
+/// </summary>
 namespace SD
 {
     public class BuffBackend : MonoBehaviour
