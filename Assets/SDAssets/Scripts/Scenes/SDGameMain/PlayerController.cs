@@ -264,6 +264,29 @@ namespace SD
                     Time.deltaTime * maxRotationSpeed * 2);
             }
         }
+
+        #region Getters and Setters
+
+        /// <summary>
+        /// Returns the base max speed of the player.
+        /// </summary>
+        /// <returns></returns>
+        public float GetBaseSpeed()
+        {
+            return baseMaxSpeed;
+        }
+
+        /// <summary>
+        /// Sets the base max speed of the player.
+        /// </summary>
+        /// <param name="newSpeedLimit"></param>
+        public void SetCurrentSpeed(float newSpeedLimit)
+        {
+            baseMaxSpeed = newSpeedLimit;
+        }
+
+
+        #endregion
     }
 }
 
