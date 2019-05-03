@@ -10,6 +10,7 @@ public class ButtonManager : MonoBehaviour
 {
     public List<AudioClip> mouseoverSounds;
     public List<AudioClip> buttonClickSounds;
+    public List<AudioClip> transistionSounds;
 
     private AudioSource audioSource;
     private System.Random rng;
@@ -30,5 +31,11 @@ public class ButtonManager : MonoBehaviour
     public void BtnPlayButtonClickSound()
     {
         audioSource.PlayOneShot(buttonClickSounds[rng.Next(0, (buttonClickSounds.Count))]);
+    }
+
+    // Play button click sound on transition screen.
+    public void BtnPlaySceneTransitionSound()
+    {
+        audioSource.PlayOneShot(transistionSounds[rng.Next(0, (transistionSounds.Count))]);
     }
 }

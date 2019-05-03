@@ -13,11 +13,12 @@ public class ShoalManager : MonoBehaviour {
 	public Vector3 swimLimits = new Vector3(5,5,5);
 	private float timer = 5;
 	public int numFish = 1;
+    public float fishSizeScale = 1;
 	public GameObject[] allFish;
 	[Header("Fish Settings")]
-	[Range(0.0f,5.0f)]
+	[Range(0.0f,50.0f)]
 	public float minSpeed = 1f;
-	[Range(0.0f,5.0f)]
+	[Range(0.0f,50.0f)]
 	public float maxSpeed = 1.5f;
 	public static float terrainOffset;
 	
@@ -44,7 +45,9 @@ public class ShoalManager : MonoBehaviour {
 
 			allFish[i] = (GameObject) Instantiate (fishPrefab,pos,Quaternion.identity);
 			allFish[i].GetComponent<Shoal>().manager = this;
-	}
+            allFish[i].transform.localScale = new Vector3(fishSizeScale, fishSizeScale, fishSizeScale);
+
+    }
 }
 	
 	// Update is called once per frame

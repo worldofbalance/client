@@ -41,7 +41,7 @@ namespace SD
             if (other.gameObject.tag == "SpeedBuffFish")
             {
                 // Add a stack of the buff, get the recalculated buff results.
-                player.SetCurrentSpeed(AddStack());
+                player.SetCurrentSpeed(ApplyBuff());
             }
         }
 

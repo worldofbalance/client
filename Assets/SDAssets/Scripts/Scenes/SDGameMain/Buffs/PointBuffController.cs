@@ -42,7 +42,7 @@ namespace SD
             if (other.gameObject.tag == "PointBuffFish")
             {
                 // Add a stack of the buff, get the recalculated buff results.
-                AddStack();
+                ApplyBuff();
             }
         }
 

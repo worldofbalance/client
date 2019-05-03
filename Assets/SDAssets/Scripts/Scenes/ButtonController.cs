@@ -13,7 +13,6 @@ public class ButtonController : MonoBehaviour
 	void Start ()
     {
         soundManagerObject = GameObject.Find("Button Sound Manager");
-        Console.WriteLine("Ate speedBuffFish.");
     }
 	
     public void PlayMouseoverSound()
@@ -24,5 +23,10 @@ public class ButtonController : MonoBehaviour
     public void PlayButtonClickSound()
     {
         soundManagerObject.GetComponent<ButtonManager>().BtnPlayButtonClickSound();
+    }
+
+    public void PlaySceneTransitionSound()
+    {
+        soundManagerObject.GetComponent<ButtonManager>().BtnPlaySceneTransitionSound();
     }
 }

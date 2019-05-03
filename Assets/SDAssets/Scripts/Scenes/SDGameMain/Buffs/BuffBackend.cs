@@ -36,11 +36,15 @@ namespace SD
 
         // The end time and max duration of the buff.
         private float buffEndTime = 0.0f;
-        private float buffMaxDuration = 0.0f;
+        private float maxBuffDuration = 0.0f;
 
-        void Start()
+        // Optional use audio source for buff pickup sounds.
+        public AudioClip buffSound = null;
+        private AudioSource audioSource;
+
+        void Awake()
         {
-            Console.WriteLine("Buff Template Awake.");
+            audioSource = gameObject.AddComponent<AudioSource>();
         }
 
         // Stat updates take place in LateUpdate to allow the extended buff
@@ -59,12 +63,13 @@ namespace SD
         /// Add a stack of the buff, if possible.
         /// </summary>
         /// <returns>Returns the recalculated stat value.</returns>
-        public float AddStack()
+        public float ApplyBuff()
         {
             // Check for too many stacks. Add a stack if ok.
             if (buffStackAmount < maxBuffStackAmount)
             {
                 buffStackAmount++;
+
                 // After adding a stack, recalculate the adjustedStat value.
                 // case 0: multiplicitive multiplier.
                 // case 1: additive multiplier.
@@ -93,12 +98,18 @@ namespace SD
                         break;
                 }
 
-                // Update the end time of the buff.
-                buffEndTime = Time.timeSinceLevelLoad + buffMaxDuration;
-
-                // Clamp it to the maximum stat value provided if it goes over.
+                // Clamp the adjusted stat to the maximum stat value provided if it goes over.
                 adjustedStat = (adjustedStat <= maxBuffEffect) ? adjustedStat : maxBuffEffect;
             }
+
+            // Play sound clip if applicable.
+            if (buffSound != null)
+            {
+                audioSource.PlayOneShot(buffSound);
+            }
+
+            // Update the end time of the buff, even if we can't add any more stacks.
+            buffEndTime = Time.timeSinceLevelLoad + maxBuffDuration;
 
             // Finally, return the adjusted stat value.
             return adjustedStat;
@@ -163,7 +174,7 @@ namespace SD
         /// <param name="duration"></param>
         public void SetMaxBuffDuration(float duration)
         {
-            buffMaxDuration = duration;
+            maxBuffDuration = duration;
         }
 
         /// <summary>
