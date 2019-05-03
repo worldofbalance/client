@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This is the speed buff controller script.
-/// Inherits from the BuffTemplate class.
+/// This is the controller for the point boost buff.
+/// Player receives an extra unscored point per fish consumed
+/// while under the effect of this buff.
 /// </summary>
 namespace SD
 {
-    public class SpeedBuffController : BuffBackend
+    public class PointBuffController : BuffBackend
     {
         // Variables that can be adjusted for balance.
         public float perStackBonus;
@@ -25,12 +26,12 @@ namespace SD
             player = gameObject.GetComponent<PlayerController>();
             gameController = GameController.getInstance();
 
-            SetBaseStat(player.GetBaseSpeed());
+            SetBaseStat(0.0f);
             SetMaxStackAmount(maxBuffStacks);
             SetMaxBuffDuration(buffDuration);
-            SetBuffMechanism(BuffMechanism.MULTIPLICITIVE);
+            SetBuffMechanism(BuffMechanism.FLAT);
+            SetInitialBuffBonus(0.0f);
             SetBuffBonusPerStack(perStackBonus);
-            SetAbsoluteMaxStatAmount(player.GetAbsoluteMaxSpeedLimit());
         }
 
         private void OnTriggerEnter(Collider other)
@@ -38,26 +39,25 @@ namespace SD
             //Debug.Log("Collided with: " + other.gameObject.tag);
 
             // If the collision target is a buff fish, adjust stacks.
-            if (other.gameObject.tag == "SpeedBuffFish")
+            if (other.gameObject.tag == "PointBuffFish")
             {
                 // Add a stack of the buff, get the recalculated buff results.
-                player.SetCurrentSpeed(AddStack());
+                AddStack();
             }
         }
 
         void Update()
         {
-            // Update the player's base speed and inform the game controller of
-            // player's speed boost buff state.
-            player.SetCurrentSpeed(GetAdjustedStatAmount());
+            // Round the point bonus to avoid truncation errors, then cast to int.
+            gameController.SetPointBonusAmount((int)Math.Round(GetAdjustedStatAmount()));
 
-            if(GetBuffStackAmount() > 0)
+            if (GetBuffStackAmount() > 0)
             {
-                gameController.SetIsSpeedBuffActive(true);
+                gameController.SetIsPointBuffActive(true);
             }
             else
             {
-                gameController.SetIsSpeedBuffActive(false);
+                gameController.SetIsPointBuffActive(false);
             }
         }
     }

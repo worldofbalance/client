@@ -44,13 +44,13 @@ namespace SD
             GetComponent<SkinnedMeshRenderer>().enabled = false;
             GetComponent<Collider>().enabled = false;
 
-            gameController.setPointBoost(true);
+            gameController.SetIsPointBuffActive(true);
 
             //effects are active for 10 seconds
             yield return new WaitForSeconds(100f);
 
             //undoes the effects
-            gameController.setPointBoost(false);
+            gameController.SetIsPointBuffActive(false);
             Destroy(gameObject);
         }
     }

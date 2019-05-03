@@ -64,6 +64,7 @@ namespace SD {
                 time -= 1f * Time.deltaTime;
                 if (time <= 0) {
                     //takes effect when the player picks up a point boost power-up
+                    /*
                     if (gameController.getPointBoostStatus() == true)
                     {
                         gameController.AddScore(gameController.GetUnscored() * 2);
@@ -72,6 +73,7 @@ namespace SD {
                     {
                         gameController.Score();
                     }
+                    */
                     gameController.ResetUnscored ();
                     //gameController.stamina = 100;
                     gameController.hideBaseScorePanel ();

@@ -50,7 +50,7 @@ namespace SD
             originalMaxSpeed = playerController.absoluteMaxSpeedLimit;
 
             //changes the speed of the player
-            gameController.setSpeedBoost(true);
+            gameController.SetIsSpeedBuffActive(true);
             playerController.baseMaxSpeed = originalSpeed * 2.5f;
             playerController.absoluteMaxSpeedLimit = playerController.absoluteMaxSpeedLimit * 2f;
             if (playerController.baseMaxSpeed > playerController.absoluteMaxSpeedLimit)
@@ -68,7 +68,7 @@ namespace SD
             //undoes the effects
             playerController.baseMaxSpeed = originalSpeed;
             playerController.absoluteMaxSpeedLimit = originalMaxSpeed;
-            gameController.setSpeedBoost(false);
+            gameController.SetIsSpeedBuffActive(false);
             Destroy(gameObject);
         }
     }
