@@ -89,7 +89,7 @@ public class Species : MonoBehaviour {
 		GameObject organism = Instantiate(Resources.Load("Prefabs/Dummy")) as GameObject;
 		organism.transform.position = 
 			new Vector3 (baseX + xOff * step, 0, baseZ + yOff * step);
-		organism.transform.FindChild("Quad").GetComponent<Renderer>().material.mainTexture = Resources.Load(Constants.TEXTURE_RESOURCES_PATH + "Species/" + name) as Texture;
+		organism.transform.Find("Quad").GetComponent<Renderer>().material.mainTexture = Resources.Load(Constants.TEXTURE_RESOURCES_PATH + "Species/" + name) as Texture;
 		organism.transform.localScale *= 0.50f;    // scaled to fit on one tile
 		organism.transform.localScale *= 1.25f;    // default
 		if (name.Equals("Acacia")) {
@@ -105,7 +105,7 @@ public class Species : MonoBehaviour {
 	private GameObject CreateOrganism(Vector3 position) {
 //		GameObject organism = Instantiate(WorldController.speciesPrefabs["African Elephant"]) as GameObject;
 		GameObject organism = Instantiate(Resources.Load("Prefabs/Dummy")) as GameObject;
-		organism.transform.FindChild("Quad").GetComponent<Renderer>().material.mainTexture = Resources.Load(Constants.TEXTURE_RESOURCES_PATH + "Species/" + name) as Texture;
+		organism.transform.Find("Quad").GetComponent<Renderer>().material.mainTexture = Resources.Load(Constants.TEXTURE_RESOURCES_PATH + "Species/" + name) as Texture;
 		organism.transform.position = position;
 
 		if (organism_type.Equals("Animal")) {

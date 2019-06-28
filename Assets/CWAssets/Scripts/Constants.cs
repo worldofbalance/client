@@ -13,7 +13,8 @@ public class Constants {
     //public static readonly string REMOTE_HOST =  "localhost";//"thecity.sfsu.edu"; // "localhost"; //"localhost";  "smurf.sfsu.edu";
     // public static readonly string REMOTE_HOST =  "thecity.sfsu.edu";
 	// public static readonly string REMOTE_HOST =  "smurf.sfsu.edu";
-	public static readonly string REMOTE_HOST = "54.153.66.118";   // AWS from Ben, 2-2017
+	public static readonly string REMOTE_HOST = "localhost"; // AWS Spr 2019
+	// public static readonly string REMOTE_HOST = "54.153.66.118";   // AWS from Ben, 2-2017
 	public static readonly int REMOTE_PORT = 9260;  	// for thecity
 	//public static readonly int REMOTE_PORT = 20038;     // for localhost
 	public static readonly float HEARTBEAT_RATE = 1f;
