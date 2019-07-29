@@ -30,9 +30,12 @@ namespace SD {
         private int unscoredPoint;
         private int opponentScore;
         public float stamina;       // Player's stamina
+        private float maxStamina;
         public int health;
-        private const float MaxStamina = 100;
-        private float staminaRecoveryRate = 0.115f;
+        private float maxHealth;
+        private float staminaRecoveryRate = 10f;
+        private float staminaRecoveryDelay;
+        private float staminaBeginRecoverTime = 0.0f;
 
         public Boundary boundary;
         public Rigidbody player;
@@ -40,9 +43,11 @@ namespace SD {
         public Rigidbody playerBase;
         public Rigidbody opponentBase;
         private Vector3 playerInitialPosition = new Vector3(-100,0,0);
-        private Quaternion playerInitialRotation = Quaternion.Euler(0,90,0);
+        private Quaternion playerInitialRotation = Quaternion.Euler(0,0,0);
+        //private Quaternion playerInitialRotation = Quaternion.Euler(0, 90, 0);
         private Vector3 opponentInitialPosition = new Vector3 (100, 0, 0);
-        private Quaternion opponentInitialRotation = Quaternion.Euler (0, -90, 0);
+        //private Quaternion opponentInitialRotation = Quaternion.Euler (0, -90, 0);
+        private Quaternion opponentInitialRotation = Quaternion.Euler(0, 0, 0);
         private Vector3 playerBaseInitialPosition = new Vector3(-260,0,0);
         private Quaternion playerBaseInitialRotation = Quaternion.Euler(0,0,0);
         private Vector3 opponentBaseInitialPosition = new Vector3(260,0,0);
@@ -112,7 +117,7 @@ namespace SD {
                 rbOpponent = (Rigidbody)Instantiate (opponent, opponentInitialPosition, opponentInitialRotation);
                 rbOpponent.gameObject.SetActive (true);
                 opponentPlayer = new PlayTimePlayer ();
-                opponentPlayer.speedUpFactor = playerClone.GetComponent<PlayerController> ().speedUpFactor;
+                opponentPlayer.speedUpFactor = playerClone.GetComponent<PlayerController>().staminaSpeedBoostFactor;
                 opponentPlayer.yRotation = opponentInitialRotation.eulerAngles.y;
                 isGameTimeTicking = false; // Wait for time sync if in multiplayer mode
                 gameController.countdownPanelCanvas.SetActive (true);
@@ -136,7 +141,7 @@ namespace SD {
             yield return new WaitForSeconds (seconds);
             hideFoodChainPanel ();
         }
-        // Automatically revovers stamina, and refreshs staminaText UI every frame.
+        // Automatically recovers stamina, and refreshs staminaText UI every frame.
         void Update() {
             if (getIsGameTimeTicking ()) {
                 if (Constants.PLAYER_NUMBER != 2)
@@ -195,10 +200,10 @@ namespace SD {
             Vector3 spawnPosition;
             if (npcFishes [i].xPosition != 0 && npcFishes [i].yPosition != 0) {
                 spawnPosition = new Vector3 (npcFishes [i].xPosition, npcFishes [i].yPosition, npcFishes[i].xRotationAngle);
-                Debug.Log ("Spawning NPCFish " + i + " from request result");
+                //Debug.Log ("Spawning NPCFish " + i + " from request result");
             } else {
                 spawnPosition = new Vector3 (Random.Range(boundary.xMin, boundary.xMax), Random.Range(boundary.yMin, boundary.yMax), 0);
-                Debug.Log ("Spawning NPCFish " + i + " from local random numbers");
+                //Debug.Log ("Spawning NPCFish " + i + " from local random numbers");
             }
             Quaternion spawnRotation = Quaternion.Euler(0, 90,0);
             npcFishObjects [i] = Instantiate (preyArray[preyIndex], spawnPosition, spawnRotation) as GameObject;
@@ -304,9 +309,10 @@ namespace SD {
                 }
             }
         }
-    // Increases the current score value, and pass the info to scoreText
-    // by calling UpdateScore().
-    public void AddScore(int newScoreValue) {
+
+        // Increases the current score value, and pass the info to scoreText
+        // by calling UpdateScore().
+        public void AddScore(int newScoreValue) {
             score += newScoreValue;
             UpdateScoreText ();
             // Send the score to the opponent.
@@ -347,9 +353,23 @@ namespace SD {
 
         // Recovers the current stamina 
         void RecoverStamina(){
-            stamina = stamina + staminaRecoveryRate;
-            if (stamina >= MaxStamina)
-                stamina = MaxStamina;
+            if(Time.fixedTime > staminaBeginRecoverTime)
+            {
+                stamina = stamina + staminaRecoveryRate * Time.deltaTime;
+                if (stamina >= maxStamina)
+                    stamina = maxStamina;
+            }
+        }
+
+        // Set the maximum amount of stamina for the player.
+        public void SetMaxStamina(float maxStam)
+        {
+            maxStamina = maxStam;
+        }
+
+        public void SetStaminaDelay(float srd)
+        {
+            staminaRecoveryDelay = srd;
         }
 
         // Returns the current stamina
@@ -359,7 +379,10 @@ namespace SD {
 
         // Sets stamina
         public void SetStamina(float newStamina){
-            this.stamina = newStamina;
+            staminaBeginRecoverTime = Time.fixedTime + staminaRecoveryDelay;
+            stamina = newStamina;
+            if (stamina < 0.0f)
+                stamina = 0.0f;
         }
 
         // Sets score
@@ -382,6 +405,12 @@ namespace SD {
 
         public void SetHealth(int newHealth){
             this.health = newHealth;
+        }
+
+        // Set the maximum amount of health for the player.
+        public void SetMaxHealth(float maxHP)
+        {
+            maxHealth = maxHP;
         }
 
         public void UpdateHealth(int value){

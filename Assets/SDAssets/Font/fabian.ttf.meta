@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 25a1920f83f2bdc46a2879ef35cbf19e
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Fabian
+  fontNames:
+  - Fabian
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 0da288d851bfdef4b87488d25470406c, type: 3}
+  - {fileID: 12800000, guid: da472f89a5ce7458f98ca1e6e41c95f3, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

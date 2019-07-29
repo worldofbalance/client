@@ -27,7 +27,7 @@ namespace SD {
 
         // Use this for initialization
         void Start () {
-            maxY = 40f;
+            maxY = 14f;
 
             staminaBar = GameObject.Find ("StaminaBar").GetComponent<Image> ();
             staminaBarTransform = staminaBar.GetComponent<RectTransform> ();

@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: c63f15613b9134b41a81ca686de51f62
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Minisystem
+  fontNames:
+  - Minisystem
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 2e1e0ef0bc82d4d4aab12974418bdf9e, type: 3}
+  - {fileID: 12800000, guid: 819c3f693d8784a8f8d9b774f14f48e9, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
