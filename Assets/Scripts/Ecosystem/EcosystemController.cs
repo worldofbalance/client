@@ -18,6 +18,7 @@ public class EcosystemController : MonoBehaviour {
     public Vector3 upperBound { get; set; }
 	private ConvergeManager manager;
 	private Database database;
+    private Graph graph;
 
     void Awake() {
 		Game.networkManager.Send(EcosystemProtocol.Prepare(GameState.world.world_id, GameState.player.GetID()));			
@@ -30,6 +31,12 @@ public class EcosystemController : MonoBehaviour {
     void Start(){
         Game.StartEnterTransition();
         Camera.main.GetComponent<EcosystemCamera>().Setup();
+
+        if (GameObject.Find("Cube").GetComponent<Graph>() == null)
+        {
+            GameObject.Find("Cube").AddComponent<Graph>();
+        }
+        graph = GameObject.Find("Cube").GetComponent<Graph>();
     }
 
     // Update is called once per frame
@@ -45,6 +52,7 @@ public class EcosystemController : MonoBehaviour {
     }
 
     void OnGUI() {
+        // displays World button that leads back to World scene
         if (GUI.Button(new Rect(10, 10, 80, 30), "World") && !isLeaving) {
             Camera.main.GetComponent<EcosystemCamera>().TriggerLeaving();
             isLeaving = true;

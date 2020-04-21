@@ -1,3 +1,7 @@
+/*
+ * This class displays a graph of the player's ecosystem score and species biomass.
+ */
+
 using UnityEngine;
 
 using System;
@@ -5,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class Graph : MonoBehaviour {
 
@@ -30,7 +35,7 @@ public class Graph : MonoBehaviour {
 	private float left;
 	private float top;
 	private float width = 855;    // 2017-3-31  was 805
-	private float height = 430;   // 2017-3-15  was 420
+	private float height = 440;   // 2017-3-15  was 420
 	public bool isActive = false;
 	private bool isReady = false;
 	private bool isLegendActive = true;
@@ -53,8 +58,8 @@ public class Graph : MonoBehaviour {
 	private Rect legendScrollRect;
 	private Vector2 legendScrollPos = Vector2.zero;
 	private bool isLegendContentHidden = false;
-	private float thickness = 2f;
-	private Vector2 hStart;
+    private float thickness = 2f; // graph axis line thickness
+    private Vector2 hStart;
 	private Vector2 hEnd;
 	private int xNumMarkers = 12;
 	private int yNumMarkers = 5;
@@ -119,9 +124,10 @@ public class Graph : MonoBehaviour {
 
 		yAxisLength = Vector2.Distance(vStart, vEnd) * 0.95f;
 		yUnitLength = yAxisLength / yNumMarkers;
-
+        
+        // line graph points
 		lineMarkerTex = Resources.Load<Texture2D>("chart_dot");
-
+        // graph window background
 		bgTexture = Resources.Load<Texture2D>(Constants.THEME_PATH + Constants.ACTIVE_THEME + "/gui_bg");
 		font = Resources.Load<Font>("Fonts/" + "Chalkboard");
 		MakeDayCounts ();
@@ -177,31 +183,52 @@ public class Graph : MonoBehaviour {
 		}
 	}
 		
-	
 	void OnGUI() {
-		if (buttonActive) {
+        // local reference to current scene
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        // displays Graph button if current scene is Ecosystem
+        if (buttonActive && currentScene.name == "Ecosystem") {
+            if (GUI.Button(new Rect(100, 10, 80, 30), "Graph")) {
+                ToggleGraph();
+            }
+        }
+
+        // old "Graph" button
+        if (buttonActive && currentScene.name != "Ecosystem") {
 			if (GUI.Button(new Rect(200, Screen.height - 95f, 80, 30), "Graph")) {
 				ToggleGraph();
 			}
 		}
 
+        // creates graph window
 		if (isActive) {
 			windowRect = GUI.Window(window_id, windowRect, MakeWindow, title);
 		}
 	}
 
-	void ToggleGraph() {
+    // toggles graph display
+	public void ToggleGraph() {
+        // temporary reference to current scene
+        Scene currentScene = SceneManager.GetActiveScene();
+
 		isActive = !isActive;
 		if (isActive) {
-			GameObject.Find ("MenuScript").GetComponent<MenuScript> ().menuOpen = true;
-			GameObject.Find ("MenuScript").GetComponent<MenuScript> ().disableDropDown ();
-			GameObject.Find ("Local Object").GetComponent<WorldMouse> ().popOversEnabled = false;
+            // disable when in Ecosystem scene
+            if (currentScene.name != "Ecosystem"){
+                GameObject.Find("MenuScript").GetComponent<MenuScript>().menuOpen = true;
+                GameObject.Find("MenuScript").GetComponent<MenuScript>().disableDropDown();
+                GameObject.Find("Local Object").GetComponent<WorldMouse>().popOversEnabled = false;
+            }            
 			excludeList.Clear ();
 			GetData ();
 		} else {
-			GameObject.Find ("MenuScript").GetComponent<MenuScript> ().menuOpen = false;
-			GameObject.Find ("MenuScript").GetComponent<MenuScript> ().enableDropdown ();
-			GameObject.Find ("Local Object").GetComponent<WorldMouse> ().popOversEnabled = true;
+            // disable when in Ecosystem scene
+            if (currentScene.name != "Ecosystem"){
+                GameObject.Find("MenuScript").GetComponent<MenuScript>().menuOpen = false;
+                GameObject.Find("MenuScript").GetComponent<MenuScript>().enableDropdown();
+                GameObject.Find("Local Object").GetComponent<WorldMouse>().popOversEnabled = true;
+            }			
 		}
 	}
 
@@ -276,7 +303,7 @@ public class Graph : MonoBehaviour {
 	}
 
 	private void DrawGrid() {
-		Color color = Color.white;
+		Color color = Color.grey;
 
 		GUI.BeginGroup(graphRect, GUI.skin.box);
 			GUIStyle style = new GUIStyle(GUI.skin.label);
@@ -290,7 +317,7 @@ public class Graph : MonoBehaviour {
 			for (int i = 0; i < xNumMarkers; i++) {
 				float xPos = hStart.x + xUnitLength * (i + 1), yPos = hStart.y - 5;
 				// Unit Line
-				Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPos, yPos + 10), color, thickness, false);
+				Drawing.DrawLine(new Vector2(xPos, yPos + 5), new Vector2(xPos, yPos + 15), color, thickness, false);
 				// Unit Label
 				style.alignment = TextAnchor.UpperCenter;
 				if ((xMin + i * zoom) < xAxisLabels.Count) {
@@ -313,9 +340,9 @@ public class Graph : MonoBehaviour {
 			Drawing.DrawLine(vStart, vEnd, color, thickness, false);
 			// Y-Axis Markers
 			for (int i = 0; i <= yNumMarkers; i++) {
-				float xPos = vStart.x - 5, yPos = vStart.y - yUnitLength * i;
+				float xPos = vStart.x, yPos = vStart.y - yUnitLength * i;
 				// Unit Line
-				Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPos + 10, yPos), color, thickness, false);
+				Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(graphRect.width - 100, yPos), color, thickness, false);
 				// Unit Label
 				style.alignment = TextAnchor.UpperRight;
 				GUI.Label(new Rect(xPos - 85, yPos - 11, 80, 30), (i * yRange / 5).ToString(), style);
@@ -334,7 +361,7 @@ public class Graph : MonoBehaviour {
 				Drawing.DrawLine(vStartES, vEndES, color, thickness, false);
 				// Y-Axis Markers
 				for (int i = 0; i <= yNumMarkers; i++) {
-					float xPos = vStartES.x - 5, yPos = vStartES.y - yUnitLength * i;
+					float xPos = vStartES.x - 10, yPos = vStartES.y - yUnitLength * i;
 					// Unit Line
 					Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPos + 10, yPos), color, thickness, false);
 					// Unit Label
@@ -373,6 +400,7 @@ public class Graph : MonoBehaviour {
 			series.width = Mathf.Lerp(0, graphRect.width, series.deltaTime += Time.deltaTime * 0.5f);
 		}
 		int yRangeSave = 0;
+        // environment score flag
 		if (esFlag) {
 			yRangeSave = yRange;
 			yRange = yRangeES;
@@ -408,7 +436,7 @@ public class Graph : MonoBehaviour {
 					// Current Point
 					float xPosNext = hStart.x + xUnitLength * (j + 1), yPosNext = hStart.y - (values[xMin + j * zoom] / yRange * yAxisLength);
 					// Connect the Points by Drawing Line
-					Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPosNext, yPosNext), color, 1.5f, true);
+					Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPosNext, yPosNext), color, 2.5f, true);
 					// Draw End Point
 					text = ("<color=#" + series.colorHex + ">" + series.label + "</color>" + '\n' + values[xMin + j].ToString("F2"));
 					lastIdx = j + 1;
@@ -432,7 +460,7 @@ public class Graph : MonoBehaviour {
 					if (lastIdx > 0) {
 						float xPos = hStart.x + xUnitLength * lastIdx, 
 						yPos = hStart.y - (values[xMin + (lastIdx - 1) * zoom] / yRange * yAxisLength);
-						Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPosNext, yPosNext), color, 1.5f, true);
+						Drawing.DrawLine(new Vector2(xPos, yPos), new Vector2(xPosNext, yPosNext), color, 2.5f, true);
 					}
 					string text = ("<color=#" + series.colorHex + ">" + series.label + "</color>" + '\n' + values[lastVIdx].ToString("F2"));
 					DrawMarker(series.label, new Rect(xPosNext - 7, yPosNext - 7, 14, 14), color, text);
@@ -472,7 +500,9 @@ public class Graph : MonoBehaviour {
 		GUI.EndGroup();
 	}
 
+    // draws hex shape on each data point of graph
 	private void DrawMarker(string label, Rect rect, Color color, string text) {
+        // previously, color passed so hex plot points matched line color
 		Color temp = GUI.color;
 
 		if (rect.Contains(Event.current.mousePosition)) {
@@ -487,12 +517,15 @@ public class Graph : MonoBehaviour {
 			}
 		}
 
-		GUI.color = color;
-		GUI.DrawTexture(rect, lineMarkerTex);
+        // set color to clear or transparent to remove plot points
+        // hex points retained to preserve the mouseover function of plot lines
+		GUI.color = Color.clear;
+		//GUI.DrawTexture(rect, lineMarkerTex);
 
 		GUI.color = temp;
 	}
 
+    // draws bottom slider
 	private void DrawMonthSlider() {
 		int offset = (zoom > 1) ? 1 : 0;
 		monthSliderMax = Mathf.Max (0, 1 + offset + xAxisLabels.Count / zoom - xNumMarkers);
@@ -508,19 +541,21 @@ public class Graph : MonoBehaviour {
 		}
 	}
 	
-	public void ShowMonth(int month) {
-		if (xAxisLabels.Count > xNumMarkers) {
-			monthSliderStart = monthSliderValue;
-			monthSliderDT = 0;
-			scrollToMonth = Mathf.Clamp(month, 1, xAxisLabels.Count - xNumMarkers + 1) - 1;
-		}
-	}
+    // called under ShowLastMonth which is never called
+	//public void ShowMonth(int month) {
+	//	if (xAxisLabels.Count > xNumMarkers) {
+	//		monthSliderStart = monthSliderValue;
+	//		monthSliderDT = 0;
+	//		scrollToMonth = Mathf.Clamp(month, 1, xAxisLabels.Count - xNumMarkers + 1) - 1;
+	//	}
+	//}
 	
-	public void ShowLastMonth() {
-		if (xAxisLabels.Count > xNumMarkers) {
-			ShowMonth(xAxisLabels.Count - xNumMarkers + 1);
-		}
-	}
+    // never called, function uncertain (legacy code)
+	//public void ShowLastMonth() {
+	//	if (xAxisLabels.Count > xNumMarkers) {
+	//		ShowMonth(xAxisLabels.Count - xNumMarkers + 1);
+	//	}
+	//}
 
 	private void DrawLegend() {
 		GUIStyle style = new GUIStyle(GUI.skin.label);
@@ -576,6 +611,7 @@ public class Graph : MonoBehaviour {
 
 						GUI.color = temp;
 
+                        // button that removes species series on click
 						if (GUI.Button(new Rect(0, 0, itemRect.width, itemRect.height), "", GUIStyle.none)) {
 							SetSeriesActive(label, excludeList.Contains(label));
 							UpdateData ();
@@ -640,7 +676,8 @@ public class Graph : MonoBehaviour {
 		// Update X-Axis Labels
 		xAxisLabels.Clear();
 		for (int i = minDay; i <= maxDay; i++) {
-			xAxisLabels.Add("" + i);      // .ToString("00"));
+            int day = i - minDay + 1; // show days since first player login, not actual days on database
+			xAxisLabels.Add("" + day);      // .ToString("00"));
 		}
 		
 		// Update Values
@@ -730,12 +767,13 @@ public class Graph : MonoBehaviour {
 		isReady = true;
 	}
 	
-	public IEnumerator UpdateDataRoutine(float time) {
-		while (true) {
-			// UpdateData();
-			yield return new WaitForSeconds(time);
-		}
-	}
+    // never called (legacy code?)
+	//public IEnumerator UpdateDataRoutine(float time) {
+	//	while (true) {
+	//		// UpdateData();
+	//		yield return new WaitForSeconds(time);
+	//	}
+	//}
 		
 	void MakeDayCounts() {
 		int month;
@@ -766,8 +804,9 @@ public class Graph : MonoBehaviour {
 		}
 		return result;
 	}
-		
-	void GetData() {		
+
+    // This method will retrieve data for the graph based on local cache and server data.
+    void GetData() {		
 		isReady = false;
 		biomassValues = new Dictionary<int,int> ();
 		speciesIds = new List<int> ();
@@ -777,16 +816,20 @@ public class Graph : MonoBehaviour {
 		minMonth = NUM_YEARS * 12;
 		maxMonth = 0;
 
+        // if cache exists
 		if (File.Exists (fileName)) {			
 			int spId, cnt = 0;
 			List<int> tList;
 			Dictionary<int,int> tDict;
 			string inLine;
+
+            // read local cache data
 			using(StreamReader sr = new StreamReader(fileName))
 			{
 				inLine = sr.ReadLine();
 				aDay = Int32.Parse(inLine);
-				maxDay = aDay;
+				maxDay = aDay; // most recent in cache
+                xMax = maxDay;
 
 				while (!sr.EndOfStream) {
 					inLine = sr.ReadLine();
@@ -794,7 +837,7 @@ public class Graph : MonoBehaviour {
 					bufLine = inLine;
 					spId = NextValue ();
 					// Debug.Log ("Sorted month values, species_id = " + spId);
-					cnt = NextValue ();
+					cnt = NextValue (); // number of data values/days stored for this species
 					minDay = Math.Min (minDay, aDay - cnt + 1);
 					for (int idx = 0; idx < cnt; idx++) {
 						int val = NextValue ();
@@ -829,7 +872,7 @@ public class Graph : MonoBehaviour {
 				speciesIds = new List<int> ();
 				// minDay = 1000000;
 			}
-		} else {
+		} else { // no cached data
 			aDay = 0;
 		}
 
@@ -840,10 +883,11 @@ public class Graph : MonoBehaviour {
 	public void processDayInfo(NetworkResponse response)
 	{
 		ResponseSpeciesAction args = response as ResponseSpeciesAction;
-		cDay = args.cDay;
+		cDay = args.cDay; // current day
 		fDay = args.fDay;
 		lDay = args.lDay;
-		maxDay = cDay;
+		maxDay = cDay; // max day displayed on graph
+        xMax = maxDay;
 		Debug.Log ("Graph: c,f,l,aDay = " + cDay + " " + fDay + " " + lDay + " " + aDay);
 		// Debug.Log("Graph: Send SpeciesActionProtocol, action = 2");
 
@@ -983,7 +1027,7 @@ public class Graph : MonoBehaviour {
 		}
 	}
 
-
+    // writes latest data to local cache file
 	void WriteFile() {
 		string outLine;
 		Dictionary<int,int> sDict;

@@ -13,17 +13,13 @@ public class Constants
     // Constants
     public static readonly string CLIENT_VERSION = "1.00";
 
-    // public static readonly string REMOTE_HOST = "localhost";
+    public static readonly string REMOTE_HOST = "localhost";
     // public static readonly string REMOTE_HOST = "thecity.sfsu.edu";
-	public static readonly string REMOTE_HOST = "smurf.sfsu.edu";
+	//public static readonly string REMOTE_HOST = "smurf.sfsu.edu";
+	//public static readonly string REMOTE_HOST = "worldofbalance.westus.cloudapp.azure.com";
 	// public static readonly string REMOTE_HOST = "54.153.66.118";   // AWS from Ben, 2-2017
     // IP address may be 130.212.3.51
 
-    //public static readonly int REMOTE_PORT = 9234;
-    // public static readonly int REMOTE_PORT = 9270;    // 9270 is new port as of 2016-9-13 - cvg account
-    //20041;
-    //    public static readonly int REMOTE_PORT = 9234;
-    //9257 9255 for locahost, 9257 for Anu's server
     public static readonly int REMOTE_PORT = 9255;    // 9255  wob_wob account
     public static readonly float HEARTBEAT_RATE = 1f;
 	
@@ -34,9 +30,17 @@ public class Constants
     public static readonly string THEME_PATH = "Themes/";
 
     public static string ACTIVE_THEME = "Default";
-	
-    public static readonly Font FONT_01 = Resources.Load<Font>("Fonts/" + "Chalkboard");
+
+	//void Awake(){
+	//	Font FONT_01 = Resources.Load<Font>("Fonts/" + "Chalkboard");
+	//	Texture2D BG_TEXTURE_01 = Resources.Load<Texture2D>(Constants.THEME_PATH + Constants.ACTIVE_THEME + "/gui_bg");
+	//}
+	// moved loads to Awake() fuction to remove compile/build error 
+	// Unity does not permit loads from out of function or static initializers
+	public static readonly Font FONT_01 = Resources.Load<Font>("Fonts/" + "Chalkboard");
     public static readonly Texture2D BG_TEXTURE_01 = Resources.Load<Texture2D>(Constants.THEME_PATH + Constants.ACTIVE_THEME + "/gui_bg");
+	//public static readonly Font FONT_01;
+	//public static readonly Texture2D BG_TEXTURE_01;
 
 	// Converge game - foodweb (Database.cs) constants
     public static readonly int ID_NOT_SET = -1;
@@ -44,6 +48,7 @@ public class Constants
 	public const int MODE_SHOP = 1;
 	public const int MODE_CONVERGE_GAME = 2;
 	public const int MODE_OWNED = 3;
+    public const int MODE_FOODWEB = 4;
 
     //author: Lobby Team
     public static readonly float BATTLE_REQUEST_RATE = 1f;

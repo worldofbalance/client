@@ -171,6 +171,18 @@ public class WorldMouse : MonoBehaviour
                                 tileUi.transform.GetChild(2).GetComponent<Text>().text = terrain[currentSelectedTile.terrain_type - 1];
                                 tileUi.transform.GetChild(3).GetComponent<Text>().text = currentSelectedTile.v_capacity.ToString();
                             }
+
+                            //Launch the ecosystem if they are clicking on owned tiles 
+                            if (currentTile.player_id == GameState.player.GetID())
+                            {
+                                // Disabled for now. Leave to develop more later
+                                mapCamera.Move(currentTile.transform.position);
+
+                                // displays ecosystem graph
+                                //graph.ToggleGraph();
+
+                                Debug.Log("clicked on own tile");
+                            }
                         }
                     }
                 }
@@ -186,8 +198,8 @@ public class WorldMouse : MonoBehaviour
                         //Launch the ecosystem if they are clicking on owned tiles 
                         if (currentTile.player_id == GameState.player.GetID())
                         {
-							// Disabled for now. Leave to develop more later
-                            // mapCamera.Move(currentTile.transform.position);
+                            // Disabled for now. Leave to develop more later
+                            mapCamera.Move(currentTile.transform.position);
 
                         }
                         else if (currentTile.player_id == 0 && !tileUi.activeSelf) // check to see if tile can be purchased 

@@ -76,10 +76,12 @@ public class WorldController : MonoBehaviour {
 	  UpdateSpeciesLoc ();
 	}
 	
-	if (GUI.Button (new Rect (200, Screen.height - 145f, 80, 30), "Food Web") && !foodWebImageExists) {
-	  short action = 2;
-	  Game.networkManager.Send (SpeciesActionProtocol.Prepare (action), ProcessSpeciesAction2);		
-	}
+    // displays Food Web button
+	/*if (GUI.Button (new Rect (200, Screen.height - 145f, 80, 30), "Food Web") && !foodWebImageExists) {
+        Debug.Log("food web button, food web image does not exist");
+        short action = 2;
+	    Game.networkManager.Send (SpeciesActionProtocol.Prepare (action), ProcessSpeciesAction2);
+	}*/
 			
 	if (GUI.Button (new Rect (200, Screen.height - 45f, 80, 30), "Logout")) {
 	  confirmPopUp = true;
@@ -92,12 +94,14 @@ public class WorldController : MonoBehaviour {
 
 	if (foodWebImageExists) {
 	  GUI.Window (Constants.FOOD_WEB_VIEW, foodWebRect, MakeFoodWebWindow, "food Web view", GUIStyle.none);
+            Debug.Log("food web image exists");
 	}
   }
   
 
 	void MakeFoodWebWindow(int id) {
-		Functions.DrawBackground(new Rect(0, 0, FWWWidth, FWWHeight), bgTexture);
+        Debug.Log("make food web window method");
+        Functions.DrawBackground(new Rect(0, 0, FWWWidth, FWWHeight), bgTexture);
 		GUIStyle style = new GUIStyle(GUI.skin.label);
 		style.alignment = TextAnchor.UpperCenter;
 		style.fontSize = 18;
@@ -108,7 +112,7 @@ public class WorldController : MonoBehaviour {
 
 		if (GUI.Button (new Rect (FWWWidth/2 - 50, FWWHeight - 60, 100, 30), "Close")) {
 			foodWebImageExists = false;
-		}			
+		}
 	}
 
 
@@ -148,6 +152,7 @@ public class WorldController : MonoBehaviour {
 
 	public void ProcessSpeciesAction2 (NetworkResponse response)
 	{
+        Debug.Log("ProcessSpeciesAction2 start");
 		ResponseSpeciesAction args = response as ResponseSpeciesAction;
 		short action = args.action;
 		short status = args.status;
@@ -187,6 +192,7 @@ public class WorldController : MonoBehaviour {
 
 
   public void ProcessFWImage(NetworkResponse response) {
+    Debug.Log("ProcessFWImage start");
 	ResponseSpeciesAction args = response as ResponseSpeciesAction;
 	Debug.Log ("WorldController, ProcessFWImage, byteCount = " + args.byteCount);
 	imageByteCount = args.byteCount;
@@ -203,6 +209,7 @@ public class WorldController : MonoBehaviour {
   }
 
   public void ProcessFWImage2(NetworkResponse response) {
+        Debug.Log("ProcessFWImage2 start");
 	ResponseSpeciesAction args = response as ResponseSpeciesAction;
 	Debug.Log ("WorldController, ProcessFWImage2, startByte, byteCount = " 
 		+ args.startByte + " " + args.byteCount);
@@ -221,14 +228,16 @@ public class WorldController : MonoBehaviour {
   
 
   void DrawTexture(String filePath) {
+        Debug.Log("DrawTexture start");
 	byte[] fileData;
 	if (File.Exists(filePath)) {
 	  fileData = File.ReadAllBytes(filePath);
 	  fwTexture = new Texture2D(2, 2);
 	  fwTexture.LoadImage(fileData); //..this will auto-resize the texture dimensions.
 	  foodWebImageExists = true;
-	}
-  }
+            Debug.Log("foodWebImageExists = true");
+        }
+    }
 
 
   public void ProcessWorld(NetworkResponse response) {

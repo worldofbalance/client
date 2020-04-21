@@ -11,8 +11,8 @@ public class ClashNavMeshAI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(target != null) 
-			GetComponent<NavMeshAgent>().destination = target.transform.position;
+		//if(target != null) 
+			//GetComponent<UnityEngine.AI.NavMeshAgent>().destination = target.transform.position;
 	}
 
 	public void SetTarget(GameObject go) {

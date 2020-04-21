@@ -54,6 +54,7 @@ public class EcosystemCamera : MonoBehaviour {
 
         switch (InputExtended.GetMouseNumClick(0)) {
             case 1: // Single Click
+                // mouse drag
                 mouseDownPos = Input.mousePosition;
                 oldCameraPos = transform.position;
                 break;
