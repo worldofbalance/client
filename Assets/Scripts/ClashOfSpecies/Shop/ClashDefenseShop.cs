@@ -8,6 +8,8 @@ using SpeciesType = ClashSpecies.SpeciesType;
 public class ClashDefenseShop : MonoBehaviour
 {
 
+
+	public List<string> terrainNames;
     private ClashGameManager manager;
 
     public GridLayoutGroup carnivoreGroup;
@@ -123,6 +125,7 @@ public class ClashDefenseShop : MonoBehaviour
         // Setup the terrain items list.
         List<GameObject> terrains = new List<GameObject> (Resources.LoadAll<GameObject> ("Prefabs/ClashOfSpecies/Terrains"));
         foreach (GameObject t in terrains) {
+			terrainNames.Add (t.name);
             var item = (Instantiate (shopElementPrefab) as GameObject).GetComponent<ClashShopItem> ();
             
             var texture = Resources.Load<Texture2D> ("Images/ClashOfSpecies/" + t.name);

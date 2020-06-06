@@ -27,29 +27,30 @@ public abstract class COSAbstractInputController:ScriptableObject
     public abstract void InputControllerAwake(Terrain terrain);
 
     public GameObject SpawnAlly(RaycastHit hit, 
-                                ClashSpecies selected, Dictionary<int, int> remaining, ToggleGroup toggleGroup)
+		ClashSpecies selected, Dictionary<int, int> remaining, ToggleGroup toggleGroup, Vector3 position)
     {
-        NavMeshHit placement;
+        //UnityEngine.AI.NavMeshHit placement;
 
-        if (NavMesh.SamplePosition(hit.point, out placement, 100, walkableAreaMask) && hit.collider.CompareTag("Terrain"))
-        {
-            Debug.Log("mask is" + placement.mask);
+        //if (UnityEngine.AI.NavMesh.SamplePosition(position, out placement, 100, walkableAreaMask) && hit.collider.CompareTag("Terrain"))
+        //{
+           // Debug.Log("mask is" + placement.mask);
             var allyResource = Resources.Load<GameObject>("Prefabs/ClashOfSpecies/Units/" + selected.name);
-            var allyObject = Instantiate(allyResource, placement.position, Quaternion.identity) as GameObject;
+            var allyObject = Instantiate(allyResource, position, Quaternion.identity) as GameObject;
             allyObject.tag = "Ally";
 
             remaining[selected.id]--;
             var toggle = toggleGroup.ActiveToggles().FirstOrDefault();
-            toggle.transform.parent.GetComponent<ClashUnitListItem>().amountLabel.text = remaining[selected.id].ToString();
+            //toggle.transform.parent.GetComponent<ClashUnitListItem>().amountLabel.text = remaining[selected.id].ToString();
             if (remaining[selected.id] == 0)
             {
                 toggle.enabled = false;
                 toggle.interactable = false;
                 //                selected = null;
             }
+			allyObject.transform.position = position;
             return allyObject;
-        }
-        return null;
+       // }
+        //return null;
     }
 
 }

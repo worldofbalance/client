@@ -9,7 +9,6 @@ using UnitType = ClashSpecies.SpeciesType;
 
 public class ClashBattleController : MonoBehaviour
 {
-
     private Dictionary<int, int> remaining = new Dictionary<int, int>();
     private ClashGameManager manager;
     private ClashSpecies selected;
@@ -50,14 +49,6 @@ public class ClashBattleController : MonoBehaviour
 
     public float timeLeft = 120f;
 
-    //    public float moveSensitivityX = 1.0f;
-    //    public float moveSensitivityY = 1.0f;
-    //    public bool updateZoomSensitivity = true;
-    //    public float zoomSpeed = 0.05f;
-    //    public float minZoom = 1.0f;
-    //    public float maxZoom = 20.0f;
-    //    public bool invertMoveX = true;
-    //    public bool invertMoveY = false;
 
     public bool enemyAIEnabled = false;
 
@@ -72,13 +63,6 @@ public class ClashBattleController : MonoBehaviour
 
     //    public float inertiaDuration = 1.0f;
 
-    private Camera _camera;
-
-    public float terrainCameraPadding = 40;
-
-    private float minX, maxX, minZ, maxZ;
-    private float horizontalExtent, verticalExtent;
-
     //    private float scrollVelocity = 0.0f;
     private float timeTouchPhaseEnded;
     private Vector3 oldTouchPos;
@@ -87,6 +71,15 @@ public class ClashBattleController : MonoBehaviour
     public Dictionary<string, int> allySpecies = new Dictionary<string, int> ();
 
     COSAbstractInputController cosInController;
+
+
+	//tile building
+	//cube
+	public Transform tileTrans;
+	public MeshRenderer tileRend;
+	//tile material
+	public Material canPlace;
+	public Material cantPlace;
 
     /// <summary>
     /// Touch controler fields end
@@ -101,23 +94,14 @@ public class ClashBattleController : MonoBehaviour
 
     int walkableAreaMask;
 
-    void Start()
-    {
+    void Start(){
         
-        walkableAreaMask = (int)Math.Pow(2, NavMesh.GetAreaFromName("Walkable"));
+        walkableAreaMask = (int)Math.Pow(2, UnityEngine.AI.NavMesh.GetAreaFromName("Walkable"));
         var terrainResource = Resources.Load("Prefabs/ClashOfSpecies/Terrains/" + manager.currentTarget.terrain);
         var terrainObject = Instantiate(terrainResource, Vector3.zero, Quaternion.identity) as GameObject;
 
         terrain = terrainObject.GetComponentInChildren<Terrain>();
 
-
-//        Camera.main.GetComponent<ClashBattleCamera>().target = terrain;
-
-        _camera = Camera.main;
-        minX = terrainCameraPadding;
-        maxX = Terrain.activeTerrain.terrainData.size.x - terrainCameraPadding;
-        minZ = terrainCameraPadding;
-        maxZ = Terrain.activeTerrain.terrainData.size.z - terrainCameraPadding;
 
         foreach (var pair in manager.currentTarget.layout)
         {
@@ -132,8 +116,11 @@ public class ClashBattleController : MonoBehaviour
                 RaycastHit hitInfo;
                 Physics.Raycast(new Vector3(speciesPos.x, 50, speciesPos.z), 50 * Vector3.down, out hitInfo);
 //                Debug.DrawRay(new Vector3(speciesPos.x, 50, speciesPos.z), 50 * Vector3.down, Color.green, 10f);
-                NavMeshHit placement;
-                if (NavMesh.SamplePosition(hitInfo.point, out placement, 1000, walkableAreaMask))
+                UnityEngine.AI.NavMeshHit placement;
+
+				//Place objects/species down here AQ
+
+                if (UnityEngine.AI.NavMesh.SamplePosition(hitInfo.point, out placement, 1000, walkableAreaMask))
                 {
                     var speciesResource = Resources.Load<GameObject>("Prefabs/ClashOfSpecies/Units/" + species.name);
                     var speciesObject = Instantiate(speciesResource, placement.position, Quaternion.identity) as GameObject;
@@ -282,16 +269,20 @@ public class ClashBattleController : MonoBehaviour
 
     void Update()
     {
-        RaycastHit hit = cosInController.InputUpdate(_camera);
+		RaycastHit hit = cosInController.InputUpdate(Camera.main);
+
+		//from here will run script for tile building
+		Vector3 spawnPosition = tilePlacer(); //this updates position of tile prefab 
 
         if (isStarted && !finished)
             UpdateTimer();
 
-        if (cosInController.TouchState == COSTouchState.TerrainTapped)
+		if (cosInController.TouchState == COSTouchState.TerrainTapped && checkBuildSpace(spawnPosition))
         {
             if (selected != null && remaining[selected.id] > 0)
             {
-                var allyObject = cosInController.SpawnAlly(hit, selected, remaining, toggleGroup);
+				//pass the spawn position, which is determined by the tilePlacer()
+				var allyObject = cosInController.SpawnAlly(hit, selected, remaining, toggleGroup, spawnPosition);
 
                 if (allyObject == null)
                 {
@@ -470,15 +461,6 @@ public class ClashBattleController : MonoBehaviour
 
     }
 
-    void LateUpdate()
-    {
-        Vector3 pos = new Vector3(
-                          Mathf.Clamp(_camera.transform.position.x, minX, maxX),
-                          _camera.transform.position.y, 
-                          Mathf.Clamp(_camera.transform.position.z, minZ, maxZ));
-        _camera.transform.position = pos;
-    }
-
     void UpdateTimer()
     {
         timeLeft -= Time.deltaTime;
@@ -538,7 +520,6 @@ public class ClashBattleController : MonoBehaviour
                             default:
                                 return false;
                         }
-                        return false;
                     }).OrderBy(u =>
                     {
                         return (enemy.transform.position - u.transform.position).sqrMagnitude;
@@ -582,7 +563,6 @@ public class ClashBattleController : MonoBehaviour
                             default:
                                 return false;
                         }
-                        return false;
                     }).OrderBy(u =>
                     {
                         return (ally.transform.position - u.transform.position).sqrMagnitude;
@@ -742,6 +722,7 @@ public class ClashBattleController : MonoBehaviour
     public void PlaySound (int clip) {
     
         audioSource.clip = audioClip [clip];
+		audioSource.volume = .50f;
         audioSource.Play ();
     }
 
@@ -750,5 +731,76 @@ public class ClashBattleController : MonoBehaviour
         return selected == null;
     }
 
+	private Vector3 tilePlacer(){
+		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+		RaycastHit hit;
 
+		Vector3 newPos = new Vector3(0,0,0);
+		if (Physics.Raycast (ray, out hit, Mathf.Infinity)) {
+			if (hit.collider.tag == "Terrain") {
+				newPos = showTile (hit.point);
+				if (checkBuildSpace (newPos)) {
+					tileRend.material = canPlace;
+					if (Input.GetMouseButtonDown (0)) {
+
+						return newPos;
+					}
+				}
+				//Cant build on this part of terrain
+				else
+					tileRend.material = cantPlace;
+
+			} 
+			else if (hit.collider.tag != "Terrain") {
+				//same as above fo different x y positions
+				tileRend.material = cantPlace;
+				showTile (hit.point);
+			}
+		} 
+		else {
+			tileRend.enabled = false;
+		}
+		return newPos;
+	}
+	private Vector3 showTile(Vector3 mousePosition)
+	{
+		Vector3 position = mousePosition;
+		//if collider is within bounds of map then show cube, if no object is already in that space canPlace material
+		//else cantPlace material
+		//Y is height
+
+		float x = position.x;
+		float z = position.z;
+		float tileSize = 5.0f;
+		//x = Mathf.Floor (x);
+		//z = Mathf.Floor (z);
+		x /= tileSize;
+		z /= tileSize;
+		x = Mathf.Floor (x);
+		z = Mathf.Floor (z);
+		x *= tileSize;
+		z *= tileSize;
+		x += tileSize/2.0f;
+		z += tileSize/2.0f;
+
+		position.x = x;
+		position.z = z;
+		position.y = 0.0f;
+
+		tileTrans.position = position;
+
+		tileRend.enabled = true;
+		return position;
+	}
+	//Attack Build
+	private bool checkBuildSpace(Vector3 checkPos)
+	{
+		//attacker gets 5 tile padding, each tile is 10x10
+		//Terrain origin is at 0x0x0
+		if(checkPos.x <= 25 || checkPos.z <= 25 || checkPos.x >= 200 || checkPos.z >= 200){
+			return true;
+		}
+		else
+			return false;
+	}
 }

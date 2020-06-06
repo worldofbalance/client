@@ -16,8 +16,8 @@ public class Login : MonoBehaviour
     public Texture background;
     private Texture2D bgTexture;
     private Font font;
-    private string user_id = "";
-    private string password = "";
+    private string user_id = "rrex";
+    private string password = "1234";
     private Rect windowRect;
     private bool isActive = true;
     private bool isInitial = true;
@@ -155,8 +155,8 @@ public class Login : MonoBehaviour
                 LoginProtocol.Prepare (user_id, password), ProcessLogin
             );
 
-            RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance ();
-            cManager.Send (RR_RequestLogin (user_id, password));
+           //RR.RRConnectionManager cManager = RR.RRConnectionManager.getInstance ();
+           //cManager.Send (RR_RequestLogin (user_id, password));
 
             SD.SDMain.networkManager.Send (SD.SDLoginProtocol.Prepare (user_id, password), SD_ResponseLogin);
         }
@@ -165,8 +165,8 @@ public class Login : MonoBehaviour
     public IEnumerator AutoLogin ()
     {
         while (true) {
-            user_id = "1";
-            password = "1";
+            user_id = "jeremy";
+            password = "okay";
             Submit ();
 			
             yield return new WaitForSeconds (1.0f);
